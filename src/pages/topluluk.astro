@@ -1,0 +1,261 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MemberCard from '../components/MemberCard.astro';
+import ApplyTeamCard from '../components/ApplyTeamCard.astro';
+import { members } from '../data/members';
+import { Users, HeartHandshake, ArrowRight } from 'lucide-astro';
+import BreadcrumbSchema from '../components/seo/BreadcrumbSchema.astro';
+
+const breadcrumbs = [
+  { name: 'Ana Sayfa', path: '/' },
+  { name: 'Topluluk & Ekip', path: '/topluluk' },
+];
+---
+
+<Layout 
+  title="Topluluk ve Ekip - Nostr Türkiye Topluluğu"
+  description="Nostr Türkiye topluluğu kurucuları, aktif üyeleri, doakrasi yönetim modeli ve çalışma grupları (Guilds) katılım rehberi."
+>
+  <BreadcrumbSchema slot="head" items={breadcrumbs} />
+  
+  <!-- Header Banner -->
+  <section class="py-14 sm:py-20 border-b border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-b from-white via-slate-50 to-slate-100/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-nostr-100 dark:bg-nostr-950 text-nostr-700 dark:text-nostr-300 border border-nostr-200 dark:border-nostr-800 mb-6 shadow-sm">
+        <Users class="w-3.5 h-3.5 text-nostr-500" />
+        <span>Hiyerarşisiz & Açık Topluluk</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.2]">
+        Topluluk & Ekip
+      </h1>
+      <p class="mt-4 text-base sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        Doakrasi (Do-ocracy) esasına dayalı; unvanlarla değil, ürettiği değer ve katkıyla şekillenen bağımsız topluluk yapımız.
+      </p>
+    </div>
+  </section>
+
+  <!-- Members Section -->
+  <section class="py-16 bg-white dark:bg-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      
+      <div>
+        <div class="flex items-center justify-between gap-4 mb-8">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Topluluk Üyeleri</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Nostr Türkiye ekosistemini inşa eden ve kolaylaştıran isimler.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {members.map((member) => (
+            <MemberCard member={member} />
+          ))}
+        </div>
+      </div>
+
+      <!-- Do-ocracy Philosophy Box -->
+      <div class="p-8 sm:p-10 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-nostr-100 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400 flex items-center justify-center">
+            <HeartHandshake class="w-5 h-5" />
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white">
+            Doakrasi Nedir? Nasıl Karar Alırız?
+          </h3>
+        </div>
+        <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+          Nostr Türkiye'de bürokrasi, oylama kilitlenmeleri veya katı yöneticiler yoktur. Bir fikir veya ihtiyaç varsa, sorumluluğu alıp üreten kişi o çalışmanın doğal lideridir. Kararlar katı emirlerle değil, açık tartışma ve kaba fikir birliği (rough consensus) ile alınır.
+        </p>
+        <div class="pt-2">
+          <a href="/manifesto#madde-2" class="inline-flex items-center gap-1.5 text-xs font-semibold text-nostr-600 dark:text-nostr-400 hover:underline">
+            <span>Manifestodaki Örgütlenme Maddesini Oku</span>
+            <ArrowRight class="w-3.5 h-3.5" />
+          </a>
+        </div>
+      </div>
+
+      <!-- Application Component -->
+      <ApplyTeamCard />
+
+    </div>
+  </section>
+
+  <!-- Dynamic Nostr Profiles Fetcher Script -->
+  <script is:inline>
+    const npubToHex = (npub) => {
+      if (!npub || typeof npub !== 'string' || !npub.startsWith('npub1')) return null;
+      const CHARSET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
+      const data = npub.slice(5);
+      const words = [];
+      for (let i = 0; i < data.length; i++) {
+        const d = CHARSET.indexOf(data[i]);
+        if (d === -1) return null;
+        words.push(d);
+      }
+      if (words.length <= 6) return null;
+      const decoded = words.slice(0, -6);
+      let acc = 0;
+      let bits = 0;
+      const bytes = [];
+      for (let i = 0; i < decoded.length; i++) {
+        acc = (acc << 5) | decoded[i];
+        bits += 5;
+        while (bits >= 8) {
+          bits -= 8;
+          bytes.push((acc >> bits) & 0xff);
+        }
+      }
+      if (bytes.length !== 32) return null;
+      return bytes.map((b) => b.toString(16).padStart(2, '0')).join('');
+    };
+
+    const applyProfileToCard = (card, meta) => {
+      if (!card || !meta) return;
+
+      // 1. Avatar
+      if (meta.picture && typeof meta.picture === 'string' && meta.picture.startsWith('http')) {
+        const avatarImg = card.querySelector('.member-avatar');
+        const monogram = card.querySelector('.member-monogram');
+        if (avatarImg) {
+          avatarImg.src = meta.picture;
+          avatarImg.onload = () => {
+            avatarImg.classList.remove('hidden');
+            if (monogram) monogram.classList.add('hidden');
+          };
+          avatarImg.onerror = () => {
+            avatarImg.classList.add('hidden');
+            if (monogram) monogram.classList.remove('hidden');
+          };
+        }
+      }
+
+      // 2. Bio / About
+      if (meta.about && typeof meta.about === 'string' && meta.about.trim()) {
+        const bioEl = card.querySelector('.member-bio');
+        if (bioEl) {
+          bioEl.textContent = meta.about.trim();
+        }
+      }
+
+      // 3. NIP-05
+      if (meta.nip05 && typeof meta.nip05 === 'string' && meta.nip05.trim()) {
+        const nip05Text = card.querySelector('.member-nip05');
+        const nip05Dyn = card.querySelector('.member-nip05-dyn');
+        if (nip05Text) nip05Text.textContent = meta.nip05.trim();
+        if (nip05Dyn) nip05Dyn.classList.remove('hidden');
+      }
+
+      // 4. Lightning Address (lud16)
+      if (meta.lud16 && typeof meta.lud16 === 'string' && meta.lud16.trim()) {
+        const lud16Text = card.querySelector('.member-lud16');
+        const lud16Dyn = card.querySelector('.member-lightning-dyn');
+        if (lud16Text) lud16Text.textContent = meta.lud16.trim();
+        if (lud16Dyn) lud16Dyn.classList.remove('hidden');
+      }
+    };
+
+    const fetchNostrProfiles = () => {
+      const cards = document.querySelectorAll('[data-member-card]');
+      if (!cards.length) return;
+
+      const pubkeyToCardMap = new Map();
+      const pubkeysToFetch = [];
+
+      cards.forEach((card) => {
+        const npub = card.getAttribute('data-npub');
+        if (!npub) return;
+        const hex = npubToHex(npub);
+        if (!hex) return;
+
+        pubkeyToCardMap.set(hex, card);
+
+        // Check sessionStorage cache
+        try {
+          const cached = sessionStorage.getItem('nostr_profile_' + hex);
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            if (parsed && parsed.meta && Date.now() - parsed.timestamp < 3600000) {
+              applyProfileToCard(card, parsed.meta);
+            }
+          }
+        } catch (e) {}
+
+        pubkeysToFetch.push(hex);
+      });
+
+      if (!pubkeysToFetch.length) return;
+
+      const relays = [
+        'wss://relay.nostr.org.tr',
+        'wss://relay.damus.io',
+        'wss://nos.lol',
+        'wss://purplepag.es',
+        'wss://relay.primal.net'
+      ];
+
+      const subId = 'team_' + Math.random().toString(36).slice(2, 8);
+      const reqMessage = JSON.stringify([
+        'REQ',
+        subId,
+        { kinds: [0], authors: pubkeysToFetch }
+      ]);
+
+      const latestEvents = new Map();
+
+      relays.forEach((relayUrl) => {
+        try {
+          const ws = new WebSocket(relayUrl);
+
+          const timer = setTimeout(() => {
+            try { ws.close(); } catch(e){}
+          }, 6000);
+
+          ws.onopen = () => {
+            ws.send(reqMessage);
+          };
+
+          ws.onmessage = (event) => {
+            try {
+              const data = JSON.parse(event.data);
+              if (Array.isArray(data) && data[0] === 'EVENT' && data[1] === subId && data[2]) {
+                const nostrEvent = data[2];
+                if (nostrEvent.kind === 0 && nostrEvent.pubkey) {
+                  const currentLatest = latestEvents.get(nostrEvent.pubkey);
+                  if (!currentLatest || nostrEvent.created_at > currentLatest.created_at) {
+                    latestEvents.set(nostrEvent.pubkey, nostrEvent);
+                    const meta = JSON.parse(nostrEvent.content);
+                    const card = pubkeyToCardMap.get(nostrEvent.pubkey);
+                    if (card && meta) {
+                      applyProfileToCard(card, meta);
+                      try {
+                        sessionStorage.setItem('nostr_profile_' + nostrEvent.pubkey, JSON.stringify({
+                          meta,
+                          created_at: nostrEvent.created_at,
+                          timestamp: Date.now()
+                        }));
+                      } catch (e) {}
+                    }
+                  }
+                }
+              }
+            } catch (err) {}
+          };
+
+          ws.onerror = () => {
+            clearTimeout(timer);
+            try { ws.close(); } catch(e){}
+          };
+
+          ws.onclose = () => {
+            clearTimeout(timer);
+          };
+        } catch (err) {}
+      });
+    };
+
+    fetchNostrProfiles();
+    document.addEventListener('astro:after-swap', fetchNostrProfiles);
+  </script>
+
+</Layout>

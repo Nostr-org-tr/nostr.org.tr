@@ -1,0 +1,73 @@
+---
+import { workingGroups } from '../data/members';
+import { Mail, ArrowRight, ShieldCheck, Sparkles, Terminal, BookOpen, Mic, Palette } from 'lucide-astro';
+
+const iconsMap: Record<string, any> = {
+  Terminal,
+  BookOpen,
+  Mic,
+  Palette,
+};
+
+const mailSubject = encodeURIComponent('[Nostr TR Başvuru] Topluluk Çalışma Grubu Katılımı');
+const mailBody = encodeURIComponent(`Merhaba Nostr Türkiye Kolaylaştırıcıları,
+
+Topluluk çalışma gruplarında aktif rol almak ve katkı sunmak istiyorum.
+
+1. İsim / Rumuz: 
+2. Nostr Public Key (npub): 
+3. Katkı Sağlamak İstediğim Alan / Guild (Yazılım, İçerik, Etkinlik, Tasarım vb.): 
+4. Kendimden Kısaca ve Neler Yapabilirim?: 
+
+Doakrasi ilkelerine ve topluluk manifestosuna bağlı kalmayı taahhüt ediyorum.
+
+Teşekkürler.`);
+
+const mailtoLink = `mailto:ekip@nostr.org.tr?subject=${mailSubject}&body=${mailBody}`;
+---
+
+<div class="p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-nostr-950 text-white border border-slate-800 shadow-xl space-y-8">
+  
+  <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+    <div class="space-y-2 max-w-2xl">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-nostr-500/20 text-nostr-300 border border-nostr-500/30">
+        <Sparkles class="w-3.5 h-3.5" />
+        <span>Doakrasi & Katkıya Dayalı Örgütlenme</span>
+      </div>
+      <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+        Topluluk Ekibine ve Çalışma Gruplarına Katılın
+      </h3>
+      <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+        Nostr Türkiye'de katı makamlar ve unvanlar yoktur. Sorumluluk alan, kod yazan, rehber hazırlayan, etkinlik düzenleyen herkes ekibin doğal bir parçasıdır.
+      </p>
+    </div>
+
+    <a
+      href={mailtoLink}
+      class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-slate-950 bg-white hover:bg-slate-100 shadow-lg shadow-white/10 transition-all active:scale-95 flex-shrink-0"
+    >
+      <Mail class="w-4 h-4 text-nostr-600" />
+      <span>ekip@nostr.org.tr ile Başvur</span>
+      <ArrowRight class="w-4 h-4" />
+    </a>
+  </div>
+
+  <!-- Working Groups Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-slate-800">
+    {workingGroups.map((group) => {
+      const Icon = iconsMap[group.icon] || ShieldCheck;
+      return (
+        <div class="p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-nostr-500/40 transition-colors space-y-2">
+          <div class="w-8 h-8 rounded-lg bg-nostr-500/20 flex items-center justify-center text-nostr-300">
+            <Icon class="w-4 h-4" />
+          </div>
+          <h4 class="font-bold text-sm text-white">{group.title}</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            {group.description}
+          </p>
+        </div>
+      );
+    })}
+  </div>
+
+</div>

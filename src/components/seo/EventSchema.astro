@@ -1,0 +1,44 @@
+---
+import JsonLd from './JsonLd.astro';
+import type { TalkItem } from '../../data/talks';
+
+interface Props {
+  talks: TalkItem[];
+}
+
+const { talks } = Astro.props;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': talks.map((talk) => ({
+    '@type': 'EducationEvent',
+    '@id': `https://nostr.org.tr/konusmalar#${talk.id}`,
+    name: `${talk.title} - ${talk.event}`,
+    description: talk.description,
+    startDate: talk.date.length === 4 ? `${talk.date}-01-01` : talk.date,
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    location: {
+      '@type': 'Place',
+      name: talk.location,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: talk.location,
+        addressCountry: 'TR',
+      },
+    },
+    performer: {
+      '@type': 'Person',
+      name: talk.speaker,
+    },
+    organizer: {
+      '@type': 'Organization',
+      name: talk.event,
+    },
+    image: 'https://nostr.org.tr/og-image.png',
+    url: 'https://nostr.org.tr/konusmalar',
+  })),
+};
+---
+
+<JsonLd schema={schema} />

@@ -1,0 +1,177 @@
+---
+import { 
+  ScrollText, 
+  Users, 
+  Radio, 
+  FolderGit2, 
+  ListChecks, 
+  BookOpen, 
+  Mic, 
+  Github, 
+  Menu, 
+  X,
+  Languages
+} from 'lucide-astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  currentPath?: string;
+  isEn?: boolean;
+}
+
+const { currentPath = '/', isEn = false } = Astro.props;
+
+const navItems = [
+  { href: '/manifesto', label: 'Manifesto', icon: ScrollText },
+  { href: '/topluluk', label: 'Topluluk', icon: Users },
+  { href: '/roleler', label: 'Röleler', icon: Radio },
+  { href: '/projeler', label: 'Projeler', icon: FolderGit2 },
+  { href: '/takip-listeleri', label: 'Listeler', icon: ListChecks },
+  { href: '/rehber', label: 'Rehber', icon: BookOpen },
+  { href: '/konusmalar', label: 'Konuşmalar', icon: Mic },
+];
+---
+
+<header class="sticky top-0 z-50 w-full border-b border-slate-200/80 dark:border-slate-800/80 glass-header">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    
+    <!-- Logo (Clean SVG without long slogan) -->
+    <a 
+      href={isEn ? "/en/manifesto" : "/"} 
+      class="flex items-center gap-2.5 group transition-transform active:scale-95"
+      aria-label="Nostr Türkiye Ana Sayfa"
+    >
+      <img 
+        src="/images/nostr-org-logo.jpeg" 
+        alt="Nostr Türkiye" 
+        class="w-9 h-9 rounded-xl object-cover transition-transform group-hover:scale-105 shadow-sm"
+        width="36"
+        height="36"
+      />
+      <div class="flex items-center gap-1.5 font-bold tracking-tight text-slate-900 dark:text-white">
+        <span class="text-base sm:text-lg">nostr</span>
+        <span class="px-1.5 py-0.5 text-xs font-mono font-semibold rounded bg-tr-red/10 text-tr-red dark:bg-tr-red/20 dark:text-rose-400 border border-tr-red/20">
+          .org.tr
+        </span>
+      </div>
+    </a>
+
+    <!-- Desktop Nav Links (Icon + Concise Text) -->
+    <nav class="hidden md:flex items-center gap-1 lg:gap-1.5" aria-label="Ana Menü">
+      {navItems.map((item) => {
+        const Icon = item.icon;
+        const isActive = currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
+        return (
+          <a
+            href={item.href}
+            class={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs lg:text-sm font-medium transition-all ${
+              isActive
+                ? 'text-nostr-600 dark:text-nostr-400 bg-nostr-50 dark:bg-nostr-950/60 font-semibold'
+                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
+            }`}
+          >
+            <Icon class="w-4 h-4 opacity-80" />
+            <span>{item.label}</span>
+          </a>
+        );
+      })}
+    </nav>
+
+    <!-- Utility Actions (Language, Theme, GitHub, Mobile Menu) -->
+    <div class="flex items-center gap-1.5 sm:gap-2">
+      
+      <!-- Language Switcher (Direct Link to English Manifesto or Back to TR) -->
+      {isEn ? (
+        <a
+          href="/manifesto"
+          title="Türkçe Versiyon"
+          class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700"
+        >
+          <Languages class="w-3.5 h-3.5 text-tr-red" />
+          <span>TR</span>
+        </a>
+      ) : (
+        <a
+          href="/en/manifesto"
+          title="English Manifesto"
+          class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700"
+        >
+          <Languages class="w-3.5 h-3.5 text-nostr-500" />
+          <span>EN</span>
+        </a>
+      )}
+
+      <!-- Theme Switcher -->
+      <ThemeToggle />
+
+      <!-- GitHub Link -->
+      <a
+        href="https://github.com/delirehberi/nostr.org.tr"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="GitHub Deposu"
+        class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+      >
+        <Github class="w-4 h-4" />
+      </a>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button
+        type="button"
+        id="mobile-menu-btn"
+        aria-label="Menüyü Aç/Kapat"
+        aria-expanded="false"
+        class="md:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+      >
+        <Menu class="w-5 h-5 block" id="menu-icon" />
+        <X class="w-5 h-5 hidden" id="close-icon" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Drawer Menu -->
+  <div 
+    id="mobile-menu" 
+    class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur px-4 pt-2 pb-4 space-y-1 shadow-lg"
+  >
+    {navItems.map((item) => {
+      const Icon = item.icon;
+      const isActive = currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
+      return (
+        <a
+          href={item.href}
+          class={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+            isActive
+              ? 'text-nostr-600 dark:text-nostr-400 bg-nostr-50 dark:bg-nostr-950/60 font-semibold'
+              : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+          }`}
+        >
+          <Icon class="w-4 h-4 opacity-80" />
+          <span>{item.label}</span>
+        </a>
+      );
+    })}
+  </div>
+</header>
+
+<script is:inline>
+  const setupMobileMenu = () => {
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    const menuIcon = document.getElementById('menu-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    if (!btn || !menu || !menuIcon || !closeIcon) return;
+
+    btn.addEventListener('click', () => {
+      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', !isExpanded);
+      menu.classList.toggle('hidden');
+      menuIcon.classList.toggle('hidden');
+      closeIcon.classList.toggle('hidden');
+    });
+  };
+
+  setupMobileMenu();
+  document.addEventListener('astro:after-swap', setupMobileMenu);
+</script>

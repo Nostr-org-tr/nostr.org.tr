@@ -1,0 +1,59 @@
+name: 👤 Topluluk Üyesi Ekleme (Member Submission)
+description: Topluluk dizinine eklenmek ve @nostr.org.tr NIP-05 kimliği almak için başvurun.
+title: "[Üye]: "
+labels: ["member-request", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Nostr Türkiye Topluluğu'na hoş geldiniz! Topluluk sayfasında yer almak ve `adiniz@nostr.org.tr` takma adına sahip olmak için aşağıdaki bilgileri doldurunuz.
+  - type: input
+    id: name
+    attributes:
+      label: Görünen İsim (Display Name)
+      placeholder: "Örn: Ahmet Yılmaz"
+    validations:
+      required: true
+  - type: input
+    id: handle
+    attributes:
+      label: NIP-05 Kullanıcı Adı (Handle)
+      description: "nostr.org.tr üzerinde istediğiniz kullanıcı adı (Örn: 'ahmet' -> ahmet@nostr.org.tr)"
+      placeholder: "ahmet"
+    validations:
+      required: true
+  - type: input
+    id: npub
+    attributes:
+      label: Nostr Açık Anahtarı (npub)
+      description: "npub1 ile başlayan Nostr açık anahtarınız (Özel anahtarınızı - nsec - ASLA PAYLAŞMAYIN!)"
+      placeholder: "npub1..."
+    validations:
+      required: true
+  - type: textarea
+    id: bio
+    attributes:
+      label: Biyografi / İlgi Alanları
+      description: "Topluluk kartınızda gösterilecek kısa tanıtım."
+      placeholder: "Bitcoin & Nostr geliştiricisi, açık kaynak meraklısı."
+    validations:
+      required: true
+  - type: checkboxes
+    id: roles
+    attributes:
+      label: Topluluk Rolleri
+      options:
+        - label: Geliştirici (Developer)
+        - label: İçerik Üretici (Creator)
+        - label: Röle Operatörü (Relay Operator)
+        - label: Topluluk Üyesi (Community)
+        - label: Çevirmen (Translator)
+    validations:
+      required: true
+  - type: input
+    id: links
+    attributes:
+      label: Bağlantılar (GitHub / Web / Twitter)
+      placeholder: "github: ahmet, twitter: ahmetyilmaz, web: https://ahmet.dev"
+    validations:
+      required: false

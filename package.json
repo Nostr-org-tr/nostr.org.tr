@@ -1,0 +1,36 @@
+{
+  "name": "nostr-org-tr",
+  "type": "module",
+  "version": "1.0.0",
+  "license": "MIT",
+  "homepage": "https://nostr.org.tr",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nostr-turkiye/nostr.org.tr.git"
+  },
+  "description": "Nostr Türkiye Topluluğu resmi web sitesi (nostr.org.tr)",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "cf:dev": "wrangler dev",
+    "cf:deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/tailwind": "^5.1.5",
+    "astro": "^5.4.1",
+    "clsx": "^2.1.1",
+    "lucide-astro": "latest",
+    "tailwind-merge": "^3.0.2",
+    "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250224.0",
+    "@tailwindcss/typography": "^0.5.16",
+    "@types/node": "^22.13.5",
+    "tailwindcss": "^3.4.17",
+    "wrangler": "^3.111.0"
+  }
+}

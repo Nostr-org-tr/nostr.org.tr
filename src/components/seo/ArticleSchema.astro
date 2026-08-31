@@ -1,0 +1,55 @@
+---
+import JsonLd from './JsonLd.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  inLanguage?: 'tr-TR' | 'en-US';
+  datePublished?: string;
+  dateModified?: string;
+}
+
+const {
+  title,
+  description,
+  path,
+  inLanguage = 'tr-TR',
+  datePublished = '2026-01-01',
+  dateModified = '2026-08-31',
+} = Astro.props;
+
+const url = `https://nostr.org.tr${path.startsWith('/') ? path : `/${path}`}`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  '@id': `${url}#article`,
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': url,
+  },
+  headline: title,
+  description: description,
+  inLanguage: inLanguage,
+  image: 'https://nostr.org.tr/og-image.png',
+  datePublished: datePublished,
+  dateModified: dateModified,
+  author: {
+    '@type': 'Organization',
+    name: 'Nostr Türkiye Topluluğu',
+    url: 'https://nostr.org.tr',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Nostr Türkiye Topluluğu',
+    url: 'https://nostr.org.tr',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://nostr.org.tr/images/nostr-org-logo.jpeg',
+    },
+  },
+};
+---
+
+<JsonLd schema={schema} />

@@ -1,0 +1,183 @@
+---
+import GuideLayout from '../layouts/GuideLayout.astro';
+import CopyButton from '../components/CopyButton.astro';
+import Nip05KeyConverter from '../components/Nip05KeyConverter.astro';
+import { guides } from '../data/guides';
+import { 
+  Radio, 
+  Key, 
+  Smartphone, 
+  ArrowRightLeft, 
+  BadgeCheck, 
+  Zap, 
+  ExternalLink, 
+  CheckCircle2, 
+  ShieldAlert,
+  ArrowRight,
+  Code2
+} from 'lucide-astro';
+
+import ArticleSchema from '../components/seo/ArticleSchema.astro';
+import BreadcrumbSchema from '../components/seo/BreadcrumbSchema.astro';
+
+const iconsMap: Record<string, any> = {
+  Radio,
+  Key,
+  Smartphone,
+  ArrowRightLeft,
+  BadgeCheck,
+  Zap,
+};
+
+const breadcrumbs = [
+  { name: 'Ana Sayfa', path: '/' },
+  { name: 'Başlangıç Rehberi', path: '/rehber' },
+];
+---
+
+<GuideLayout 
+  title="Nostr Başlangıç ve İleri Düzey Dokümantasyon Rehberi"
+  description="Nostr protokolünün temelleri, anahtar güvenliği, istemciler, NIP-05, Zaps ve göç araçları hakkında kapsamlı Türkçe kılavuz."
+>
+  <Fragment slot="head">
+    <BreadcrumbSchema items={breadcrumbs} />
+    <ArticleSchema
+      title="Nostr Başlangıç ve İleri Düzey Dokümantasyon Rehberi"
+      description="Nostr protokolünün temelleri, anahtar güvenliği, istemciler, NIP-05, Zaps ve göç araçları hakkında kapsamlı Türkçe kılavuz."
+      path="/rehber"
+      inLanguage="tr-TR"
+      datePublished="2025-01-01"
+      dateModified="2026-08-31"
+    />
+  </Fragment>
+  
+  {guides.map((guide) => {
+    const Icon = iconsMap[guide.icon] || Radio;
+    return (
+      <article 
+        id={guide.id} 
+        class="scroll-mt-28 p-6 sm:p-10 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6"
+      >
+        <!-- Chapter Header -->
+        <div class="flex items-start gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
+          <div class="w-12 h-12 rounded-2xl bg-nostr-100 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400 flex items-center justify-center flex-shrink-0">
+            <Icon class="w-6 h-6" />
+          </div>
+          <div>
+            <span class="text-xs font-mono font-bold text-nostr-600 dark:text-nostr-400 uppercase tracking-wider">
+              {guide.readTime} Okuma Süresi
+            </span>
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">
+              {guide.title}
+            </h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+              {guide.summary}
+            </p>
+          </div>
+        </div>
+
+        <!-- Chapter Sections -->
+        <div class="space-y-6">
+          {guide.content.map((sec) => (
+            <div class="space-y-3">
+              <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-nostr-500"></span>
+                <span>{sec.heading}</span>
+              </h3>
+              
+              <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed pl-4">
+                {sec.text}
+              </p>
+
+              <!-- Code Snippet / Example -->
+              {sec.code && (
+                <div class="ml-4 rounded-2xl bg-slate-900 text-slate-100 border border-slate-800 overflow-hidden shadow-sm">
+                  <div class="flex items-center justify-between px-4 py-2.5 bg-slate-950/80 border-b border-slate-800 text-xs font-mono text-slate-400">
+                    <span class="flex items-center gap-1.5 text-slate-300 font-semibold">
+                      <Code2 class="w-3.5 h-3.5 text-nostr-400" />
+                      <span>{sec.codeTitle || '.well-known/nostr.json'}</span>
+                    </span>
+                    <CopyButton text={sec.code} label="JSON Kopyala" className="bg-slate-800 text-slate-200 border-slate-700 hover:bg-slate-700 hover:text-white" />
+                  </div>
+                  <pre class="p-4 overflow-x-auto text-xs sm:text-sm font-mono leading-relaxed text-slate-200 selection:bg-nostr-600 selection:text-white"><code>{sec.code}</code></pre>
+                </div>
+              )}
+
+              <!-- Tips / Alerts -->
+              {sec.tips && (
+                <div class="ml-4 p-4 rounded-2xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/50 space-y-2">
+                  <span class="text-xs font-bold text-amber-800 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <ShieldAlert class="w-3.5 h-3.5" />
+                    <span>Önemli Güvenlik İpuçları</span>
+                  </span>
+                  <ul class="space-y-1 text-xs sm:text-sm text-amber-900 dark:text-amber-200">
+                    {sec.tips.map((tip) => (
+                      <li class="flex items-start gap-2">
+                        <span class="text-amber-500 mt-1">•</span>
+                        <span>{tip}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <!-- Resource Links -->
+              {sec.links && (
+                <div class="ml-4 flex flex-wrap gap-2.5 pt-2">
+                  {sec.links.map((link) => (
+                    <a
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-nostr-50 hover:text-nostr-600 dark:hover:bg-nostr-950 dark:hover:text-nostr-300 border border-slate-200 dark:border-slate-700 transition-colors"
+                    >
+                      <CheckCircle2 class="w-3.5 h-3.5 text-nostr-500" />
+                      <span>{link.label}</span>
+                      <ExternalLink class="w-3 h-3 opacity-60" />
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {guide.id === 'nip-05' && (
+          <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+            <Nip05KeyConverter />
+          </div>
+        )}
+
+      </article>
+    );
+  })}
+
+  <!-- Next Step CTA -->
+  <div class="p-8 sm:p-10 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6">
+    <div class="space-y-1 text-center sm:text-left">
+      <h3 class="text-lg font-bold text-slate-900 dark:text-white">
+        Öğrendiklerinizi pratiğe dökün
+      </h3>
+      <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+        Küratörlü hesapları takip edin ve Türkiye rölesine bağlanın.
+      </p>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <a
+        href="/takip-listeleri"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-nostr-600 hover:bg-nostr-700 transition-all shadow-sm"
+      >
+        <span>Takip Listelerine Git</span>
+        <ArrowRight class="w-3.5 h-3.5" />
+      </a>
+      <a
+        href="/roleler"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-all"
+      >
+        <span>Röleleri Gör</span>
+      </a>
+    </div>
+  </div>
+
+</GuideLayout>

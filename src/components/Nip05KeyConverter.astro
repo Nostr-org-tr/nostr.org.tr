@@ -1,0 +1,602 @@
+---
+import { 
+  KeyRound, 
+  CheckCircle2, 
+  Code2, 
+  Sparkles, 
+  Server, 
+  Download,
+  Info
+} from 'lucide-astro';
+
+interface Props {
+  defaultNpub?: string;
+  defaultUsername?: string;
+}
+
+const { 
+  defaultNpub = 'npub1gmeu0wenescpjpymwmwgnkaedc6vy3aamf5tdtvxxf5z0yll3gdqatwl3v', 
+  defaultUsername = 'delirehberi' 
+} = Astro.props;
+---
+
+<div 
+  class="nip05-converter-card rounded-3xl bg-slate-900 text-slate-100 border border-slate-800 shadow-xl overflow-hidden my-8"
+  data-default-npub={defaultNpub}
+  data-default-username={defaultUsername}
+>
+  <!-- Card Header -->
+  <div class="p-6 sm:p-8 bg-slate-950/70 border-b border-slate-800/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="space-y-1">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-nostr-500/10 text-nostr-400 border border-nostr-500/20">
+        <Sparkles class="w-3.5 h-3.5" />
+        <span>İnteraktif Dönüştürücü & Üretici</span>
+      </div>
+      <h3 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5 mt-1">
+        <KeyRound class="w-6 h-6 text-nostr-400" />
+        <span>32-Byte Hex Public Key Dönüştürücü</span>
+      </h3>
+      <p class="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
+        NIP-05 alan adı doğrulamasında <code class="text-amber-400 font-mono">npub1...</code> adresi doğrudan kullanılamaz; protokol seviyesinde <strong>32-byte hexadecimal (64 karakter)</strong> açık anahtar gereklidir.
+      </p>
+    </div>
+
+    <!-- Quick Format Comparison Badge -->
+    <div class="flex-shrink-0 p-3 rounded-2xl bg-slate-900 border border-slate-800 text-xs font-mono space-y-1 text-slate-300">
+      <div class="flex items-center justify-between gap-4">
+        <span class="text-slate-500">NIP-19:</span>
+        <span class="text-nostr-300">npub1... (58-63 char)</span>
+      </div>
+      <div class="flex items-center justify-between gap-4">
+        <span class="text-slate-500">NIP-05:</span>
+        <span class="text-emerald-400">32-byte Hex (64 char)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-6 sm:p-8 space-y-8">
+    <!-- Input Section -->
+    <div class="space-y-3">
+      <label for="pubkey-input" class="block text-sm font-semibold text-slate-200">
+        Nostr Açık Anahtarınız (Public Key)
+      </label>
+      <div class="relative">
+        <input
+          id="pubkey-input"
+          type="text"
+          placeholder="npub1... veya 64 karakterli hex anahtarınızı yapıştırın"
+          value={defaultNpub}
+          spellcheck="false"
+          autocomplete="off"
+          class="w-full px-4 py-3.5 pr-28 rounded-2xl bg-slate-950 border border-slate-700 text-slate-100 text-xs sm:text-sm font-mono focus:outline-none focus:ring-2 focus:ring-nostr-500/50 focus:border-nostr-500 transition-all placeholder:text-slate-600"
+        />
+        <div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+          <button
+            type="button"
+            id="paste-btn"
+            class="px-2.5 py-1.5 rounded-xl text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
+            title="Panodan Yapıştır"
+          >
+            Yapıştır
+          </button>
+          <button
+            type="button"
+            id="clear-btn"
+            class="px-2.5 py-1.5 rounded-xl text-xs font-medium bg-slate-800/60 hover:bg-slate-700 text-slate-400 hover:text-slate-200 border border-slate-700/60 transition-colors"
+            title="Temizle"
+          >
+            Temizle
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Status / Validation Message -->
+      <div id="validation-box" class="flex items-center gap-2 text-xs font-medium text-emerald-400 transition-all">
+        <CheckCircle2 class="w-4 h-4 flex-shrink-0" />
+        <span id="validation-msg">Geçerli NIP-19 Bech32 (npub) açık anahtarı algılandı.</span>
+      </div>
+    </div>
+
+    <!-- Conversion Results Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- 32-Byte Hex Result (Highlighted for NIP-05) -->
+      <div class="p-5 rounded-2xl bg-slate-950 border-2 border-emerald-500/30 hover:border-emerald-500/50 transition-all flex flex-col justify-between space-y-3 relative overflow-hidden">
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400 uppercase tracking-wider">
+              <CheckCircle2 class="w-3.5 h-3.5" />
+              <span>32-Byte Hex Pubkey (NIP-05 İçin)</span>
+            </span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+              64 karakter
+            </span>
+          </div>
+          <p class="text-xs text-slate-400">
+            NIP-05 <code class="text-slate-300 font-mono">nostr.json</code> dosyasına eklenmesi gereken ham açık anahtarınız:
+          </p>
+        </div>
+
+        <div class="flex items-center justify-between gap-2 p-3 rounded-xl bg-slate-900 border border-slate-800">
+          <div id="hex-output" class="font-mono text-xs text-emerald-300 break-all select-all font-semibold">
+            46f3c7bb33cc3019049b76dc89dbb96e34c247bdda68b6ad8632682793ff8a1a
+          </div>
+          <button
+            type="button"
+            id="copy-hex-btn"
+            class="flex-shrink-0 inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition-all shadow-sm active:scale-95"
+          >
+            <span>Kopyala</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bech32 npub Result -->
+      <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 hover:border-slate-700 transition-all flex flex-col justify-between space-y-3">
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-nostr-400 uppercase tracking-wider">
+              <KeyRound class="w-3.5 h-3.5" />
+              <span>NIP-19 npub (İstemciler İçin)</span>
+            </span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-nostr-500/10 text-nostr-300 border border-nostr-500/20">
+              Bech32
+            </span>
+          </div>
+          <p class="text-xs text-slate-400">
+            Sosyal profillerinizde ve Nostr istemcilerinde paylaştığınız açık adresiniz:
+          </p>
+        </div>
+
+        <div class="flex items-center justify-between gap-2 p-3 rounded-xl bg-slate-900 border border-slate-800">
+          <div id="npub-output" class="font-mono text-xs text-nostr-300 break-all select-all">
+            npub1gmeu0wenescpjpymwmwgnkaedc6vy3aamf5tdtvxxf5z0yll3gdqatwl3v
+          </div>
+          <button
+            type="button"
+            id="copy-npub-btn"
+            class="flex-shrink-0 inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all shadow-sm active:scale-95"
+          >
+            <span>Kopyala</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NIP-05 Generator Settings & Live Code Box -->
+    <div class="p-6 sm:p-7 rounded-2xl bg-slate-950 border border-slate-800 space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-800/80">
+        <div>
+          <h4 class="text-base font-bold text-white flex items-center gap-2">
+            <Code2 class="w-4 h-4 text-nostr-400" />
+            <span>Hazır <code class="text-nostr-300 font-mono text-sm">/.well-known/nostr.json</code> Dosyası Üretici</span>
+          </h4>
+          <p class="text-xs text-slate-400 mt-0.5">
+            Alan adınızda sunacağınız dosyayı özelleştirin ve tek tıkla kopyalayın.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          id="download-json-btn"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors self-start sm:self-auto"
+        >
+          <Download class="w-3.5 h-3.5" />
+          <span>nostr.json İndir</span>
+        </button>
+      </div>
+
+      <!-- Settings Inputs -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+        <div class="space-y-1.5">
+          <label for="username-input" class="block font-semibold text-slate-300">
+            Kullanıcı Adı (NIP-05 Handle)
+          </label>
+          <div class="flex items-center rounded-xl bg-slate-900 border border-slate-800 px-3 py-2 text-slate-200 focus-within:border-nostr-500">
+            <input
+              id="username-input"
+              type="text"
+              value={defaultUsername}
+              placeholder="Örn: delirehberi veya _ (kök ad için)"
+              class="w-full bg-transparent font-mono focus:outline-none placeholder:text-slate-600"
+            />
+            <span class="text-slate-500 font-mono text-[11px]">@siteniz.com</span>
+          </div>
+          <p class="text-[11px] text-slate-500">
+            Kök domain için (örn: <code class="text-slate-400">@emre.xyz</code>) alt çizgi (<code class="text-slate-400">_</code>) kullanın.
+          </p>
+        </div>
+
+        <div class="space-y-1.5">
+          <label for="relays-input" class="block font-semibold text-slate-300">
+            Röleler (Virgülle ayrılmış)
+          </label>
+          <input
+            id="relays-input"
+            type="text"
+            value="wss://relay.nostr.org.tr, wss://relay.damus.io, wss://nos.lol"
+            class="w-full rounded-xl bg-slate-900 border border-slate-800 px-3 py-2 text-slate-200 font-mono focus:outline-none focus:border-nostr-500 placeholder:text-slate-600"
+          />
+          <p class="text-[11px] text-slate-500">
+            İstemcilerin profilinizi ararken bağlanacağı önerilen röleler.
+          </p>
+        </div>
+      </div>
+
+      <!-- JSON Preview Box -->
+      <div class="rounded-xl bg-slate-900 border border-slate-800/90 overflow-hidden">
+        <div class="flex items-center justify-between px-4 py-2 bg-slate-950/80 border-b border-slate-800 text-[11px] font-mono text-slate-400">
+          <span class="flex items-center gap-1.5 text-slate-300 font-medium">
+            <Server class="w-3.5 h-3.5 text-nostr-400" />
+            <span>https://siteniz.com/.well-known/nostr.json</span>
+          </span>
+          <button
+            type="button"
+            id="copy-json-btn"
+            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
+          >
+            <span>JSON Kopyala</span>
+          </button>
+        </div>
+        <pre class="p-4 overflow-x-auto text-xs font-mono leading-relaxed text-emerald-300/90"><code id="json-preview"></code></pre>
+      </div>
+
+      <!-- Info Alert on Server Requirements -->
+      <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex items-start gap-3 text-xs text-slate-300">
+        <Info class="w-4 h-4 text-nostr-400 flex-shrink-0 mt-0.5" />
+        <div class="space-y-1">
+          <p class="font-semibold text-slate-200">Sunucu Yapılandırma İpuçları:</p>
+          <ul class="list-disc list-inside space-y-0.5 text-slate-400 text-[11px]">
+            <li>Dosya yolu mutlaka <code class="text-slate-200 font-mono">/.well-known/nostr.json</code> olmalıdır.</li>
+            <li>Sunucunuzun <code class="text-slate-200 font-mono">Access-Control-Allow-Origin: *</code> CORS başlığını gönderdiğinden emin olun.</li>
+            <li>Content-Type başlığı <code class="text-slate-200 font-mono">application/json; charset=utf-8</code> olarak yapılandırılmalıdır.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  // Pure JavaScript Client-side Bech32 & Nostr key converter
+  const ALPHABET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
+  const ALPHABET_MAP = {};
+  for (let i = 0; i < ALPHABET.length; i++) {
+    ALPHABET_MAP[ALPHABET[i]] = i;
+  }
+  const GENERATOR = [0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3];
+
+  function polymod(values) {
+    let chk = 1;
+    for (let p = 0; p < values.length; ++p) {
+      const top = chk >> 25;
+      chk = ((chk & 0x1ffffff) << 5) ^ values[p];
+      for (let i = 0; i < 5; ++i) {
+        if ((top >> i) & 1) {
+          chk ^= GENERATOR[i];
+        }
+      }
+    }
+    return chk;
+  }
+
+  function hrpExpand(hrp) {
+    const ret = [];
+    for (let p = 0; p < hrp.length; ++p) {
+      ret.push(hrp.charCodeAt(p) >> 5);
+    }
+    ret.push(0);
+    for (let p = 0; p < hrp.length; ++p) {
+      ret.push(hrp.charCodeAt(p) & 31);
+    }
+    return ret;
+  }
+
+  function verifyChecksum(hrp, data) {
+    return polymod(hrpExpand(hrp).concat(data)) === 1;
+  }
+
+  function createChecksum(hrp, data) {
+    const values = hrpExpand(hrp).concat(data).concat([0, 0, 0, 0, 0, 0]);
+    const mod = polymod(values) ^ 1;
+    const ret = [];
+    for (let p = 0; p < 6; ++p) {
+      ret.push((mod >> (5 * (5 - p))) & 31);
+    }
+    return ret;
+  }
+
+  function convertBits(data, fromBits, toBits, pad) {
+    let acc = 0;
+    let bits = 0;
+    const ret = [];
+    const maxv = (1 << toBits) - 1;
+    const maxAcc = (1 << (fromBits + toBits - 1)) - 1;
+
+    for (let p = 0; p < data.length; ++p) {
+      const value = data[p];
+      if (value < 0 || value >> fromBits !== 0) {
+        return null;
+      }
+      acc = ((acc << fromBits) | value) & maxAcc;
+      bits += fromBits;
+      while (bits >= toBits) {
+        bits -= toBits;
+        ret.push((acc >> bits) & maxv);
+      }
+    }
+
+    if (pad) {
+      if (bits > 0) {
+        ret.push((acc << (toBits - bits)) & maxv);
+      }
+    } else if (bits >= fromBits || ((acc << (toBits - bits)) & maxv)) {
+      return null;
+    }
+
+    return ret;
+  }
+
+  function decodeBech32(bechString) {
+    const str = bechString.trim().toLowerCase();
+    const pos = str.lastIndexOf('1');
+    if (pos < 1 || pos + 7 > str.length || str.length > 1000) {
+      return null;
+    }
+
+    const hrp = str.substring(0, pos);
+    const data = [];
+    for (let p = pos + 1; p < str.length; ++p) {
+      const d = ALPHABET_MAP[str.charAt(p)];
+      if (d === undefined) {
+        return null;
+      }
+      data.push(d);
+    }
+
+    if (!verifyChecksum(hrp, data)) {
+      return null;
+    }
+
+    const payload = data.slice(0, data.length - 6);
+    const bytes = convertBits(payload, 5, 8, false);
+    if (!bytes) {
+      return null;
+    }
+
+    return { hrp, data: new Uint8Array(bytes) };
+  }
+
+  function encodeBech32(hrp, data) {
+    const words = convertBits(data, 8, 5, true);
+    if (!words) throw new Error('Bit conversion error');
+    const checksum = createChecksum(hrp.toLowerCase(), words);
+    const combined = words.concat(checksum);
+    let result = hrp.toLowerCase() + '1';
+    for (let i = 0; i < combined.length; ++i) {
+      result += ALPHABET.charAt(combined[i]);
+    }
+    return result;
+  }
+
+  function bytesToHex(bytes) {
+    let hex = '';
+    for (let i = 0; i < bytes.length; i++) {
+      hex += bytes[i].toString(16).padStart(2, '0');
+    }
+    return hex;
+  }
+
+  function hexToBytes(hex) {
+    const cleanHex = hex.trim().toLowerCase().replace(/^0x/, '');
+    if (cleanHex.length % 2 !== 0 || !/^[0-9a-f]+$/i.test(cleanHex)) {
+      throw new Error('Geçersiz hexadecimal format');
+    }
+    const bytes = new Uint8Array(cleanHex.length / 2);
+    for (let i = 0; i < cleanHex.length; i += 2) {
+      bytes[i / 2] = parseInt(cleanHex.substring(i, i + 2), 16);
+    }
+    return bytes;
+  }
+
+  function npubToHex(npub) {
+    const clean = npub.trim().toLowerCase();
+    if (!clean.startsWith('npub1')) {
+      throw new Error('npub adresi "npub1" ile başlamalıdır');
+    }
+    const decoded = decodeBech32(clean);
+    if (!decoded || decoded.hrp !== 'npub') {
+      throw new Error('Geçersiz npub Bech32 anahtarı veya hatalı checksum');
+    }
+    if (decoded.data.length !== 32) {
+      throw new Error(`Beklenen 32-byte anahtar uzunluğu, bulunan: ${decoded.data.length} byte`);
+    }
+    return bytesToHex(decoded.data);
+  }
+
+  function hexToNpub(hex) {
+    const clean = hex.trim().toLowerCase().replace(/^0x/, '');
+    if (!/^[0-9a-f]{64}$/.test(clean)) {
+      throw new Error('Hex anahtar tam 64 karakter (32 byte) olmalıdır');
+    }
+    const bytes = hexToBytes(clean);
+    return encodeBech32('npub', bytes);
+  }
+
+  function initNip05Converter() {
+    const container = document.querySelector('.nip05-converter-card');
+    if (!container || container.getAttribute('data-initialized') === 'true') return;
+    container.setAttribute('data-initialized', 'true');
+
+    const pubkeyInput = container.querySelector('#pubkey-input');
+    const usernameInput = container.querySelector('#username-input');
+    const relaysInput = container.querySelector('#relays-input');
+    const pasteBtn = container.querySelector('#paste-btn');
+    const clearBtn = container.querySelector('#clear-btn');
+    const validationBox = container.querySelector('#validation-box');
+    const validationMsg = container.querySelector('#validation-msg');
+    const hexOutput = container.querySelector('#hex-output');
+    const npubOutput = container.querySelector('#npub-output');
+    const jsonPreview = container.querySelector('#json-preview');
+    const copyHexBtn = container.querySelector('#copy-hex-btn');
+    const copyNpubBtn = container.querySelector('#copy-npub-btn');
+    const copyJsonBtn = container.querySelector('#copy-json-btn');
+    const downloadJsonBtn = container.querySelector('#download-json-btn');
+
+    let currentHex = '';
+    let currentNpub = '';
+    let currentJson = '';
+
+    function update() {
+      const rawInput = (pubkeyInput?.value || '').trim();
+      const username = (usernameInput?.value || '_').trim().toLowerCase() || '_';
+      const relaysStr = relaysInput?.value || '';
+      const relays = relaysStr
+        .split(',')
+        .map((r) => r.trim())
+        .filter(Boolean);
+
+      if (!rawInput) {
+        currentHex = '';
+        currentNpub = '';
+        if (validationBox && validationMsg) {
+          validationBox.className = 'flex items-center gap-2 text-xs font-medium text-slate-400';
+          validationMsg.textContent = 'Dönüştürmek için bir npub veya hex anahtar girin.';
+        }
+        if (hexOutput) hexOutput.textContent = '—';
+        if (npubOutput) npubOutput.textContent = '—';
+        if (jsonPreview) jsonPreview.textContent = '{\n  "names": {},\n  "relays": {}\n}';
+        return;
+      }
+
+      try {
+        let hex = '';
+        let npub = '';
+        let detectedType = '';
+
+        if (rawInput.toLowerCase().startsWith('npub1')) {
+          hex = npubToHex(rawInput);
+          npub = rawInput.toLowerCase();
+          detectedType = 'npub';
+        } else {
+          const cleanHex = rawInput.replace(/^0x/i, '').toLowerCase();
+          if (/^[0-9a-f]{64}$/.test(cleanHex)) {
+            hex = cleanHex;
+            npub = hexToNpub(cleanHex);
+            detectedType = 'hex';
+          } else if (/^[0-9a-f]+$/i.test(cleanHex)) {
+            throw new Error(`Eksik hex anahtar: 64 karakter olmalı (şu an ${cleanHex.length})`);
+          } else {
+            throw new Error('Tanınmayan anahtar formatı (npub1... veya 64 karakterli hex olmalı)');
+          }
+        }
+
+        currentHex = hex;
+        currentNpub = npub;
+
+        if (validationBox && validationMsg) {
+          validationBox.className = 'flex items-center gap-2 text-xs font-medium text-emerald-400';
+          validationMsg.textContent =
+            detectedType === 'npub'
+              ? '✓ Geçerli NIP-19 (npub) açık anahtarı algılandı ve 32-byte Hex formatına dönüştürüldü.'
+              : '✓ Geçerli 32-byte Hex açık anahtarı algılandı ve NIP-19 npub formatına dönüştürüldü.';
+        }
+
+        if (hexOutput) hexOutput.textContent = hex;
+        if (npubOutput) npubOutput.textContent = npub;
+
+        const jsonObj = {
+          names: {
+            [username]: hex,
+          },
+        };
+
+        if (relays.length > 0) {
+          jsonObj.relays = {
+            [hex]: relays,
+          };
+        }
+
+        currentJson = JSON.stringify(jsonObj, null, 2);
+        if (jsonPreview) jsonPreview.textContent = currentJson;
+      } catch (err) {
+        currentHex = '';
+        currentNpub = '';
+        if (validationBox && validationMsg) {
+          validationBox.className = 'flex items-center gap-2 text-xs font-medium text-rose-400';
+          validationMsg.textContent = '✕ ' + (err.message || 'Geçersiz anahtar.');
+        }
+        if (hexOutput) hexOutput.textContent = '—';
+        if (npubOutput) npubOutput.textContent = '—';
+        if (jsonPreview) jsonPreview.textContent = '{\n  "error": "Geçersiz anahtar"\n}';
+      }
+    }
+
+    // Attach input listeners
+    pubkeyInput?.addEventListener('input', update);
+    usernameInput?.addEventListener('input', update);
+    relaysInput?.addEventListener('input', update);
+
+    // Paste button
+    pasteBtn?.addEventListener('click', async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text && pubkeyInput) {
+          pubkeyInput.value = text.trim();
+          update();
+        }
+      } catch (err) {
+        console.warn('Panoya erişilemedi:', err);
+      }
+    });
+
+    // Clear button
+    clearBtn?.addEventListener('click', () => {
+      if (pubkeyInput) {
+        pubkeyInput.value = '';
+        update();
+        pubkeyInput.focus();
+      }
+    });
+
+    // Copy helper
+    const copyToClipboard = async (text, button, successLabel = 'Kopyalandı!') => {
+      if (!text || text === '—') return;
+      try {
+        await navigator.clipboard.writeText(text);
+        const originalHtml = button.innerHTML;
+        button.innerHTML = `<span>✓ ${successLabel}</span>`;
+        button.classList.add('bg-emerald-600', 'text-white');
+        setTimeout(() => {
+          button.innerHTML = originalHtml;
+          button.classList.remove('bg-emerald-600', 'text-white');
+        }, 2000);
+      } catch (e) {
+        console.error('Kopyalama hatası:', e);
+      }
+    };
+
+    copyHexBtn?.addEventListener('click', () => copyToClipboard(currentHex, copyHexBtn, 'Hex Kopyalandı!'));
+    copyNpubBtn?.addEventListener('click', () => copyToClipboard(currentNpub, copyNpubBtn, 'npub Kopyalandı!'));
+    copyJsonBtn?.addEventListener('click', () => copyToClipboard(currentJson, copyJsonBtn, 'JSON Kopyalandı!'));
+
+    // Download nostr.json
+    downloadJsonBtn?.addEventListener('click', () => {
+      if (!currentJson) return;
+      const blob = new Blob([currentJson], { type: 'application/json;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'nostr.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // Initial update
+    update();
+  }
+
+  initNip05Converter();
+  document.addEventListener('astro:after-swap', initNip05Converter);
+</script>

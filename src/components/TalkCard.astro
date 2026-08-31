@@ -1,0 +1,71 @@
+---
+import type { TalkItem } from '../data/talks';
+import { Mic, Calendar, MapPin, ExternalLink, Presentation } from 'lucide-astro';
+
+interface Props {
+  talk: TalkItem;
+}
+
+const { talk } = Astro.props;
+---
+
+<div class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-nostr-300 dark:hover:border-nostr-700 transition-all">
+  <div class="flex flex-col lg:flex-row gap-6 justify-between items-start">
+    
+    <div class="space-y-3 max-w-2xl">
+      <!-- Badge & Event -->
+      <div class="flex flex-wrap items-center gap-2 text-xs font-semibold">
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-nostr-100 dark:bg-nostr-950 text-nostr-700 dark:text-nostr-300 border border-nostr-200 dark:border-nostr-800">
+          <Mic class="w-3.5 h-3.5 text-nostr-500" />
+          <span>{talk.event}</span>
+        </span>
+        <span class="inline-flex items-center gap-1 text-slate-500 dark:text-slate-400">
+          <Calendar class="w-3.5 h-3.5" />
+          <span>{talk.date}</span>
+        </span>
+        <span class="inline-flex items-center gap-1 text-slate-500 dark:text-slate-400">
+          <MapPin class="w-3.5 h-3.5" />
+          <span>{talk.location}</span>
+        </span>
+      </div>
+
+      <!-- Title -->
+      <h3 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white leading-snug">
+        {talk.title}
+      </h3>
+
+      <p class="text-xs font-medium text-slate-500 dark:text-slate-400">
+        Konuşmacı: <span class="text-slate-800 dark:text-slate-200 font-semibold">{talk.speaker}</span>
+      </p>
+
+      <!-- Description -->
+      <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+        {talk.description}
+      </p>
+
+      <!-- Topics -->
+      <div class="flex flex-wrap gap-1.5 pt-1">
+        {talk.topics.map((topic) => (
+          <span class="px-2.5 py-0.5 text-xs font-mono rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+            {topic}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex flex-col sm:flex-row lg:flex-col gap-2.5 w-full lg:w-auto flex-shrink-0 pt-2 lg:pt-0">
+      <a
+        href={talk.slidesUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-xs text-white bg-nostr-600 hover:bg-nostr-700 shadow-md shadow-nostr-500/10 transition-all active:scale-98"
+      >
+        <Presentation class="w-4 h-4" />
+        <span>Sunum Slaytlarını İncele</span>
+        <ExternalLink class="w-3.5 h-3.5 opacity-80" />
+      </a>
+    </div>
+
+  </div>
+</div>

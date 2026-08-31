@@ -1,0 +1,127 @@
+---
+import Layout from '../layouts/Layout.astro';
+import RelayPingCard from '../components/RelayPingCard.astro';
+import { communityRelay, recommendedRelays } from '../data/relays';
+import { Radio, HelpCircle, CheckCircle2 } from 'lucide-astro';
+import BreadcrumbSchema from '../components/seo/BreadcrumbSchema.astro';
+
+const breadcrumbs = [
+  { name: 'Ana Sayfa', path: '/' },
+  { name: 'Röleler & Canlı Tanı', path: '/roleler' },
+];
+---
+
+<Layout 
+  title="Röleler & Canlı Durum Tanısı - Nostr Türkiye"
+  description="Nostr Türkiye resmi rölesi (relay.nostr.org.tr), canlı WebSocket ping tanı aracı, whitelist yazma politikası ve röle rehberi."
+>
+  <BreadcrumbSchema slot="head" items={breadcrumbs} />
+  
+  <!-- Header Banner -->
+  <section class="py-14 sm:py-20 border-b border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-b from-white via-slate-50 to-slate-100/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-nostr-100 dark:bg-nostr-950 text-nostr-700 dark:text-nostr-300 border border-nostr-200 dark:border-nostr-800 mb-6 shadow-sm">
+        <Radio class="w-3.5 h-3.5 text-nostr-500" />
+        <span>Merkeziyetsiz Röle Ağı</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.2]">
+        Türkiye & Küresel Röleler
+      </h1>
+      <p class="mt-4 text-base sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        Nostr'da mesajlar şirket sunucularında değil; bağımsız rölelerde taşınır. Canlı WebSocket gecikmelerini ölçün ve istemcinize ekleyin.
+      </p>
+    </div>
+  </section>
+
+  <!-- Official Relay Spotlight & Diagnostic Section -->
+  <section class="py-16 bg-white dark:bg-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      
+      <!-- Community Relay Section -->
+      <div>
+        <div class="flex items-center justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <span>Resmi Topluluk Rölesi</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-tr-red"></span>
+            </h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+              Türkiye topluluğu için optimize edilmiş, düşük gecikmeli ve yüksek güvenlikli röle.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6">
+          <RelayPingCard relay={communityRelay} />
+        </div>
+      </div>
+
+      <!-- Other Recommended Relays -->
+      <div>
+        <div class="flex items-center justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white">
+              Tavsiye Edilen Küresel Röleler
+            </h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+              Ağ dayanıklılığını artırmak için istemcinize birden fazla açık röle ekleyebilirsiniz.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {recommendedRelays.filter(r => !r.isOfficialCommunityRelay).map((relay) => (
+            <RelayPingCard relay={relay} />
+          ))}
+        </div>
+      </div>
+
+      <!-- How to add relays guide -->
+      <div class="p-8 sm:p-10 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-6">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-nostr-100 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400 flex items-center justify-center">
+            <HelpCircle class="w-5 h-5" />
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white">
+            İstemcinize Röle Nasıl Eklenir?
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-600 dark:text-slate-300">
+          <div class="space-y-2 p-4 rounded-2xl bg-white dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60">
+            <h4 class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+              <CheckCircle2 class="w-4 h-4 text-nostr-500" />
+              <span>Damus (iOS / macOS)</span>
+            </h4>
+            <p class="text-xs leading-relaxed">
+              Ayarlar > Röleler (Relays) bölümüne gidin. <code class="font-mono text-nostr-600 dark:text-nostr-400">wss://relay.nostr.org.tr</code> adresini yapıştırıp Ekle'ye dokunun.
+            </p>
+          </div>
+
+          <div class="space-y-2 p-4 rounded-2xl bg-white dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60">
+            <h4 class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+              <CheckCircle2 class="w-4 h-4 text-nostr-500" />
+              <span>Amethyst (Android)</span>
+            </h4>
+            <p class="text-xs leading-relaxed">
+              Sol menüden Ayarlar > Röleler sekmesini açın. "+" butonuna basarak röle URL'sini ekleyin.
+            </p>
+          </div>
+
+          <div class="space-y-2 p-4 rounded-2xl bg-white dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60">
+            <h4 class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+              <CheckCircle2 class="w-4 h-4 text-nostr-500" />
+              <span>Primal (Web / Mobil)</span>
+            </h4>
+            <p class="text-xs leading-relaxed">
+              Settings > Network / Relays bölümüne gidin ve özel röle listesine ekleyin.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</Layout>

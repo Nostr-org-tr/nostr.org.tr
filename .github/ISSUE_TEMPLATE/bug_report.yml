@@ -1,0 +1,33 @@
+name: 🐛 Hata Bildirimi (Bug Report)
+description: Web sitesinde veya NIP-05 servisinde karşılaştığınız bir sorunu bildirin.
+title: "[Hata]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Karşılaştığınız hatayı çözebilmemiz için lütfen aşağıdaki ayrıntıları doldurun.
+  - type: textarea
+    id: description
+    attributes:
+      label: Hatanın Açıklaması
+      placeholder: "Hatanın ne olduğunu ve ne olmasını beklediğinizi açıklayın."
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Tekrarlama Adımları (Steps to Reproduce)
+      placeholder: |
+        1. '...' sayfasına gidin
+        2. '...' butonuna tıklayın
+        3. Hatayı gözlemleyin
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Tarayıcı / Cihaz / İşletim Sistemi
+      placeholder: "Örn: Chrome 125, macOS Sonoma / iOS Safari"
+    validations:
+      required: false

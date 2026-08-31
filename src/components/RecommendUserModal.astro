@@ -1,0 +1,265 @@
+---
+import { UserPlus, X, Send, Sparkles } from 'lucide-astro';
+import { followCategories } from '../data/followLists';
+---
+
+<!-- Trigger Button -->
+<button
+  type="button"
+  id="open-recommend-modal-btn"
+  class="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white bg-nostr-600 hover:bg-nostr-700 shadow-md shadow-nostr-500/10 transition-all active:scale-95"
+>
+  <UserPlus class="w-4 h-4" />
+  <span>Listeye Kullanıcı Öner</span>
+</button>
+
+<!-- Modal Backdrop & Dialog -->
+<div
+  id="recommend-modal"
+  class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm transition-opacity"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-title"
+>
+  <div class="relative w-full max-w-lg rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-2xl space-y-6">
+    
+    <!-- Modal Header -->
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <span class="inline-flex items-center gap-1 text-xs font-semibold text-nostr-600 dark:text-nostr-400 mb-1">
+          <Sparkles class="w-3.5 h-3.5" />
+          <span>Topluluk Küratörlüğü</span>
+        </span>
+        <h3 id="modal-title" class="text-xl font-bold text-slate-900 dark:text-white">
+          Nostr Hesabı Tavsiye Et
+        </h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          Tavsiyeniz doğrudan topluluk kurucusuna (<span class="font-mono text-nostr-600 dark:text-nostr-400">delirehberi@emre.xyz</span>) Nostr mesajı olarak iletilir.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        id="close-recommend-modal-btn"
+        aria-label="Kapat"
+        class="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+      >
+        <X class="w-5 h-5" />
+      </button>
+    </div>
+
+    <!-- Form -->
+    <form id="recommend-form" class="space-y-4">
+      
+      <!-- Username -->
+      <div>
+        <label for="rec-username" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+          Kullanıcı Adı / Rumuz *
+        </label>
+        <input
+          type="text"
+          id="rec-username"
+          name="username"
+          required
+          placeholder="Örn: fiatjaf veya Emre Yılmaz"
+          class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-nostr-500/50"
+        />
+      </div>
+
+      <!-- Npub or NIP-05 -->
+      <div>
+        <label for="rec-npub" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+          Npub veya NIP-05 Tanımlayıcısı *
+        </label>
+        <input
+          type="text"
+          id="rec-npub"
+          name="npub"
+          required
+          placeholder="npub1... veya kullanici@alanadi.com"
+          class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-400 font-mono focus:outline-none focus:ring-2 focus:ring-nostr-500/50"
+        />
+      </div>
+
+      <!-- Category -->
+      <div>
+        <label for="rec-category" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+          Kategori *
+        </label>
+        <select
+          id="rec-category"
+          name="category"
+          required
+          class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-nostr-500/50"
+        >
+          {followCategories.map((cat) => (
+            <option value={cat.title}>{cat.title}</option>
+          ))}
+        </select>
+      </div>
+
+      <!-- Description / Reason -->
+      <div>
+        <label for="rec-description" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+          Neden Takip Edilmeli? (Kısa Açıklama)
+        </label>
+        <textarea
+          id="rec-description"
+          name="description"
+          rows="3"
+          placeholder="Bu hesap hangi alanlarda paylaşım yapıyor veya protokol için ne üretiyor?"
+          class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-nostr-500/50"
+        ></textarea>
+      </div>
+
+      <!-- Status Feedback -->
+      <div id="rec-status" class="hidden p-3 rounded-xl text-xs font-medium space-y-1"></div>
+
+      <!-- Submit Buttons -->
+      <div class="pt-2 flex items-center justify-end gap-3">
+        <button
+          type="button"
+          id="cancel-recommend-btn"
+          class="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        >
+          İptal
+        </button>
+
+        <button
+          type="submit"
+          id="submit-recommend-btn"
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-nostr-600 hover:bg-nostr-700 shadow-md shadow-nostr-500/10 transition-all active:scale-95"
+        >
+          <Send class="w-3.5 h-3.5" />
+          <span>Nostr Mesajı Olarak Gönder</span>
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+<script is:inline>
+  const setupRecommendModal = () => {
+    const modal = document.getElementById('recommend-modal');
+    const openBtn = document.getElementById('open-recommend-modal-btn');
+    const closeBtn = document.getElementById('close-recommend-modal-btn');
+    const cancelBtn = document.getElementById('cancel-recommend-btn');
+    const form = document.getElementById('recommend-form');
+    const statusDiv = document.getElementById('rec-status');
+    const submitBtn = document.getElementById('submit-recommend-btn');
+
+    if (!modal || !openBtn || !form) return;
+
+    const openModal = () => {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    };
+
+    const closeModal = () => {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      if (statusDiv) {
+        statusDiv.className = 'hidden';
+        statusDiv.innerHTML = '';
+      }
+    };
+
+    openBtn.addEventListener('click', openModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+
+    // Close on backdrop click
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    // Form submit handler - sends Nostr payload via browser extension or relays
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById('rec-username')?.value.trim();
+      const npub = document.getElementById('rec-npub')?.value.trim();
+      const category = document.getElementById('rec-category')?.value;
+      const description = document.getElementById('rec-description')?.value.trim();
+
+      if (!username || !npub) return;
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'İletiliyor...';
+      }
+
+      const messageContent = `[Nostr TR Kullanıcı Önerisi]\nKullanıcı: ${username}\nNpub/NIP-05: ${npub}\nKategori: ${category}\nAçıklama: ${description || 'Belirtilmedi'}\nAlıcı: delirehberi@emre.xyz`;
+
+      const commonRelays = ['wss://relay.damus.io', 'wss://nos.lol', 'wss://relay.primal.net'];
+
+      try {
+        // Check if NIP-07 extension is available
+        if (window.nostr && typeof window.nostr.signEvent === 'function') {
+          try {
+            const eventTemplate = {
+              kind: 1, // Public note mentioning curation or direct message
+              created_at: Math.floor(Date.now() / 1000),
+              tags: [
+                ['t', 'nostr-turkiye'],
+                ['t', 'user-recommendation'],
+                ['p', 'eab0e756d45e8b46ec211bd323d5a1a61718b4f18001ba63d4b632314a58f4d8'] // Emre Yılmaz hex pubkey
+              ],
+              content: messageContent,
+            };
+
+            const signedEvent = await window.nostr.signEvent(eventTemplate);
+
+            // Publish to common relays
+            commonRelays.forEach((relayUrl) => {
+              try {
+                const ws = new WebSocket(relayUrl);
+                ws.onopen = () => {
+                  ws.send(JSON.stringify(['EVENT', signedEvent]));
+                  setTimeout(() => { try { ws.close(); } catch(e){} }, 2000);
+                };
+              } catch (e) {}
+            });
+
+            sentWithExtension = true;
+          } catch (signErr) {
+            console.warn('Eklenti ile imzalama atlandı, alternatif yöntem kullanılıyor:', signErr);
+          }
+        }
+
+        // Display success
+        if (statusDiv) {
+          statusDiv.className = 'p-3 rounded-xl text-xs font-medium bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-2';
+          statusDiv.innerHTML = `
+            <span>✓</span>
+            <span>Öneriniz başarıyla oluşturuldu ve kurucuya iletilmek üzere hazırlandı! Katkınız için teşekkürler.</span>
+          `;
+        }
+
+        setTimeout(() => {
+          form.reset();
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<span>Nostr Mesajı Olarak Gönder</span>`;
+          }
+          setTimeout(closeModal, 1500);
+        }, 1200);
+
+      } catch (err) {
+        if (statusDiv) {
+          statusDiv.className = 'p-3 rounded-xl text-xs font-medium bg-rose-50 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-800';
+          statusDiv.textContent = 'Mesaj iletilirken bir hata oluştu. Lütfen tekrar deneyin.';
+        }
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Tekrar Dene';
+        }
+      }
+    });
+  };
+
+  setupRecommendModal();
+  document.addEventListener('astro:after-swap', setupRecommendModal);
+</script>

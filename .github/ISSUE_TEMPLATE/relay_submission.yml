@@ -1,0 +1,51 @@
+name: 📶 Röle Önerisi (Relay Submission)
+description: Türkiye merkezli veya topluluk için önerilen yeni bir Nostr rölesi ekleyin.
+title: "[Röle]: "
+labels: ["relay-request", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Topluluk röle listesine eklenmesini önerdiğiniz Nostr rölesinin bilgilerini girin.
+  - type: input
+    id: url
+    attributes:
+      label: Röle WebSocket Adresi (URL)
+      placeholder: "wss://relay.example.org.tr"
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: Röle Adı
+      placeholder: "Örn: Nostr TR Rölesi #1"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Röle Açıklaması
+      placeholder: "Rölenin amacı, barındırıldığı yer veya özellikleri."
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: Konum / Şehir
+      placeholder: "İstanbul, TR"
+    validations:
+      required: true
+  - type: input
+    id: operator
+    attributes:
+      label: Operatör Adı veya İletişim npub
+      placeholder: "operatör_adi veya npub1..."
+    validations:
+      required: true
+  - type: input
+    id: nips
+    attributes:
+      label: Desteklenen NIP Standartları (Virgülle ayrılmış)
+      placeholder: "1, 2, 9, 11, 20, 50"
+    validations:
+      required: false

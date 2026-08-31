@@ -1,0 +1,25 @@
+# Nostr Türkiye Topluluğu (nostr.org.tr)
+
+> Nostr Türkiye Topluluğu is an open-source, non-hierarchical (do-ocracy) community dedicated to decentralized, censorship-resistant communication and cryptographic identity sovereignty in Türkiye and beyond.
+
+## Summary
+- **Website**: https://nostr.org.tr
+- **Community Relay**: wss://relay.nostr.org.tr (Open Read, Whitelist Write for community members)
+- **Founder**: Emre Yılmaz (@delirehberi / delirehberi@emre.xyz / emre@nostr.org.tr)
+- **Official Nostr Handle**: topluluk@nostr.org.tr (`npub1a5272jud2fdhl2jr4g2zyg0c8rzpt2kxnxamfe62zqzwfdl84huq2usgqp`)
+- **Contact & Working Groups**: ekip@nostr.org.tr
+- **GitHub**: https://github.com/delirehberi/nostr.org.tr
+
+## Core Sections & URLs
+- [Ana Sayfa / Home](https://nostr.org.tr/): Core principles, value proposition, and community highlights.
+- [Manifesto (TR)](https://nostr.org.tr/manifesto): Foundational 5 pillars of the community (Freedom, Do-ocracy, Legal Scope, Ethics, Lightning Zaps).
+- [Manifesto (EN)](https://nostr.org.tr/en/manifesto): Full English translation of the charter for the global ecosystem.
+- [Topluluk & Ekip](https://nostr.org.tr/topluluk): Community members, do-ocracy governance, and working groups application guide.
+- [Röleler & Canlı Tanı](https://nostr.org.tr/roleler): Real-time WebSocket latency probe testing `relay.nostr.org.tr` and relay guides.
+- [Projeler & Araçlar](https://nostr.org.tr/projeler): Open-source tools spotlighting `x2nostr.emre.xyz` (social migration) and `bridge.workouse.com` (automation bridge).
+- [Takip Listeleri](https://nostr.org.tr/takip-listeleri): Curated public keys by category (Academics, Influencers, Core Developers, Community Leaders, News) with one-click follow.
+- [Başlangıç Rehberi](https://nostr.org.tr/rehber): Comprehensive documentation on keys, clients (Damus, Amethyst, Primal), NIP-05, and Lightning Zaps.
+- [Konuşmalar & Sunumlar](https://nostr.org.tr/konusmalar): Presentation archive including DevFest Istanbul 2025 (*Nostr: A Protocol for Freedom of Speech*).
+
+## Full Documentation for LLMs
+- [Full Context & Guides Dump](https://nostr.org.tr/llms-full.txt): Complete text of all guides, manifesto, and schemas.

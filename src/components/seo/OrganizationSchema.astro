@@ -1,0 +1,50 @@
+---
+import JsonLd from './JsonLd.astro';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://nostr.org.tr/#organization',
+      name: 'Nostr Türkiye Topluluğu',
+      alternateName: ['Nostr Türkiye', 'Nostr Turkey Community', 'nostr.org.tr'],
+      url: 'https://nostr.org.tr',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://nostr.org.tr/images/nostr-org-logo.jpeg',
+        caption: 'Nostr Türkiye Logo',
+      },
+      image: 'https://nostr.org.tr/og-image.png',
+      sameAs: [
+        'https://github.com/delirehberi/nostr.org.tr',
+        'https://relay.nostr.org.tr',
+      ],
+      description: 'Türkiye Nostr topluluğunun resmi platformu. Sansürsüz, algoritmasız, açık ve bağımsız iletişim protokolü Nostr hakkında Türkçe rehberler, röleler, takip listeleri ve etkinlikler.',
+      email: 'ekip@nostr.org.tr',
+      knowsAbout: [
+        'Nostr Protocol',
+        'Decentralized Social Networks',
+        'Cryptographic Identity',
+        'Bitcoin Lightning Network',
+        'NIP-01',
+        'NIP-05',
+        'NIP-57',
+      ],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': 'https://nostr.org.tr/#website',
+      url: 'https://nostr.org.tr',
+      name: 'Nostr Türkiye Topluluğu',
+      publisher: {
+        '@id': 'https://nostr.org.tr/#organization',
+      },
+      inLanguage: ['tr-TR', 'en-US'],
+      description: 'Özgür, açık ve sansürsüz iletişim protokolü Nostr Türkiye merkezi.',
+    },
+  ],
+};
+---
+
+<JsonLd schema={schema} />

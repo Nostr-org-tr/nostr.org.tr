@@ -1,0 +1,77 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TalkCard from '../components/TalkCard.astro';
+import { talks } from '../data/talks';
+import { Mic, Presentation, Mail, ArrowRight } from 'lucide-astro';
+import EventSchema from '../components/seo/EventSchema.astro';
+import BreadcrumbSchema from '../components/seo/BreadcrumbSchema.astro';
+
+const breadcrumbs = [
+  { name: 'Ana Sayfa', path: '/' },
+  { name: 'Konuşmalar & Sunumlar', path: '/konusmalar' },
+];
+---
+
+<Layout 
+  title="Konuşmalar & Sunumlar - Nostr Türkiye"
+  description="DevFest Istanbul 2025 ve diğer teknoloji konferanslarında Nostr protokolü üzerine gerçekleştirilen sunumlar, slaytlar ve etkinlik arşivi."
+>
+  <Fragment slot="head">
+    <BreadcrumbSchema items={breadcrumbs} />
+    <EventSchema talks={talks} />
+  </Fragment>
+  
+  <!-- Header Banner -->
+  <section class="py-14 sm:py-20 border-b border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-b from-white via-slate-50 to-slate-100/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-nostr-100 dark:bg-nostr-950 text-nostr-700 dark:text-nostr-300 border border-nostr-200 dark:border-nostr-800 mb-6 shadow-sm">
+        <Mic class="w-3.5 h-3.5 text-nostr-500" />
+        <span>Topluluk Etkinlikleri & Konuşmalar</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.2]">
+        Konuşmalar & Sunumlar
+      </h1>
+      <p class="mt-4 text-base sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        Türkiye'de ve uluslararası arenada Nostr protokolünü, sansürsüz iletişimi ve açık internet vizyonunu anlattığımız sunumlar.
+      </p>
+    </div>
+  </section>
+
+  <!-- Talks Stream -->
+  <section class="py-16 bg-white dark:bg-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      
+      <!-- List of Talks -->
+      <div class="space-y-6">
+        {talks.map((talk) => (
+          <TalkCard talk={talk} />
+        ))}
+      </div>
+
+      <!-- Invite Speaker CTA -->
+      <div class="p-8 sm:p-10 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="space-y-2 max-w-2xl">
+          <h3 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <Presentation class="w-5 h-5 text-nostr-500" />
+            <span>Etkinliğinize Konuşmacı Davet Edin</span>
+          </h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            Üniversite kulübünüzde, şirketinizde veya teknoloji buluşmalarınızda Nostr, kriptografi ve merkeziyetsiz protokoller üzerine bir sunum mu istiyorsunuz?
+          </p>
+        </div>
+
+        <a
+          href="mailto:ekip@nostr.org.tr?subject=Nostr%20Konu%C5%9Fmac%C4%B1%20Daveti"
+          class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold text-xs text-white bg-nostr-600 hover:bg-nostr-700 shadow-md shadow-nostr-500/10 transition-all active:scale-95 flex-shrink-0"
+        >
+          <Mail class="w-4 h-4" />
+          <span>Konuşmacı Talep Et</span>
+          <ArrowRight class="w-4 h-4" />
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+</Layout>

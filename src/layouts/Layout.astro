@@ -1,0 +1,148 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  isEn?: boolean;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  alternateTr?: string;
+  alternateEn?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
+}
+
+const {
+  title = 'Nostr Türkiye Topluluğu - Özgür, Açık ve Sorumlu İletişimin Geleceği',
+  description = 'Türkiye Nostr topluluğunun resmi platformu. Sansürsüz, algoritmasız, açık ve bağımsız iletişim protokolü Nostr hakkında Türkçe rehberler, röleler, takip listeleri ve etkinlikler.',
+  isEn = false,
+  ogImage = '/og-image.png',
+  ogType = 'website',
+  alternateTr,
+  alternateEn,
+  publishedTime,
+  modifiedTime,
+} = Astro.props;
+
+const siteUrl = Astro.site ? Astro.site.toString().replace(/\/$/, '') : 'https://nostr.org.tr';
+const currentPath = Astro.url.pathname;
+const canonicalURL = new URL(currentPath, siteUrl).toString();
+
+// Resolve full absolute URL for Open Graph & Twitter share images
+const absoluteOgImage = ogImage.startsWith('http')
+  ? ogImage
+  : new URL(ogImage.startsWith('/') ? ogImage : `/${ogImage}`, siteUrl).toString();
+
+// Determine bilingual alternate links
+let trUrl = alternateTr;
+let enUrl = alternateEn;
+
+if (!trUrl && !enUrl) {
+  const cleanPath = currentPath.replace(/\/$/, '');
+  if (cleanPath === '/manifesto' || cleanPath === '/en/manifesto') {
+    trUrl = `${siteUrl}/manifesto/`;
+    enUrl = `${siteUrl}/en/manifesto/`;
+  }
+}
+---
+
+<!doctype html>
+<html lang={isEn ? "en" : "tr"}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Robots Directives & Theme Color -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#8b5cf6" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f172a" />
+
+    <!-- Canonical & Sitemap -->
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="sitemap" href="/sitemap.xml" />
+
+    <!-- In-Page Hreflang Tags -->
+    {trUrl && <link rel="alternate" hreflang="tr" href={trUrl} />}
+    {enUrl && <link rel="alternate" hreflang="en" href={enUrl} />}
+    {trUrl && <link rel="alternate" hreflang="x-default" href={trUrl} />}
+    {!trUrl && <link rel="alternate" hreflang={isEn ? "en" : "tr"} href={canonicalURL} />}
+    {!trUrl && !isEn && <link rel="alternate" hreflang="x-default" href={canonicalURL} />}
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:site_name" content="Nostr Türkiye Topluluğu" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={absoluteOgImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content={title} />
+    <meta property="og:locale" content={isEn ? "en_US" : "tr_TR"} />
+    {enUrl && <meta property="og:locale:alternate" content={isEn ? "tr_TR" : "en_US"} />}
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@delirehberi" />
+    <meta name="twitter:creator" content="@delirehberi" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={absoluteOgImage} />
+    <meta name="twitter:image:alt" content={title} />
+
+    <!-- Google / DNS Preconnects -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link 
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" 
+      rel="stylesheet" 
+    />
+
+    <!-- Head Slot for Structured Data / Schemas -->
+    <slot name="head" />
+
+    <!-- Theme Initialization Script (Light Mode Default) -->
+    <script is:inline>
+      const getInitialTheme = () => {
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme === 'dark') {
+          return 'dark';
+        }
+        // Strictly default to Light mode
+        return 'light';
+      };
+
+      const theme = getInitialTheme();
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <Header currentPath={currentPath} isEn={isEn} />
+    <main class="flex-grow">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

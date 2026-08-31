@@ -1,0 +1,48 @@
+# Nostr Türkiye Topluluğu - Full Documentation & Context for LLMs
+
+## About Nostr Türkiye
+Nostr Türkiye Topluluğu (nostr.org.tr) is the sovereign, decentralized communication hub for Turkish-speaking Nostr users, developers, and educators. It operates on a do-ocracy model with autonomous working groups (Software/Tech, Content/Education, Events/Talks, Design/UI).
+
+---
+
+## The Community Manifesto (Türkçe)
+
+Nostr Türkiye Topluluk Manifestosu: Özgür, Açık ve Sorumlu İletişimin Geleceği
+Bizler, dijital dünyada iletişimin platformların ve algoritmaların kontrolünde değil, bireylerin özgür iradesinde olması gerektiğine inanan bağımsız bir topluluğuz. İnternetin ilk günlerindeki açık, sansürsüz ve demokratik ruhunu günümüz teknolojisiyle yeniden canlandırmak için buradayız.
+
+1. Temel İlke ve Özgürlükler
+- Kimlik ve Veri Özgürlüğü: Kendi dijital kimliğinin (public key) tek sahibisin. Verilerin şirket sunucularına hapsolmaz; sansürlenemez, satılamaz ve hesabın üçüncü tarafların kararıyla dondurulamaz.
+- Algoritmalardan Bağımsızlık: Dikkatimizi ticari kaygılarla manipüle eden kapalı algoritmaları reddediyoruz. Nostr, merkeziyetsiz röle (relay) mimarisiyle akışını senin kontrolüne bırakır.
+- Tarafsız Protokol, Tek İdeoloji: Özgürlük: Nostr bir platform veya şirket değil, açık bir protokoldür. Tek ideolojisi bireysel özgürlük ve açık iletişimdir.
+- İfadelerin ve Fikirlerin Özgürlüğü: Fikirlerin serbestçe ifade edilebilmesini ve düşünce çeşitliliğini savunuyoruz.
+
+2. Örgütlenme Modeli: Hiyerarşisiz ve Katkı Odaklı (Doakrasi)
+- Emeğe ve Katkıya Dayalı Liderlik: Hiyerarşi yoktur; sorumluluk alan, üreten ve katkı sağlayan herkes topluluğun doğal yönlendiricisidir.
+- Çalışma Grupları (Guilds): Yazılım/Teknoloji, İçerik/Eğitim, Moderasyon/Etkinlik ve Tasarım alanlarında esnek çalışma gruplarıyla organize oluruz.
+- Fikir Birliği ve Kolaylaştırıcılık: Kararlar kaba fikir birliği (rough consensus) ve açık tartışma süreçleriyle alınır.
+
+3. Sorumluluk Sınırları ve Hukuki Çerçeve
+- Hukuka Saygı ve Yasal Çerçeve: Türkiye Cumhuriyeti’nin yasalarına ve hukuki düzenlemelerine tam uyum içinde hareket ederiz.
+- Ne Yasa Koyucuyuz Ne De Yargıç: Ağ üzerindeki bağımsız kullanıcıların eylemlerini yargılamak yetki alanımızda değildir.
+- Bireysel Sorumluluk: Üretilen içeriklerin hukuki ve cezai sorumluluğu doğrudan içeriği üreten bireylere aittir.
+
+4. Topluluk Kültürü, Temsil ve Etik
+- Karşılıklı Saygı ve Etik Sorumluluk: Konuşma özgürlüğü taciz veya nefret söylemi hakkı doğurmaz; karşılıklı saygı esastır.
+- Ortak Eğitici Misyon: Amacımız Türkçe kaynaklar üretmek, açık kaynak projeleri desteklemek ve teknik okuryazarlığı artırmaktır.
+
+5. Birlikte İnşa Ediyoruz (Lightning & Zaps)
+- Değer Transferi: Lightning Network entegrasyonu sayesinde üretilen emeği ve fikirleri aracısız biçimde (Zaps) destekliyoruz.
+
+---
+
+## Community Keypairs & Verification (NIP-05)
+- Domain: nostr.org.tr
+- Official Community Handle: topluluk@nostr.org.tr
+  - Public Key: npub1a5272jud2fdhl2jr4g2zyg0c8rzpt2kxnxamfe62zqzwfdl84huq2usgqp (Hex: ed15e54b8d525b7faa43aa142221f838c415aac699bbb4e74a1004e4b7e7adf8)
+- Founder Handle: emre@nostr.org.tr / delirehberi@emre.xyz
+  - Public Key: npub1gmeu0wenescpjpymwmwgnkaedc6vy3aamf5tdtvxxf5z0yll3gdqatwl3v (Hex: 46f3c7bb33cc3019049b76dc89dbb96e34c247bdda68b6ad8632682793ff8a1a)
+- Community Relay: wss://relay.nostr.org.tr (Open Read, Whitelist Write)
+
+## Featured Projects
+1. **x2nostr (https://x2nostr.emre.xyz)**: Cross-platform migration tool for importing content, profiles, and follower connections from X/Twitter and other social networks to Nostr.
+2. **Bridge by Workouse (https://bridge.workouse.com)**: Zapier-like automation bridge for connecting webhooks, RSS feeds, notifications, and apps to Nostr relays.

@@ -1,0 +1,141 @@
+---
+import Layout from './Layout.astro';
+import { guides } from '../data/guides';
+import { BookOpen, Clock } from 'lucide-astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  activeGuideId?: string;
+  ogImage?: string;
+}
+
+const {
+  title = 'Nostr Başlangıç & Dokümantasyon Rehberi',
+  description = 'Nostr protokolü, istemci kurulumları, anahtar güvenliği, NIP-05 doğrulama, Zaps ve göç araçları hakkında adım adım kapsamlı Türkçe rehber.',
+  activeGuideId = 'nostr-nedir',
+  ogImage,
+} = Astro.props;
+---
+
+<Layout title={title} description={description} ogType="article" ogImage={ogImage}>
+  <slot name="head" slot="head" />
+  
+  <!-- Header Banner -->
+  <section class="py-12 sm:py-16 border-b border-slate-200/80 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-nostr-100 dark:bg-nostr-950 text-nostr-700 dark:text-nostr-300 border border-nostr-200 dark:border-nostr-800 mb-4">
+        <BookOpen class="w-3.5 h-3.5" />
+        <span>Resmi Türkçe Dokümantasyon</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+        Nostr Başlangıç ve İleri Düzey Rehberi
+      </h1>
+      <p class="mt-3 text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl">
+        Kriptografik anahtarlardan istemci seçimine, göç araçlarından röle kurulumuna kadar her şey.
+      </p>
+    </div>
+  </section>
+
+  <!-- Docs Main Content with Sticky Sidebar -->
+  <section class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Sidebar TOC -->
+      <aside class="lg:col-span-4 lg:sticky lg:top-24 space-y-2 p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 mb-3">
+          Rehber Konuları
+        </h2>
+        <nav class="space-y-1" id="guide-sidebar-nav" aria-label="Rehber Navigasyonu">
+          {guides.map((g) => {
+            const isInitialActive = g.id === activeGuideId;
+            return (
+              <a
+                href={`#${g.id}`}
+                data-guide-link={g.id}
+                class={`guide-nav-link flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all ${
+                  isInitialActive
+                    ? 'bg-nostr-50 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400 font-semibold border border-nostr-200/60 dark:border-nostr-800/60'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                }`}
+              >
+                <span class="truncate">{g.title}</span>
+                <span class="text-[11px] font-mono text-slate-400 flex items-center gap-1 flex-shrink-0 ml-2">
+                  <Clock class="w-3 h-3" />
+                  {g.readTime}
+                </span>
+              </a>
+            );
+          })}
+        </nav>
+      </aside>
+
+      <!-- Main Article / Chapter Stream -->
+      <div class="lg:col-span-8 space-y-12">
+        <slot />
+      </div>
+
+    </div>
+  </section>
+
+  <script is:inline>
+    const setupGuideScrollSpy = () => {
+      const navLinks = document.querySelectorAll('[data-guide-link]');
+      const articles = document.querySelectorAll('article[id]');
+      if (!navLinks.length || !articles.length) return;
+
+      const activeClassList = [
+        'bg-nostr-50', 'dark:bg-nostr-950',
+        'text-nostr-600', 'dark:text-nostr-400',
+        'font-semibold', 'border',
+        'border-nostr-200/60', 'dark:border-nostr-800/60'
+      ];
+      const inactiveClassList = [
+        'text-slate-600', 'dark:text-slate-400',
+        'hover:text-slate-900', 'dark:hover:text-white',
+        'hover:bg-slate-50', 'dark:hover:bg-slate-800/60'
+      ];
+
+      const setActive = (id) => {
+        navLinks.forEach((link) => {
+          const linkId = link.getAttribute('data-guide-link');
+          if (linkId === id) {
+            link.classList.remove(...inactiveClassList);
+            link.classList.add(...activeClassList);
+          } else {
+            link.classList.remove(...activeClassList);
+            link.classList.add(...inactiveClassList);
+          }
+        });
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActive(entry.target.id);
+          }
+        });
+      }, {
+        rootMargin: '-15% 0px -65% 0px',
+        threshold: [0, 0.2, 0.5]
+      });
+
+      articles.forEach((art) => observer.observe(art));
+
+      const onScroll = () => {
+        const scrollY = window.scrollY;
+        if (scrollY < 80 && articles.length > 0) {
+          setActive(articles[0].id);
+        } else if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50) {
+          setActive(articles[articles.length - 1].id);
+        }
+      };
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+    };
+
+    setupGuideScrollSpy();
+    document.addEventListener('astro:after-swap', setupGuideScrollSpy);
+  </script>
+
+</Layout>

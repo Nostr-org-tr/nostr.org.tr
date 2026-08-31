@@ -1,0 +1,28 @@
+---
+import JsonLd from './JsonLd.astro';
+
+interface BreadcrumbItem {
+  name: string;
+  path: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+  siteUrl?: string;
+}
+
+const { items, siteUrl = 'https://nostr.org.tr' } = Astro.props;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.name,
+    item: item.path.startsWith('http') ? item.path : `${siteUrl.replace(/\/$/, '')}${item.path.startsWith('/') ? item.path : `/${item.path}`}`,
+  })),
+};
+---
+
+<JsonLd schema={schema} />

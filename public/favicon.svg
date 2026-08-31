@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <linearGradient id="nostrGradient" x1="10" y1="10" x2="110" y2="110" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#8B5CF6" />
+      <stop offset="100%" stop-color="#6D28D9" />
+    </linearGradient>
+    <linearGradient id="trBadgeGradient" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#E11D48" />
+      <stop offset="100%" stop-color="#BE123C" />
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="104" height="104" rx="28" fill="url(#nostrGradient)" />
+  <path d="M42 84 C 42 60, 52 42, 68 32 C 76 26, 84 26, 88 32 C 90 35, 87 40, 81 40 C 72 40, 60 48, 56 68 L 56 84" 
+        stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <circle cx="80" cy="33" r="3" fill="#FFFFFF" />
+  <circle cx="36" cy="76" r="4.5" fill="#DDD6FE" />
+  <circle cx="56" cy="84" r="5" fill="#FFFFFF" />
+  <circle cx="78" cy="80" r="4.5" fill="#DDD6FE" />
+  <g transform="translate(74, 10)">
+    <circle cx="18" cy="18" r="16" fill="url(#trBadgeGradient)" stroke="#FFFFFF" stroke-width="2.5" />
+    <path d="M21.5 12 C 17.5 12 14.5 14.5 14.5 18 C 14.5 21.5 17.5 24 21.5 24 C 20.2 23 19.5 20.8 19.5 18 C 19.5 15.2 20.2 13 21.5 12 Z" fill="#FFFFFF" />
+    <path d="M23.5 18 L 22.2 18.5 L 22.6 17.2 L 21.6 16.3 L 22.9 16.3 L 23.5 15 L 24.1 16.3 L 25.4 16.3 L 24.4 17.2 L 24.8 18.5 Z" fill="#FFFFFF" />
+  </g>
+</svg>

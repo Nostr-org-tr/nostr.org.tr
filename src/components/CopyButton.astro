@@ -1,0 +1,90 @@
+---
+import { Copy, Check } from 'lucide-astro';
+
+interface Props {
+  text: string;
+  label?: string;
+  className?: string;
+  showText?: boolean;
+}
+
+const { text, label = 'Kopyala', className = '', showText = false } = Astro.props;
+---
+
+<button
+  type="button"
+  data-copy-text={text}
+  data-copy-label={label}
+  class={`copy-btn group relative inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700 transition-all focus:outline-none focus:ring-2 focus:ring-nostr-500/50 active:scale-95 ${className}`}
+  title={label}
+  aria-label={label}
+>
+  <Copy class="w-3.5 h-3.5 copy-icon transition-transform group-hover:scale-110" />
+  <Check class="w-3.5 h-3.5 check-icon hidden text-emerald-500" />
+  {showText && <span class="btn-label">{label}</span>}
+  
+  <!-- Tooltip -->
+  <span class="tooltip pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded bg-slate-900 text-white text-[10px] opacity-0 transition-opacity whitespace-nowrap shadow-sm">
+    Kopyalandı!
+  </span>
+</button>
+
+<script is:inline>
+  const setupCopyButtons = () => {
+    document.querySelectorAll('.copy-btn').forEach((btn) => {
+      // Avoid attaching multiple listeners
+      if (btn.getAttribute('data-has-listener') === 'true') return;
+      btn.setAttribute('data-has-listener', 'true');
+
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const text = btn.getAttribute('data-copy-text');
+        if (!text) return;
+
+        try {
+          await navigator.clipboard.writeText(text);
+
+          const copyIcon = btn.querySelector('.copy-icon');
+          const checkIcon = btn.querySelector('.check-icon');
+          const tooltip = btn.querySelector('.tooltip');
+          const btnLabel = btn.querySelector('.btn-label');
+
+          if (copyIcon && checkIcon) {
+            copyIcon.classList.add('hidden');
+            checkIcon.classList.remove('hidden');
+          }
+
+          if (tooltip) {
+            tooltip.classList.remove('opacity-0');
+            tooltip.classList.add('opacity-100');
+          }
+
+          if (btnLabel) {
+            btnLabel.textContent = 'Kopyalandı';
+          }
+
+          setTimeout(() => {
+            if (copyIcon && checkIcon) {
+              copyIcon.classList.remove('hidden');
+              checkIcon.classList.add('hidden');
+            }
+            if (tooltip) {
+              tooltip.classList.remove('opacity-100');
+              tooltip.classList.add('opacity-0');
+            }
+            if (btnLabel) {
+              btnLabel.textContent = btn.getAttribute('data-copy-label') || 'Kopyala';
+            }
+          }, 2000);
+        } catch (err) {
+          console.error('Kopyalama başarısız:', err);
+        }
+      });
+    });
+  };
+
+  setupCopyButtons();
+  document.addEventListener('astro:after-swap', setupCopyButtons);
+</script>

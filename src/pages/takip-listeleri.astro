@@ -1,0 +1,69 @@
+---
+import Layout from '../layouts/Layout.astro';
+import FollowListGroup from '../components/FollowListGroup.astro';
+import RecommendUserModal from '../components/RecommendUserModal.astro';
+import { followCategories } from '../data/followLists';
+import { ListChecks, Sparkles } from 'lucide-astro';
+import BreadcrumbSchema from '../components/seo/BreadcrumbSchema.astro';
+
+const breadcrumbs = [
+  { name: 'Ana Sayfa', path: '/' },
+  { name: 'Takip Listeleri', path: '/takip-listeleri' },
+];
+---
+
+<Layout 
+  title="Küratörlü Takip Listeleri - Nostr Türkiye"
+  description="Akademisyenler, influencerlar, çekirdek geliştiriciler ve topluluk liderleri için küratörlü Nostr takip listeleri. Tek tıkla toplu takip ve hesap tavsiye formu."
+>
+  <BreadcrumbSchema slot="head" items={breadcrumbs} />
+  
+  <!-- Header Banner -->
+  <section class="py-14 sm:py-20 border-b border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-b from-white via-slate-50 to-slate-100/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        
+        <div class="space-y-2 max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-nostr-100 dark:bg-nostr-950 text-nostr-700 dark:text-nostr-300 border border-nostr-200 dark:border-nostr-800 shadow-sm">
+            <ListChecks class="w-3.5 h-3.5 text-nostr-500" />
+            <span>Küratörlü Ağ Rehberi</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.2]">
+            Takip Listeleri
+          </h1>
+          <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+            Nostr'a yeni başladığınızda akışınızı kaliteli içeriklerle doldurmanız için kategorilere ayrılmış güvenilir hesaplar.
+          </p>
+        </div>
+
+        <!-- Recommend User Modal Trigger -->
+        <div class="flex-shrink-0">
+          <RecommendUserModal />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Follow Groups Stream -->
+  <section class="py-16 bg-white dark:bg-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      
+      <!-- Extension Quick Help Note -->
+      <div class="p-4 sm:p-5 rounded-2xl bg-nostr-50/60 dark:bg-nostr-950/40 border border-nostr-200/60 dark:border-nostr-800/60 flex items-start gap-3.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
+        <Sparkles class="w-5 h-5 text-nostr-500 flex-shrink-0 mt-0.5" />
+        <p class="leading-relaxed">
+          <strong class="font-bold text-slate-900 dark:text-white">İpucu:</strong> Tarayıcınızda <strong>Alby</strong> veya <strong>nos2x</strong> gibi NIP-07 Nostr eklentisi kuruluysa, kategorilerin yanındaki <strong>"Tümünü Takip Et"</strong> butonuna basarak ilgili tüm hesapları tek tıkla takip listenize ekleyebilirsiniz.
+        </p>
+      </div>
+
+      <!-- Categories -->
+      {followCategories.map((category) => (
+        <FollowListGroup category={category} />
+      ))}
+
+    </div>
+  </section>
+
+</Layout>
