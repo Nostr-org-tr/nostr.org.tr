@@ -1,5 +1,5 @@
 ---
-import { Github, Radio, Mail } from 'lucide-astro';
+import { Github, Mail, Zap } from 'lucide-astro';
 
 const currentYear = new Date().getFullYear();
 ---
@@ -17,22 +17,27 @@ const currentYear = new Date().getFullYear();
         <p class="text-sm text-slate-600 dark:text-slate-400 max-w-md leading-relaxed">
           Platformların ve algoritmaların değil; bireylerin özgür iradesinin ve açık protokollerin hakim olduğu bir internet için bağımsız, doakratik topluluk.
         </p>
-        <div class="flex items-center gap-3 pt-1 text-xs text-slate-500 dark:text-slate-400">
+        <div class="flex flex-wrap items-center gap-3 pt-1 text-xs text-slate-500 dark:text-slate-400">
           <span class="inline-flex items-center gap-1">
             <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
             Açık Kaynak & Bağımsız
           </span>
           <span>•</span>
-          <span class="inline-flex items-center gap-1">
-            <span>⚡</span> Lightning Etkin
-          </span>
+          <a 
+            href="lightning:delirehberi@emre.xyz" 
+            class="inline-flex items-center gap-1 text-amber-600 dark:text-amber-400 hover:underline font-medium"
+            title="Lightning ile sunucu masraflarına destek olun"
+          >
+            <Zap class="w-3.5 h-3.5 fill-current" />
+            <span>Altyapı Desteği: delirehberi@emre.xyz</span>
+          </a>
         </div>
       </div>
 
       <!-- Quick Nav Links -->
       <div class="space-y-3">
         <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-900 dark:text-slate-200">
-          Topluluk & Kaynaklar
+          Topluluk & Ekosistem
         </h3>
         <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
           <li>
@@ -46,6 +51,16 @@ const currentYear = new Date().getFullYear();
             </a>
           </li>
           <li>
+            <a href="/roleler" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
+              Röleler (relay.nostr.org.tr)
+            </a>
+          </li>
+          <li>
+            <a href="/projeler" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
+              Projeler & Araçlar
+            </a>
+          </li>
+          <li>
             <a href="/takip-listeleri" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
               Takip Listeleri
             </a>
@@ -56,8 +71,8 @@ const currentYear = new Date().getFullYear();
             </a>
           </li>
           <li>
-            <a href="/en/manifesto" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
-              English Manifesto
+            <a href="/konusmalar" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
+              Konuşmalar & Sunumlar
             </a>
           </li>
         </ul>
@@ -80,7 +95,7 @@ const currentYear = new Date().getFullYear();
           </li>
           <li>
             <a 
-              href="https://github.com/delirehberi/nostr.org.tr" 
+              href="https://github.com/nostr-org-tr/nostr.org.tr" 
               target="_blank" 
               rel="noopener noreferrer"
               class="inline-flex items-center gap-1.5 hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors"
@@ -91,11 +106,10 @@ const currentYear = new Date().getFullYear();
           </li>
           <li>
             <a 
-              href="/roleler" 
+              href="/en/manifesto" 
               class="inline-flex items-center gap-1.5 hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors"
             >
-              <Radio class="w-3.5 h-3.5" />
-              <span>Türkiye Röleleri</span>
+              <span>English Manifesto</span>
             </a>
           </li>
         </ul>

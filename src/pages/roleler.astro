@@ -1,19 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import RelayPingCard from '../components/RelayPingCard.astro';
+import ServerSupportCard from '../components/ServerSupportCard.astro';
 import { communityRelay, recommendedRelays } from '../data/relays';
 import { Radio, HelpCircle, CheckCircle2 } from 'lucide-astro';
 import BreadcrumbSchema from '../components/seo/BreadcrumbSchema.astro';
 
 const breadcrumbs = [
   { name: 'Ana Sayfa', path: '/' },
-  { name: 'Röleler & Canlı Tanı', path: '/roleler' },
+  { name: 'Röleler', path: '/roleler' },
 ];
 ---
 
 <Layout 
-  title="Röleler & Canlı Durum Tanısı - Nostr Türkiye"
-  description="Nostr Türkiye resmi rölesi (relay.nostr.org.tr), canlı WebSocket ping tanı aracı, whitelist yazma politikası ve röle rehberi."
+  title="Röleler - Nostr Türkiye Topluluğu"
+  description="Nostr Türkiye resmi rölesi (relay.nostr.org.tr), küresel tavsiye edilen röleler, whitelist yazma politikası ve röle ekleme rehberi."
 >
   <BreadcrumbSchema slot="head" items={breadcrumbs} />
   
@@ -29,12 +30,12 @@ const breadcrumbs = [
         Türkiye & Küresel Röleler
       </h1>
       <p class="mt-4 text-base sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-        Nostr'da mesajlar şirket sunucularında değil; bağımsız rölelerde taşınır. Canlı WebSocket gecikmelerini ölçün ve istemcinize ekleyin.
+        Nostr'da mesajlar şirket sunucularında değil; bağımsız rölelerde taşınır. Röle adreslerini inceleyin ve istemcinize ekleyin.
       </p>
     </div>
   </section>
 
-  <!-- Official Relay Spotlight & Diagnostic Section -->
+  <!-- Official Relay Spotlight & Details Section -->
   <section class="py-16 bg-white dark:bg-slate-950">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
       
@@ -47,7 +48,7 @@ const breadcrumbs = [
               <span class="w-2.5 h-2.5 rounded-full bg-tr-red"></span>
             </h2>
             <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
-              Türkiye topluluğu için optimize edilmiş, düşük gecikmeli ve yüksek güvenlikli röle.
+              Türkiye topluluğu için kurulan <span class="font-mono text-nostr-600 dark:text-nostr-400">relay.nostr.org.tr</span> aktif olarak yayındadır.
             </p>
           </div>
         </div>
@@ -75,6 +76,11 @@ const breadcrumbs = [
             <RelayPingCard relay={relay} />
           ))}
         </div>
+      </div>
+
+      <!-- Server Costs & Support Card -->
+      <div>
+        <ServerSupportCard />
       </div>
 
       <!-- How to add relays guide -->

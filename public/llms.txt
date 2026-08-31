@@ -8,7 +8,7 @@
 - **Founder**: Emre Yılmaz (@delirehberi / delirehberi@emre.xyz / emre@nostr.org.tr)
 - **Official Nostr Handle**: topluluk@nostr.org.tr (`npub1a5272jud2fdhl2jr4g2zyg0c8rzpt2kxnxamfe62zqzwfdl84huq2usgqp`)
 - **Contact & Working Groups**: ekip@nostr.org.tr
-- **GitHub**: https://github.com/delirehberi/nostr.org.tr
+- **GitHub**: https://github.com/nostr-org-tr/nostr.org.tr
 
 ## Core Sections & URLs
 - [Ana Sayfa / Home](https://nostr.org.tr/): Core principles, value proposition, and community highlights.

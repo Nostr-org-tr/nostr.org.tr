@@ -1,0 +1,239 @@
+---
+---
+
+<canvas
+  id="hero-graph-canvas"
+  class="absolute inset-0 w-full h-full pointer-events-auto z-0 select-none"
+  aria-hidden="true"
+></canvas>
+
+<script is:inline>
+  (() => {
+    const initGraph = () => {
+      const canvas = document.getElementById('hero-graph-canvas');
+      if (!canvas) return;
+
+      const ctx = canvas.getContext('2d', { alpha: true });
+      if (!ctx) return;
+
+      let animationFrameId = null;
+      let isVisible = true;
+      let width = 0;
+      let height = 0;
+      let dpr = window.devicePixelRatio || 1;
+
+      // Mouse state relative to canvas
+      const mouse = {
+        x: -1000,
+        y: -1000,
+        radius: 180,
+        isHovering: false,
+      };
+
+      // Node structure
+      const NODE_COUNT_DESKTOP = 45;
+      const NODE_COUNT_MOBILE = 25;
+      let nodes = [];
+
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const isDarkMode = () => document.documentElement.classList.contains('dark');
+
+      const resize = () => {
+        const rect = canvas.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        dpr = window.devicePixelRatio || 1;
+
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        ctx.scale(dpr, dpr);
+
+        initNodes();
+      };
+
+      const initNodes = () => {
+        const count = width < 768 ? NODE_COUNT_MOBILE : NODE_COUNT_DESKTOP;
+        nodes = [];
+
+        for (let i = 0; i < count; i++) {
+          const isRelay = i % 7 === 0;
+          nodes.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * (isRelay ? 0.35 : 0.6) * (prefersReducedMotion ? 0.05 : 1),
+            vy: (Math.random() - 0.5) * (isRelay ? 0.35 : 0.6) * (prefersReducedMotion ? 0.05 : 1),
+            radius: isRelay ? 4.5 + Math.random() * 2 : 2 + Math.random() * 2.5,
+            isRelay,
+            pulsePhase: Math.random() * Math.PI * 2,
+            pulseSpeed: 0.02 + Math.random() * 0.03,
+          });
+        }
+      };
+
+      const draw = () => {
+        if (!isVisible) return;
+
+        ctx.clearRect(0, 0, width, height);
+
+        const dark = isDarkMode();
+        const maxDist = width < 768 ? 100 : 140;
+
+        // Base color palettes
+        const nodeColorNormal = dark ? 'rgba(168, 85, 247, 0.65)' : 'rgba(124, 58, 237, 0.45)';
+        const nodeColorRelay = dark ? 'rgba(244, 63, 94, 0.85)' : 'rgba(225, 29, 72, 0.75)';
+        const edgeColor = dark ? '147, 197, 253' : '139, 92, 246';
+        const mouseLineColor = dark ? '236, 72, 153' : '124, 58, 237';
+
+        // 1. Update and draw nodes
+        for (let i = 0; i < nodes.length; i++) {
+          const node = nodes[i];
+
+          // Motion update
+          if (!prefersReducedMotion) {
+            node.x += node.vx;
+            node.y += node.vy;
+
+            // Bounce on boundaries
+            if (node.x < 0 || node.x > width) node.vx *= -1;
+            if (node.y < 0 || node.y > height) node.vy *= -1;
+
+            // Mouse interaction (gentle attraction / repulsion wave)
+            if (mouse.isHovering) {
+              const dx = mouse.x - node.x;
+              const dy = mouse.y - node.y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+
+              if (dist < mouse.radius && dist > 0) {
+                const force = (mouse.radius - dist) / mouse.radius;
+                node.x -= (dx / dist) * force * 1.5;
+                node.y -= (dy / dist) * force * 1.5;
+              }
+            }
+          }
+
+          node.pulsePhase += node.pulseSpeed;
+          const currentRadius = node.radius + Math.sin(node.pulsePhase) * (node.isRelay ? 1.2 : 0.6);
+
+          // Draw Node Glow for Relays
+          if (node.isRelay) {
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, currentRadius * 2.2, 0, Math.PI * 2);
+            ctx.fillStyle = dark ? 'rgba(244, 63, 94, 0.15)' : 'rgba(225, 29, 72, 0.12)';
+            ctx.fill();
+          }
+
+          // Draw Node Dot
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, Math.max(1, currentRadius), 0, Math.PI * 2);
+          ctx.fillStyle = node.isRelay ? nodeColorRelay : nodeColorNormal;
+          ctx.fill();
+        }
+
+        // 2. Draw connecting edges between nodes
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const dx = nodes[i].x - nodes[j].x;
+            const dy = nodes[i].y - nodes[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < maxDist) {
+              const alpha = (1 - dist / maxDist) * (dark ? 0.22 : 0.15);
+              ctx.beginPath();
+              ctx.moveTo(nodes[i].x, nodes[i].y);
+              ctx.lineTo(nodes[j].x, nodes[j].y);
+              ctx.strokeStyle = `rgba(${edgeColor}, ${alpha})`;
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            }
+          }
+        }
+
+        // 3. Draw dynamic interactive connections to mouse cursor
+        if (mouse.isHovering) {
+          // Subtle mouse radial glow
+          const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, mouse.radius);
+          gradient.addColorStop(0, dark ? 'rgba(168, 85, 247, 0.12)' : 'rgba(139, 92, 246, 0.08)');
+          gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
+          ctx.fill();
+
+          for (let i = 0; i < nodes.length; i++) {
+            const dx = mouse.x - nodes[i].x;
+            const dy = mouse.y - nodes[i].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < mouse.radius) {
+              const alpha = (1 - dist / mouse.radius) * (dark ? 0.45 : 0.3);
+              ctx.beginPath();
+              ctx.moveTo(mouse.x, mouse.y);
+              ctx.lineTo(nodes[i].x, nodes[i].y);
+              ctx.strokeStyle = `rgba(${mouseLineColor}, ${alpha})`;
+              ctx.lineWidth = 1.2;
+              ctx.stroke();
+            }
+          }
+        }
+
+        animationFrameId = requestAnimationFrame(draw);
+      };
+
+      // Mouse tracking handlers
+      const handleMouseMove = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+        mouse.isHovering = true;
+      };
+
+      const handleMouseLeave = () => {
+        mouse.isHovering = false;
+        mouse.x = -1000;
+        mouse.y = -1000;
+      };
+
+      const parentSection = canvas.closest('section') || canvas.parentElement;
+      if (parentSection) {
+        parentSection.addEventListener('mousemove', handleMouseMove, { passive: true });
+        parentSection.addEventListener('mouseleave', handleMouseLeave, { passive: true });
+      }
+
+      // Visibility optimization via IntersectionObserver
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            isVisible = entry.isIntersecting;
+            if (isVisible && !animationFrameId) {
+              animationFrameId = requestAnimationFrame(draw);
+            } else if (!isVisible && animationFrameId) {
+              cancelAnimationFrame(animationFrameId);
+              animationFrameId = null;
+            }
+          });
+        },
+        { threshold: 0.05 }
+      );
+      observer.observe(canvas);
+
+      // Resize listener
+      let resizeTimer;
+      const handleResize = () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resize, 100);
+      };
+      window.addEventListener('resize', handleResize, { passive: true });
+
+      resize();
+      animationFrameId = requestAnimationFrame(draw);
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initGraph);
+    } else {
+      initGraph();
+    }
+    document.addEventListener('astro:after-swap', initGraph);
+  })();
+</script>

@@ -90,7 +90,7 @@ Türkiye'den geliştirilen veya Türkçe destekli açık kaynak Nostr projelerin
    ```
 
 6. **Pull Request Açın**:
-   GitHub üzerinden `nostr-turkiye/nostr.org.tr` deposunun `master` dalına PR gönderin. PR şablonundaki onay kutularını doldurun.
+   GitHub üzerinden `nostr-org-tr/nostr.org.tr` deposunun `master` dalına PR gönderin. PR şablonundaki onay kutularını doldurun.
 
 ---
 

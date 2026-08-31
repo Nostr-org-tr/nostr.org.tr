@@ -119,6 +119,16 @@ if (!trUrl && !enUrl) {
     <!-- Head Slot for Structured Data / Schemas -->
     <slot name="head" />
 
+    <!-- Google tag (gtag.js) -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-W1RV1K97GK"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-W1RV1K97GK');
+    </script>
+
     <!-- Theme Initialization Script (Light Mode Default) -->
     <script is:inline>
       const getInitialTheme = () => {

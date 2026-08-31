@@ -8,12 +8,13 @@ export interface RelayInfo {
   location: string;
   software: string;
   isOfficialCommunityRelay: boolean;
+  openingSoon?: boolean;
 }
 
 export const communityRelay: RelayInfo = {
   url: 'wss://relay.nostr.org.tr',
   name: 'Nostr Türkiye Resmi Topluluk Rölesi',
-  description: 'Nostr Türkiye topluluğunun resmi rölesi. Okuma herkese açıktır. Yazma izni spam ve bot kirliliğini önlemek amacıyla topluluk üyelerine whitelist ile verilir.',
+  description: 'Nostr Türkiye topluluğunun resmi rölesi. Türkiye ve bölge genelinde düşük gecikmeli ve yüksek erişilebilirlikli Nostr iletişimi sunar. Okuma herkese açık, yazma izni spam ve bot kirliliğini önlemek amacıyla topluluk üyelerine whitelist ile sunulmaktadır.',
   readPolicy: 'open',
   writePolicy: 'whitelist',
   nips: [1, 2, 4, 9, 11, 12, 15, 16, 20, 22, 28, 33, 40, 42, 50, 56, 57],

@@ -53,7 +53,7 @@
 
 ### 1. Depoyu Klonlayın
 ```bash
-git clone https://github.com/nostr-turkiye/nostr.org.tr.git
+git clone https://github.com/nostr-org-tr/nostr.org.tr.git
 cd nostr.org.tr
 ```
 

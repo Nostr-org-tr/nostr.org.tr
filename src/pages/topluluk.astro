@@ -1,7 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import MemberCard from '../components/MemberCard.astro';
-import ApplyTeamCard from '../components/ApplyTeamCard.astro';
+import WhatWeNeedSection from '../components/WhatWeNeedSection.astro';
+import ServerSupportCard from '../components/ServerSupportCard.astro';
 import { members } from '../data/members';
 import { Users, HeartHandshake, ArrowRight } from 'lucide-astro';
 import BreadcrumbSchema from '../components/seo/BreadcrumbSchema.astro';
@@ -14,7 +15,7 @@ const breadcrumbs = [
 
 <Layout 
   title="Topluluk ve Ekip - Nostr Türkiye Topluluğu"
-  description="Nostr Türkiye topluluğu kurucuları, aktif üyeleri, doakrasi yönetim modeli ve çalışma grupları (Guilds) katılım rehberi."
+  description="Nostr Türkiye topluluğu kurucuları, aktif üyeleri, doakrasi yönetim modeli, açık topluluk rolleri ve çalışma grupları katılım rehberi."
 >
   <BreadcrumbSchema slot="head" items={breadcrumbs} />
   
@@ -35,14 +36,15 @@ const breadcrumbs = [
     </div>
   </section>
 
-  <!-- Members Section -->
+  <!-- Members & Roles Section -->
   <section class="py-16 bg-white dark:bg-slate-950">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
       
+      <!-- Topluluk Üyeleri -->
       <div>
         <div class="flex items-center justify-between gap-4 mb-8">
           <div>
-            <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Topluluk Üyeleri</h2>
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Topluluk Kolaylaştırıcıları ve Üyeleri</h2>
             <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Nostr Türkiye ekosistemini inşa eden ve kolaylaştıran isimler.</p>
           </div>
         </div>
@@ -53,6 +55,9 @@ const breadcrumbs = [
           ))}
         </div>
       </div>
+
+      <!-- What We Need / Open Community Roles -->
+      <WhatWeNeedSection />
 
       <!-- Do-ocracy Philosophy Box -->
       <div class="p-8 sm:p-10 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-4">
@@ -75,8 +80,8 @@ const breadcrumbs = [
         </div>
       </div>
 
-      <!-- Application Component -->
-      <ApplyTeamCard />
+      <!-- Server Costs & Support -->
+      <ServerSupportCard />
 
     </div>
   </section>

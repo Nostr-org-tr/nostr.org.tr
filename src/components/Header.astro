@@ -7,9 +7,11 @@ import {
   ListChecks, 
   BookOpen, 
   Mic, 
-  Github, 
   Menu, 
   X,
+  ChevronDown,
+  Compass,
+  Library,
   Languages
 } from 'lucide-astro';
 import ThemeToggle from './ThemeToggle.astro';
@@ -21,24 +23,34 @@ interface Props {
 
 const { currentPath = '/', isEn = false } = Astro.props;
 
-const navItems = [
+// Grouped navigation structure
+const singleNavs = [
   { href: '/manifesto', label: 'Manifesto', icon: ScrollText },
   { href: '/topluluk', label: 'Topluluk', icon: Users },
-  { href: '/roleler', label: 'Röleler', icon: Radio },
-  { href: '/projeler', label: 'Projeler', icon: FolderGit2 },
-  { href: '/takip-listeleri', label: 'Listeler', icon: ListChecks },
-  { href: '/rehber', label: 'Rehber', icon: BookOpen },
-  { href: '/konusmalar', label: 'Konuşmalar', icon: Mic },
 ];
+
+const discoverItems = [
+  { href: '/roleler', label: 'Röleler', desc: 'Röle listesi & bağlantılar', icon: Radio },
+  { href: '/projeler', label: 'Projeler', desc: 'Açık kaynak araçlar & botlar', icon: FolderGit2 },
+  { href: '/takip-listeleri', label: 'Takip Listeleri', desc: 'Kategorize edilmiş hesaplar', icon: ListChecks },
+];
+
+const resourceItems = [
+  { href: '/rehber', label: 'Başlangıç Rehberi', desc: 'Nostr istemcileri & kurulum', icon: BookOpen },
+  { href: '/konusmalar', label: 'Konuşmalar & Sunumlar', desc: 'Etkinlik ve sunum kayıtları', icon: Mic },
+];
+
+const isDiscoverActive = discoverItems.some(i => currentPath === i.href || (i.href !== '/' && currentPath.startsWith(i.href)));
+const isResourceActive = resourceItems.some(i => currentPath === i.href || (i.href !== '/' && currentPath.startsWith(i.href)));
 ---
 
 <header class="sticky top-0 z-50 w-full border-b border-slate-200/80 dark:border-slate-800/80 glass-header">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
     
-    <!-- Logo (Clean SVG without long slogan) -->
+    <!-- Logo -->
     <a 
       href={isEn ? "/en/manifesto" : "/"} 
-      class="flex items-center gap-2.5 group transition-transform active:scale-95"
+      class="flex items-center gap-2.5 group transition-transform active:scale-95 flex-shrink-0"
       aria-label="Nostr Türkiye Ana Sayfa"
     >
       <img 
@@ -56,15 +68,17 @@ const navItems = [
       </div>
     </a>
 
-    <!-- Desktop Nav Links (Icon + Concise Text) -->
-    <nav class="hidden md:flex items-center gap-1 lg:gap-1.5" aria-label="Ana Menü">
-      {navItems.map((item) => {
+    <!-- Desktop Navigation -->
+    <nav class="hidden md:flex items-center gap-1 lg:gap-2" aria-label="Ana Menü">
+      
+      <!-- Top-Level Single Links -->
+      {singleNavs.map((item) => {
         const Icon = item.icon;
         const isActive = currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
         return (
           <a
             href={item.href}
-            class={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs lg:text-sm font-medium transition-all ${
+            class={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
               isActive
                 ? 'text-nostr-600 dark:text-nostr-400 bg-nostr-50 dark:bg-nostr-950/60 font-semibold'
                 : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
@@ -75,12 +89,103 @@ const navItems = [
           </a>
         );
       })}
+
+      <!-- Keşfet Dropdown (Röleler, Projeler, Listeler) -->
+      <div class="relative nav-dropdown-container">
+        <button
+          type="button"
+          class={`nav-dropdown-trigger flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+            isDiscoverActive
+              ? 'text-nostr-600 dark:text-nostr-400 bg-nostr-50 dark:bg-nostr-950/60 font-semibold'
+              : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
+          }`}
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          <Compass class="w-4 h-4 opacity-80" />
+          <span>Keşfet</span>
+          <ChevronDown class="w-3.5 h-3.5 opacity-60 transition-transform duration-200 trigger-chevron" />
+        </button>
+
+        <div class="nav-dropdown-menu hidden absolute left-0 top-full pt-2 w-64 z-50">
+          <div class="p-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-1 backdrop-blur">
+            {discoverItems.map((subItem) => {
+              const SubIcon = subItem.icon;
+              const isSubActive = currentPath === subItem.href || (subItem.href !== '/' && currentPath.startsWith(subItem.href));
+              return (
+                <a
+                  href={subItem.href}
+                  class={`flex items-start gap-3 p-2.5 rounded-xl transition-all ${
+                    isSubActive
+                      ? 'bg-nostr-50 dark:bg-nostr-950/70 text-nostr-600 dark:text-nostr-400'
+                      : 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200'
+                  }`}
+                >
+                  <div class={`p-1.5 rounded-lg ${isSubActive ? 'bg-nostr-100 dark:bg-nostr-900 text-nostr-600 dark:text-nostr-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'}`}>
+                    <SubIcon class="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span class="block text-sm font-semibold leading-tight">{subItem.label}</span>
+                    <span class="block text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{subItem.desc}</span>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      <!-- Kaynaklar Dropdown (Rehber, Konuşmalar) -->
+      <div class="relative nav-dropdown-container">
+        <button
+          type="button"
+          class={`nav-dropdown-trigger flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+            isResourceActive
+              ? 'text-nostr-600 dark:text-nostr-400 bg-nostr-50 dark:bg-nostr-950/60 font-semibold'
+              : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60'
+          }`}
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          <Library class="w-4 h-4 opacity-80" />
+          <span>Kaynaklar</span>
+          <ChevronDown class="w-3.5 h-3.5 opacity-60 transition-transform duration-200 trigger-chevron" />
+        </button>
+
+        <div class="nav-dropdown-menu hidden absolute left-0 top-full pt-2 w-64 z-50">
+          <div class="p-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-1 backdrop-blur">
+            {resourceItems.map((subItem) => {
+              const SubIcon = subItem.icon;
+              const isSubActive = currentPath === subItem.href || (subItem.href !== '/' && currentPath.startsWith(subItem.href));
+              return (
+                <a
+                  href={subItem.href}
+                  class={`flex items-start gap-3 p-2.5 rounded-xl transition-all ${
+                    isSubActive
+                      ? 'bg-nostr-50 dark:bg-nostr-950/70 text-nostr-600 dark:text-nostr-400'
+                      : 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200'
+                  }`}
+                >
+                  <div class={`p-1.5 rounded-lg ${isSubActive ? 'bg-nostr-100 dark:bg-nostr-900 text-nostr-600 dark:text-nostr-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'}`}>
+                    <SubIcon class="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span class="block text-sm font-semibold leading-tight">{subItem.label}</span>
+                    <span class="block text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{subItem.desc}</span>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
     </nav>
 
-    <!-- Utility Actions (Language, Theme, GitHub, Mobile Menu) -->
+    <!-- Utility Actions (Language, Theme, Mobile Toggle) -->
     <div class="flex items-center gap-1.5 sm:gap-2">
       
-      <!-- Language Switcher (Direct Link to English Manifesto or Back to TR) -->
+      <!-- Language Switcher -->
       {isEn ? (
         <a
           href="/manifesto"
@@ -104,17 +209,6 @@ const navItems = [
       <!-- Theme Switcher -->
       <ThemeToggle />
 
-      <!-- GitHub Link -->
-      <a
-        href="https://github.com/delirehberi/nostr.org.tr"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="GitHub Deposu"
-        class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-      >
-        <Github class="w-4 h-4" />
-      </a>
-
       <!-- Mobile Menu Toggle Button -->
       <button
         type="button"
@@ -132,46 +226,170 @@ const navItems = [
   <!-- Mobile Drawer Menu -->
   <div 
     id="mobile-menu" 
-    class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur px-4 pt-2 pb-4 space-y-1 shadow-lg"
+    class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur px-4 pt-3 pb-5 space-y-4 shadow-xl max-h-[85vh] overflow-y-auto"
   >
-    {navItems.map((item) => {
-      const Icon = item.icon;
-      const isActive = currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
-      return (
-        <a
-          href={item.href}
-          class={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-            isActive
-              ? 'text-nostr-600 dark:text-nostr-400 bg-nostr-50 dark:bg-nostr-950/60 font-semibold'
-              : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
-          }`}
-        >
-          <Icon class="w-4 h-4 opacity-80" />
-          <span>{item.label}</span>
-        </a>
-      );
-    })}
+    <!-- Standalone Links -->
+    <div class="space-y-1">
+      {singleNavs.map((item) => {
+        const Icon = item.icon;
+        const isActive = currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
+        return (
+          <a
+            href={item.href}
+            class={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+              isActive
+                ? 'text-nostr-600 dark:text-nostr-400 bg-nostr-50 dark:bg-nostr-950/60 font-semibold'
+                : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+            }`}
+          >
+            <Icon class="w-4 h-4 opacity-80" />
+            <span>{item.label}</span>
+          </a>
+        );
+      })}
+    </div>
+
+    <!-- Keşfet Section -->
+    <div class="space-y-1.5 pt-2 border-t border-slate-200/80 dark:border-slate-800">
+      <div class="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+        Keşfet & Ekosistem
+      </div>
+      {discoverItems.map((item) => {
+        const Icon = item.icon;
+        const isActive = currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
+        return (
+          <a
+            href={item.href}
+            class={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
+              isActive
+                ? 'text-nostr-600 dark:text-nostr-400 bg-nostr-50 dark:bg-nostr-950/60 font-semibold'
+                : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+            }`}
+          >
+            <Icon class="w-4 h-4 opacity-80" />
+            <span>{item.label}</span>
+          </a>
+        );
+      })}
+    </div>
+
+    <!-- Kaynaklar Section -->
+    <div class="space-y-1.5 pt-2 border-t border-slate-200/80 dark:border-slate-800">
+      <div class="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+        Kaynaklar & Dokümanlar
+      </div>
+      {resourceItems.map((item) => {
+        const Icon = item.icon;
+        const isActive = currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
+        return (
+          <a
+            href={item.href}
+            class={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-colors ${
+              isActive
+                ? 'text-nostr-600 dark:text-nostr-400 bg-nostr-50 dark:bg-nostr-950/60 font-semibold'
+                : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+            }`}
+          >
+            <Icon class="w-4 h-4 opacity-80" />
+            <span>{item.label}</span>
+          </a>
+        );
+      })}
+    </div>
+
   </div>
 </header>
 
 <script is:inline>
-  const setupMobileMenu = () => {
-    const btn = document.getElementById('mobile-menu-btn');
-    const menu = document.getElementById('mobile-menu');
+  const setupNav = () => {
+    // 1. Mobile Menu
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
     const menuIcon = document.getElementById('menu-icon');
     const closeIcon = document.getElementById('close-icon');
 
-    if (!btn || !menu || !menuIcon || !closeIcon) return;
+    if (mobileBtn && mobileMenu && menuIcon && closeIcon) {
+      mobileBtn.onclick = () => {
+        const isExpanded = mobileBtn.getAttribute('aria-expanded') === 'true';
+        mobileBtn.setAttribute('aria-expanded', !isExpanded);
+        mobileMenu.classList.toggle('hidden');
+        menuIcon.classList.toggle('hidden');
+        closeIcon.classList.toggle('hidden');
+      };
+    }
 
-    btn.addEventListener('click', () => {
-      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', !isExpanded);
-      menu.classList.toggle('hidden');
-      menuIcon.classList.toggle('hidden');
-      closeIcon.classList.toggle('hidden');
+    // 2. Desktop Dropdowns
+    const dropdownContainers = document.querySelectorAll('.nav-dropdown-container');
+
+    dropdownContainers.forEach((container) => {
+      const trigger = container.querySelector('.nav-dropdown-trigger');
+      const menu = container.querySelector('.nav-dropdown-menu');
+      const chevron = container.querySelector('.trigger-chevron');
+      if (!trigger || !menu) return;
+
+      let timeoutId = null;
+
+      const openDropdown = () => {
+        if (timeoutId) clearTimeout(timeoutId);
+        // Close others
+        dropdownContainers.forEach((other) => {
+          if (other !== container) {
+            other.querySelector('.nav-dropdown-menu')?.classList.add('hidden');
+            other.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+            other.querySelector('.trigger-chevron')?.classList.remove('rotate-180');
+          }
+        });
+        menu.classList.remove('hidden');
+        trigger.setAttribute('aria-expanded', 'true');
+        if (chevron) chevron.classList.add('rotate-180');
+      };
+
+      const closeDropdown = () => {
+        timeoutId = setTimeout(() => {
+          menu.classList.add('hidden');
+          trigger.setAttribute('aria-expanded', 'false');
+          if (chevron) chevron.classList.remove('rotate-180');
+        }, 150);
+      };
+
+      // Hover triggers
+      container.addEventListener('mouseenter', openDropdown);
+      container.addEventListener('mouseleave', closeDropdown);
+
+      // Click toggle
+      trigger.onclick = (e) => {
+        e.stopPropagation();
+        const isOpen = !menu.classList.contains('hidden');
+        if (isOpen) {
+          closeDropdown();
+        } else {
+          openDropdown();
+        }
+      };
+    });
+
+    // Close dropdowns on outside click or ESC
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.nav-dropdown-container')) {
+        dropdownContainers.forEach((container) => {
+          container.querySelector('.nav-dropdown-menu')?.classList.add('hidden');
+          container.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+          container.querySelector('.trigger-chevron')?.classList.remove('rotate-180');
+        });
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        dropdownContainers.forEach((container) => {
+          container.querySelector('.nav-dropdown-menu')?.classList.add('hidden');
+          container.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+          container.querySelector('.trigger-chevron')?.classList.remove('rotate-180');
+        });
+      }
     });
   };
 
-  setupMobileMenu();
-  document.addEventListener('astro:after-swap', setupMobileMenu);
+  setupNav();
+  document.addEventListener('astro:after-swap', setupNav);
 </script>

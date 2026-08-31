@@ -76,7 +76,7 @@ export const projects: ProjectItem[] = [
     category: 'Tool',
     description: 'Nostr Türkiye Topluluğu resmi web portalı ve açık kaynak altyapısı.',
     url: 'https://nostr.org.tr',
-    github: 'https://github.com/delirehberi/nostr.org.tr',
+    github: 'https://github.com/nostr-org-tr/nostr.org.tr',
     isFeatured: false,
     author: 'Nostr Türkiye Topluluğu',
     tags: ['Astro', 'Cloudflare Workers', 'D1', 'Community'],

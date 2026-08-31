@@ -1,6 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import HeroGraphCanvas from '../components/HeroGraphCanvas.astro';
 import RelayPingCard from '../components/RelayPingCard.astro';
+import ServerSupportCard from '../components/ServerSupportCard.astro';
+import WhatWeNeedSection from '../components/WhatWeNeedSection.astro';
 import { communityRelay } from '../data/relays';
 import { talks } from '../data/talks';
 import { 
@@ -27,12 +30,15 @@ const latestTalk = talks[0];
 <Layout title="Nostr Türkiye Topluluğu - Özgür, Açık ve Sorumlu İletişimin Geleceği">
   <OrganizationSchema slot="head" />
   
-  <!-- Hero Section (Clean & Slogan-Free Header Integration) -->
-  <section class="relative overflow-hidden py-16 sm:py-24 border-b border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-b from-white via-slate-50 to-slate-100/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+  <!-- Hero Section with Interactive Graph Canvas Background -->
+  <section class="relative overflow-hidden py-16 sm:py-28 border-b border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-b from-white via-slate-50 to-slate-100/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950/80 min-h-[480px] flex items-center">
+    <!-- Interactive Background Canvas -->
+    <HeroGraphCanvas />
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pointer-events-none">
       
       <!-- Top Badge -->
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-nostr-100 text-nostr-700 dark:bg-nostr-950/80 dark:text-nostr-300 border border-nostr-200 dark:border-nostr-800 mb-6 shadow-sm">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-nostr-100/90 text-nostr-700 dark:bg-nostr-950/90 dark:text-nostr-300 border border-nostr-200 dark:border-nostr-800 mb-6 shadow-sm pointer-events-auto backdrop-blur-sm">
         <span class="w-2 h-2 rounded-full bg-tr-red animate-pulse"></span>
         <span>Türkiye Nostr Topluluğu</span>
         <span class="text-slate-400 dark:text-slate-600">|</span>
@@ -40,7 +46,7 @@ const latestTalk = talks[0];
       </div>
 
       <!-- Main Headline -->
-      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white max-w-4xl leading-[1.15]">
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white max-w-4xl leading-[1.15] drop-shadow-sm">
         İletişim senin, <br />
         kimlik senin, <br />
         <span class="nostr-gradient-text">ağ senin.</span>
@@ -52,7 +58,7 @@ const latestTalk = talks[0];
       </p>
 
       <!-- CTA Action Buttons -->
-      <div class="mt-8 flex flex-wrap items-center gap-4">
+      <div class="mt-8 flex flex-wrap items-center gap-4 pointer-events-auto">
         <a 
           href="/rehber" 
           class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold text-white bg-nostr-600 hover:bg-nostr-700 shadow-md shadow-nostr-500/20 hover:shadow-lg transition-all active:scale-98"
@@ -144,7 +150,7 @@ const latestTalk = talks[0];
     </div>
   </section>
 
-  <!-- Live Relay Diagnostic Showcase -->
+  <!-- Official Relay Showcase -->
   <section class="py-16 bg-slate-50 dark:bg-slate-900/30 border-t border-slate-200/80 dark:border-slate-800/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
@@ -152,10 +158,10 @@ const latestTalk = talks[0];
         <div>
           <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
             <Radio class="w-6 h-6 text-nostr-500" />
-            <span>Türkiye Resmi Rölesi Canlı Tanı</span>
+            <span>Türkiye Resmi Topluluk Rölesi</span>
           </h2>
           <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
-            Doğrudan tarayıcınızdan <span class="font-mono text-nostr-600 dark:text-nostr-400">relay.nostr.org.tr</span> WebSocket bağlantı durumunu test edin.
+            Türkiye topluluğu için kurulan <span class="font-mono text-nostr-600 dark:text-nostr-400">relay.nostr.org.tr</span> aktif olarak yayındadır.
           </p>
         </div>
 
@@ -170,6 +176,20 @@ const latestTalk = talks[0];
 
       <RelayPingCard relay={communityRelay} />
 
+    </div>
+  </section>
+
+  <!-- Server Costs & Lightning Support Section -->
+  <section class="py-16 bg-white dark:bg-slate-950 border-t border-slate-200/80 dark:border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <ServerSupportCard />
+    </div>
+  </section>
+
+  <!-- What We Need / Open Community Roles Section -->
+  <section class="py-16 bg-slate-50 dark:bg-slate-900/30 border-t border-slate-200/80 dark:border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <WhatWeNeedSection />
     </div>
   </section>
 

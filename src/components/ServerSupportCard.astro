@@ -1,0 +1,136 @@
+---
+import { Zap, Server } from 'lucide-astro';
+import CopyButton from './CopyButton.astro';
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+const lightningAddress = 'delirehberi@emre.xyz';
+const lightningUri = `lightning:${lightningAddress}`;
+const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(lightningUri)}`;
+---
+
+<div class={`support-card relative overflow-hidden rounded-3xl border border-amber-200/80 dark:border-amber-900/60 bg-gradient-to-br from-amber-50/70 via-white to-amber-100/30 dark:from-slate-900 dark:via-amber-950/20 dark:to-slate-900 shadow-lg ${compact ? 'p-6 sm:p-7' : 'p-8 sm:p-10'}`}>
+  
+  <!-- Decorative background glow -->
+  <div class="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-amber-400/10 dark:bg-amber-500/10 blur-3xl pointer-events-none"></div>
+
+  <div class="relative z-10 space-y-6">
+    
+    <!-- Header row -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="space-y-1.5">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 shadow-sm">
+          <Zap class="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+          <span>Lightning Network & Altyapı Desteği</span>
+        </div>
+        <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          Sunucu ve Röle Giderlerimize Destek Olun
+        </h3>
+      </div>
+
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">
+          <Server class="w-3.5 h-3.5 text-amber-500" />
+          <span>Bağımsız Barındırma</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Explanation paragraph -->
+    <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
+      Nostr Türkiye topluluk rölesi (<span class="font-mono font-semibold text-slate-900 dark:text-white">relay.nostr.org.tr</span>), web platformu ve açık kaynak araçlarımız hiçbir şirket ya da reklam fonu olmaksızın, tamamen topluluk için bağımsız olarak barındırılmaktadır. Sunucu, röle bant genişliği ve alan adı işletim maliyetlerimize Lightning (LNURL) ile mikro ödeme yaparak destek olabilirsiniz.
+    </p>
+
+    <!-- Interactive Donation & LNURL Box -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center pt-2">
+      
+      <!-- Address & Quick Actions (Left / Main) -->
+      <div class="md:col-span-8 space-y-4">
+        
+        <!-- Lightning Address Pill -->
+        <div class="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-slate-950/80 border border-amber-200 dark:border-amber-800/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950 flex items-center justify-center text-amber-600 dark:text-amber-400 flex-shrink-0">
+              <Zap class="w-5 h-5 fill-amber-500 text-amber-500" />
+            </div>
+            <div class="min-w-0">
+              <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 block">Lightning Adresi (LNURL / LUD-16)</span>
+              <span class="text-sm sm:text-base font-mono font-bold text-slate-900 dark:text-white truncate block">
+                {lightningAddress}
+              </span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 flex-shrink-0">
+            <CopyButton text={lightningAddress} label="Adresi Kopyala" />
+            
+            <a
+              href={lightningUri}
+              class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-amber-950 bg-amber-400 hover:bg-amber-300 dark:bg-amber-400 dark:hover:bg-amber-300 shadow-sm transition-all active:scale-95"
+              title="Lightning Cüzdanında Aç"
+            >
+              <Zap class="w-3.5 h-3.5 fill-current" />
+              <span>Zap Gönder</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Suggested Satoshi Presets (Minimum 1000 Sats) -->
+        <div class="flex flex-wrap items-center gap-2 pt-1">
+          <span class="text-xs text-slate-500 dark:text-slate-400 mr-1">Örnek Katkı:</span>
+          
+          <a
+            href={lightningUri}
+            class="px-3 py-1 rounded-lg text-xs font-mono font-semibold bg-white dark:bg-slate-800/80 hover:bg-amber-100 dark:hover:bg-amber-950/60 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-colors"
+          >
+            ⚡ 1.000 sats
+          </a>
+
+          <a
+            href={lightningUri}
+            class="px-3 py-1 rounded-lg text-xs font-mono font-semibold bg-white dark:bg-slate-800/80 hover:bg-amber-100 dark:hover:bg-amber-950/60 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-colors"
+          >
+            ⚡ 5.000 sats
+          </a>
+
+          <a
+            href={lightningUri}
+            class="px-3 py-1 rounded-lg text-xs font-mono font-semibold bg-white dark:bg-slate-800/80 hover:bg-amber-100 dark:hover:bg-amber-950/60 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-colors"
+          >
+            ⚡ 21.000 sats
+          </a>
+
+          <a
+            href={lightningUri}
+            class="px-3 py-1 rounded-lg text-xs font-mono font-semibold bg-white dark:bg-slate-800/80 hover:bg-amber-100 dark:hover:bg-amber-950/60 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-colors"
+          >
+            ⚡ 50.000 sats
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Quick QR Code Scanner View (Right) -->
+      <div class="md:col-span-4 flex flex-col items-center justify-center p-4 rounded-2xl bg-white dark:bg-slate-950/90 border border-amber-200/80 dark:border-slate-800 text-center space-y-2">
+        <div class="p-2 rounded-xl bg-white shadow-inner border border-slate-100">
+          <img
+            src={qrCodeUrl}
+            alt={`Lightning QR - ${lightningAddress}`}
+            class="w-28 h-28 object-contain rounded-lg"
+            width="112"
+            height="112"
+            loading="lazy"
+          />
+        </div>
+        <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+          Cüzdanınızla QR kodu taratın
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+</div>

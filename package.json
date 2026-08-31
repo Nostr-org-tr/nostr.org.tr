@@ -6,7 +6,7 @@
   "homepage": "https://nostr.org.tr",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nostr-turkiye/nostr.org.tr.git"
+    "url": "https://github.com/nostr-org-tr/nostr.org.tr.git"
   },
   "description": "Nostr Türkiye Topluluğu resmi web sitesi (nostr.org.tr)",
   "scripts": {

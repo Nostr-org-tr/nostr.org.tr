@@ -1,7 +1,7 @@
 ---
 import type { RelayInfo } from '../data/relays';
 import CopyButton from './CopyButton.astro';
-import { Radio, ShieldCheck, Lock, ExternalLink, RefreshCw, Mail } from 'lucide-astro';
+import { Radio, ShieldCheck, Lock, ExternalLink, RefreshCw, Mail, Sparkles } from 'lucide-astro';
 
 interface Props {
   relay: RelayInfo;
@@ -13,10 +13,11 @@ const { relay } = Astro.props;
 <div 
   class="relay-card p-6 sm:p-7 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-nostr-300 dark:hover:border-nostr-700 transition-all flex flex-col justify-between"
   data-relay-url={relay.url}
+  data-opening-soon={relay.openingSoon ? "true" : "false"}
 >
   <div>
-    <!-- Top Row: Name, Official Badge & Live Ping Status -->
-    <div class="flex items-start justify-between gap-3 mb-3">
+    <!-- Top Row: Name, Badges & Ping Status -->
+    <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
       <div class="space-y-1">
         <div class="flex items-center gap-2 flex-wrap">
           <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -29,6 +30,12 @@ const { relay } = Astro.props;
               <span>Resmi Topluluk Rölesi</span>
             </span>
           )}
+          {relay.openingSoon && (
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+              <Sparkles class="w-3 h-3" />
+              <span>Çok Yakında Yayında</span>
+            </span>
+          )}
         </div>
         <p class="text-xs text-slate-500 dark:text-slate-400">
           Konum: <span class="text-slate-700 dark:text-slate-200 font-medium">{relay.location}</span> • Yazılım: <span class="font-mono">{relay.software}</span>
@@ -36,9 +43,9 @@ const { relay } = Astro.props;
       </div>
 
       <!-- Realtime Latency Badge -->
-      <div class="latency-badge flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+      <div class="latency-badge flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 self-start">
         <span class="status-dot w-2 h-2 rounded-full bg-slate-400 animate-pulse"></span>
-        <span class="latency-text">Test ediliyor...</span>
+        <span class="latency-text">{relay.openingSoon ? 'Yakında Aktif' : 'Test ediliyor...'}</span>
       </div>
     </div>
 
@@ -78,15 +85,15 @@ const { relay } = Astro.props;
       </div>
     </div>
 
-    <!-- Whitelist Notice for Official Relay -->
+    <!-- Whitelist / Upcoming Notice for Official Relay -->
     {relay.writePolicy === 'whitelist' && (
-      <div class="p-3 rounded-xl bg-nostr-50/70 dark:bg-nostr-950/40 border border-nostr-200/60 dark:border-nostr-800/50 text-xs text-slate-600 dark:text-slate-300 space-y-1 mb-4">
+      <div class="p-3.5 rounded-xl bg-nostr-50/70 dark:bg-nostr-950/40 border border-nostr-200/60 dark:border-nostr-800/50 text-xs text-slate-600 dark:text-slate-300 space-y-1.5 mb-4">
         <p class="font-semibold text-nostr-700 dark:text-nostr-300 flex items-center gap-1">
           <Mail class="w-3.5 h-3.5" />
-          <span>Röleye Yazma İzni Başvurusu</span>
+          <span>Röleye Yazma İzni Başvurusu & Whitelist</span>
         </p>
         <p class="leading-relaxed">
-          Spam kirliliğini önlemek adına rölemize yazma izni whitelist ile verilmektedir. <code class="font-mono text-nostr-600 dark:text-nostr-400">npub</code> adresiniz ve kısa bir açıklama ile <a href="mailto:ekip@nostr.org.tr?subject=Röle%20Yazma%20İzni%20Başvurusu" class="underline font-semibold hover:text-nostr-600">ekip@nostr.org.tr</a> üzerinden talep iletebilirsiniz.
+          Spam ve bot kirliliğini önlemek adına röleye yazma izinleri whitelist ile tanımlanmaktadır. <code class="font-mono text-nostr-600 dark:text-nostr-400">npub</code> adresinizle <a href="mailto:ekip@nostr.org.tr?subject=Röle%20Yazma%20İzni%20Başvurusu" class="underline font-semibold hover:text-nostr-600">ekip@nostr.org.tr</a> üzerinden yazma izni talep edebilirsiniz.
         </p>
       </div>
     )}
@@ -115,6 +122,7 @@ const { relay } = Astro.props;
 <script is:inline>
   const probeRelay = (card) => {
     const url = card.getAttribute('data-relay-url');
+    const isOpeningSoon = card.getAttribute('data-opening-soon') === 'true';
     const badge = card.querySelector('.latency-badge');
     const dot = card.querySelector('.status-dot');
     const text = card.querySelector('.latency-text');
@@ -134,10 +142,15 @@ const { relay } = Astro.props;
         if (!isFinished) {
           isFinished = true;
           try { ws.close(); } catch(e){}
-          dot.className = 'status-dot w-2 h-2 rounded-full bg-rose-500';
-          text.textContent = 'Zaman Aşımı';
+          if (isOpeningSoon) {
+            dot.className = 'status-dot w-2 h-2 rounded-full bg-amber-400';
+            text.textContent = 'Çok Yakında';
+          } else {
+            dot.className = 'status-dot w-2 h-2 rounded-full bg-rose-500';
+            text.textContent = 'Zaman Aşımı';
+          }
         }
-      }, 5000);
+      }, 4000);
 
       ws.onopen = () => {
         if (isFinished) return;
@@ -153,12 +166,22 @@ const { relay } = Astro.props;
         if (isFinished) return;
         isFinished = true;
         clearTimeout(timeout);
-        dot.className = 'status-dot w-2 h-2 rounded-full bg-rose-500';
-        text.textContent = 'Bağlantı Hatası';
+        if (isOpeningSoon) {
+          dot.className = 'status-dot w-2 h-2 rounded-full bg-amber-400';
+          text.textContent = 'Çok Yakında';
+        } else {
+          dot.className = 'status-dot w-2 h-2 rounded-full bg-rose-500';
+          text.textContent = 'Bağlantı Hatası';
+        }
       };
     } catch (err) {
-      dot.className = 'status-dot w-2 h-2 rounded-full bg-rose-500';
-      text.textContent = 'Erişilemedi';
+      if (isOpeningSoon) {
+        dot.className = 'status-dot w-2 h-2 rounded-full bg-amber-400';
+        text.textContent = 'Çok Yakında';
+      } else {
+        dot.className = 'status-dot w-2 h-2 rounded-full bg-rose-500';
+        text.textContent = 'Erişilemedi';
+      }
     }
   };
 
