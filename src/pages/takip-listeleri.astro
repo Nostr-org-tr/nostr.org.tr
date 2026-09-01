@@ -66,4 +66,13 @@ const breadcrumbs = [
     </div>
   </section>
 
+  <!-- Dynamic Nostr Profiles Fetcher Script -->
+  <script>
+    import { fetchNostrProfiles } from '../utils/nostrProfileFetcher';
+
+    fetchNostrProfiles('[data-profile-card]');
+    document.addEventListener('astro:page-load', () => fetchNostrProfiles('[data-profile-card]'));
+    document.addEventListener('astro:after-swap', () => fetchNostrProfiles('[data-profile-card]'));
+  </script>
+
 </Layout>

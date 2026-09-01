@@ -75,25 +75,46 @@ const npubListJson = JSON.stringify(category.profiles.map(p => ({ name: p.name, 
   <!-- Profiles Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     {category.profiles.map((profile) => (
-      <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800/80 flex flex-col justify-between space-y-3">
+      <div 
+        data-profile-card
+        data-npub={profile.npub}
+        class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800/80 flex flex-col justify-between space-y-3"
+      >
         <div>
-          <!-- Name & NIP-05 -->
-          <div class="flex items-start justify-between gap-2">
-            <div>
-              <h4 class="text-sm font-bold text-slate-900 dark:text-white">
-                {profile.name}
+          <!-- Header: Avatar + Name & NIP-05 -->
+          <div class="flex items-start gap-3">
+            <div class="relative w-10 h-10 flex-shrink-0">
+              <div class="profile-monogram w-10 h-10 rounded-xl bg-gradient-to-tr from-nostr-600 to-nostr-400 text-white font-bold text-sm flex items-center justify-center shadow-sm">
+                {profile.name.charAt(0)}
+              </div>
+              <img 
+                src="" 
+                alt={profile.name}
+                class="profile-avatar absolute inset-0 w-10 h-10 rounded-xl object-cover hidden shadow-sm border border-slate-200/60 dark:border-slate-700/60 bg-slate-100 dark:bg-slate-800"
+                loading="lazy"
+              />
+            </div>
+
+            <div class="min-w-0 flex-1">
+              <h4 class="text-sm font-bold text-slate-900 dark:text-white truncate">
+                <span class="profile-name">{profile.name}</span>
               </h4>
-              {profile.nip05 && (
-                <div class="inline-flex items-center gap-1 text-[11px] font-mono text-nostr-600 dark:text-nostr-400">
+              {profile.nip05 ? (
+                <div class="inline-flex items-center gap-1 text-[11px] font-mono text-nostr-600 dark:text-nostr-400 max-w-full">
                   <BadgeCheck class="w-3 h-3 flex-shrink-0" />
-                  <span class="truncate">{profile.nip05}</span>
+                  <span class="profile-nip05 truncate">{profile.nip05}</span>
+                </div>
+              ) : (
+                <div class="profile-nip05-dyn hidden inline-flex items-center gap-1 text-[11px] font-mono text-nostr-600 dark:text-nostr-400 max-w-full">
+                  <BadgeCheck class="w-3 h-3 flex-shrink-0" />
+                  <span class="profile-nip05 truncate"></span>
                 </div>
               )}
             </div>
           </div>
 
           <!-- Bio -->
-          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mt-2 line-clamp-2">
+          <p class="profile-bio text-xs text-slate-600 dark:text-slate-300 leading-relaxed mt-2.5 line-clamp-2">
             {profile.bio}
           </p>
 
