@@ -25,14 +25,18 @@ interface CachedProfile {
   timestamp: number;
 }
 
-const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
+const CACHE_TTL_MS = 2 * 60 * 60 * 1000; // 2 hours TTL
 const RELAYS = [
   'wss://relay.nostr.org.tr',
   'wss://purplepag.es',
-  'wss://relay.damus.io',
-  'wss://nos.lol',
   'wss://relay.primal.net',
+  'wss://nos.lol',
+  'wss://relay.damus.io',
+  'wss://user.kindpag.es',
+  'wss://relay.mostr.pub',
 ];
+
+const memoryCache = new Map<string, CachedProfile>();
 
 /**
  * Pure Bech32 npub to 32-byte hex converter for client-side execution
@@ -73,35 +77,43 @@ export function npubToHex(npub: string): string | null {
 }
 
 /**
- * Safely read cached profile from sessionStorage
+ * Safely read cached profile from localStorage with memory fallback
  */
 function getCachedProfile(pubkeyHex: string): NostrProfileMeta | null {
+  const mem = memoryCache.get(pubkeyHex);
+  if (mem && Date.now() - mem.timestamp < CACHE_TTL_MS) {
+    return mem.meta;
+  }
+
   try {
-    const raw = sessionStorage.getItem(`nostr_profile_${pubkeyHex}`);
+    const raw = localStorage.getItem(`nostr_profile_${pubkeyHex}`);
     if (!raw) return null;
     const cached: CachedProfile = JSON.parse(raw);
     if (cached && cached.meta && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+      memoryCache.set(pubkeyHex, cached);
       return cached.meta;
     }
   } catch {
-    // Storage access failure fallback
+    // Storage access fallback
   }
   return null;
 }
 
 /**
- * Safely cache profile into sessionStorage
+ * Safely cache profile into localStorage with memory fallback
  */
 function setCachedProfile(pubkeyHex: string, meta: NostrProfileMeta, createdAt: number): void {
+  const item: CachedProfile = {
+    meta,
+    created_at: createdAt,
+    timestamp: Date.now(),
+  };
+  memoryCache.set(pubkeyHex, item);
+
   try {
-    const cached: CachedProfile = {
-      meta,
-      created_at: createdAt,
-      timestamp: Date.now(),
-    };
-    sessionStorage.setItem(`nostr_profile_${pubkeyHex}`, JSON.stringify(cached));
+    localStorage.setItem(`nostr_profile_${pubkeyHex}`, JSON.stringify(item));
   } catch {
-    // Storage quota exceeded or disabled fallback
+    // Storage quota fallback
   }
 }
 
@@ -118,19 +130,27 @@ export function applyProfileToElement(card: HTMLElement, meta: NostrProfileMeta)
     const monogram = card.querySelector<HTMLElement>('.member-monogram, .profile-monogram');
 
     if (avatarImg) {
-      if (avatarImg.src !== pictureUrl) {
-        avatarImg.onload = () => {
-          avatarImg.classList.remove('hidden');
-          if (monogram) monogram.classList.add('hidden');
-        };
-        avatarImg.onerror = () => {
-          avatarImg.classList.add('hidden');
-          if (monogram) monogram.classList.remove('hidden');
-        };
-        avatarImg.src = pictureUrl;
-      } else {
+      avatarImg.onload = () => {
         avatarImg.classList.remove('hidden');
         if (monogram) monogram.classList.add('hidden');
+      };
+      avatarImg.onerror = () => {
+        avatarImg.classList.add('hidden');
+        if (monogram) monogram.classList.remove('hidden');
+      };
+
+      if (avatarImg.src !== pictureUrl) {
+        avatarImg.src = pictureUrl;
+      }
+
+      if (avatarImg.complete) {
+        if (avatarImg.naturalWidth > 0) {
+          avatarImg.classList.remove('hidden');
+          if (monogram) monogram.classList.add('hidden');
+        } else {
+          avatarImg.classList.add('hidden');
+          if (monogram) monogram.classList.remove('hidden');
+        }
       }
     }
   }
@@ -181,140 +201,180 @@ export function applyProfileToElement(card: HTMLElement, meta: NostrProfileMeta)
 }
 
 /**
+ * Split array into chunks for safe relay querying
+ */
+function chunkArray<T>(arr: T[], size: number): T[][] {
+  const result: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) {
+    result.push(arr.slice(i, i + size));
+  }
+  return result;
+}
+
+/**
  * Main function: queries Nostr relays for all cards with `data-npub` in DOM
  */
 export function fetchNostrProfiles(selector = '[data-npub]'): void {
   if (typeof window === 'undefined') return;
 
-  const cards = Array.from(document.querySelectorAll<HTMLElement>(selector));
-  if (!cards.length) return;
+  const execute = () => {
+    const cards = Array.from(document.querySelectorAll<HTMLElement>(selector));
+    if (!cards.length) return;
 
-  const pubkeyToCardsMap = new Map<string, HTMLElement[]>();
-  const pubkeysToFetch: string[] = [];
+    const pubkeyToCardsMap = new Map<string, HTMLElement[]>();
+    const pubkeysToFetch: string[] = [];
 
-  cards.forEach((card) => {
-    const npub = card.getAttribute('data-npub');
-    if (!npub) return;
+    cards.forEach((card) => {
+      const npub = card.getAttribute('data-npub');
+      if (!npub) return;
 
-    const hex = npubToHex(npub);
-    if (!hex) return;
+      const hex = npubToHex(npub);
+      if (!hex) return;
 
-    const existingList = pubkeyToCardsMap.get(hex) || [];
-    existingList.push(card);
-    pubkeyToCardsMap.set(hex, existingList);
+      const existingList = pubkeyToCardsMap.get(hex) || [];
+      existingList.push(card);
+      pubkeyToCardsMap.set(hex, existingList);
 
-    // Apply cached data immediately for zero-delay display
-    const cached = getCachedProfile(hex);
-    if (cached) {
-      applyProfileToElement(card, cached);
-    }
+      // Apply cached data immediately for zero-delay display
+      const cached = getCachedProfile(hex);
+      if (cached) {
+        applyProfileToElement(card, cached);
+      }
 
-    if (!pubkeysToFetch.includes(hex)) {
-      pubkeysToFetch.push(hex);
-    }
-  });
-
-  if (!pubkeysToFetch.length) return;
-
-  const subId = 'meta_' + Math.random().toString(36).slice(2, 9);
-  const reqMessage = JSON.stringify([
-    'REQ',
-    subId,
-    { kinds: [0], authors: pubkeysToFetch },
-  ]);
-
-  const latestEvents = new Map<string, { created_at: number; meta: NostrProfileMeta }>();
-  const sockets: WebSocket[] = [];
-
-  // Cleanup helper
-  const closeAllSockets = () => {
-    sockets.forEach((ws) => {
-      try {
-        if (ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify(['CLOSE', subId]));
-        }
-        ws.close();
-      } catch {
-        // Socket close safe ignore
+      if (!pubkeysToFetch.includes(hex)) {
+        pubkeysToFetch.push(hex);
       }
     });
-    sockets.length = 0;
-  };
 
-  // Safe timeout after 6 seconds
-  const timeoutId = setTimeout(closeAllSockets, 6000);
+    if (!pubkeysToFetch.length) return;
 
-  let closedCount = 0;
-  const onSocketDone = () => {
-    closedCount++;
-    if (closedCount >= RELAYS.length) {
-      clearTimeout(timeoutId);
-      closeAllSockets();
-    }
-  };
+    const subIdPrefix = 'p_' + Math.random().toString(36).slice(2, 7);
+    const chunks = chunkArray(pubkeysToFetch, 10);
+    const latestEvents = new Map<string, { created_at: number; meta: NostrProfileMeta }>();
+    const sockets: WebSocket[] = [];
+    const finishedRelays = new Set<string>();
 
-  RELAYS.forEach((relayUrl) => {
-    try {
-      const ws = new WebSocket(relayUrl);
-      sockets.push(ws);
-
-      ws.onopen = () => {
+    // Cleanup helper
+    const closeAllSockets = () => {
+      sockets.forEach((ws) => {
         try {
-          ws.send(reqMessage);
-        } catch {
-          // Send error
-        }
-      };
-
-      ws.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          if (!Array.isArray(data)) return;
-
-          const [msgType, msgSubId, nostrEvent] = data;
-
-          if (msgType === 'EVENT' && msgSubId === subId && nostrEvent && nostrEvent.kind === 0 && nostrEvent.pubkey) {
-            const pubkey = nostrEvent.pubkey;
-            const createdAt = nostrEvent.created_at || 0;
-
-            const existing = latestEvents.get(pubkey);
-            if (!existing || createdAt > existing.created_at) {
-              const meta: NostrProfileMeta = JSON.parse(nostrEvent.content);
-              latestEvents.set(pubkey, { created_at: createdAt, meta });
-
-              // Apply to all card elements associated with this pubkey
-              const targetCards = pubkeyToCardsMap.get(pubkey);
-              if (targetCards && targetCards.length) {
-                targetCards.forEach((c) => applyProfileToElement(c, meta));
+          if (ws.readyState === WebSocket.OPEN) {
+            chunks.forEach((_, idx) => {
+              try {
+                ws.send(JSON.stringify(['CLOSE', `${subIdPrefix}_${idx}`]));
+              } catch {
+                // Ignore
               }
-
-              // Save to cache
-              setCachedProfile(pubkey, meta, createdAt);
-            }
-          } else if (msgType === 'EOSE' && msgSubId === subId) {
-            // Relay finished sending stored events
-            try {
-              ws.send(JSON.stringify(['CLOSE', subId]));
-              ws.close();
-            } catch {
-              // Close safe ignore
-            }
-            onSocketDone();
+            });
           }
+          ws.close();
         } catch {
-          // JSON parse or event handling safe ignore
+          // Socket close safe ignore
         }
-      };
+      });
+      sockets.length = 0;
+    };
 
-      ws.onerror = () => {
-        onSocketDone();
-      };
+    // Safe timeout after 8 seconds
+    const timeoutId = setTimeout(closeAllSockets, 8000);
 
-      ws.onclose = () => {
-        onSocketDone();
-      };
-    } catch {
-      onSocketDone();
-    }
-  });
+    const onRelayFinished = (relayUrl: string) => {
+      finishedRelays.add(relayUrl);
+      if (finishedRelays.size >= RELAYS.length) {
+        clearTimeout(timeoutId);
+        closeAllSockets();
+      }
+    };
+
+    RELAYS.forEach((relayUrl) => {
+      try {
+        const ws = new WebSocket(relayUrl);
+        sockets.push(ws);
+
+        ws.onopen = () => {
+          try {
+            chunks.forEach((chunk, idx) => {
+              const req = JSON.stringify([
+                'REQ',
+                `${subIdPrefix}_${idx}`,
+                { kinds: [0], authors: chunk },
+              ]);
+              ws.send(req);
+            });
+          } catch {
+            // Send error
+          }
+        };
+
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (!Array.isArray(data)) return;
+
+            const [msgType, msgSubId, nostrEvent] = data;
+
+            if (
+              msgType === 'EVENT' &&
+              typeof msgSubId === 'string' &&
+              msgSubId.startsWith(subIdPrefix) &&
+              nostrEvent &&
+              nostrEvent.kind === 0 &&
+              nostrEvent.pubkey
+            ) {
+              const pubkey = nostrEvent.pubkey;
+              const createdAt = nostrEvent.created_at || 0;
+
+              const existing = latestEvents.get(pubkey);
+              if (!existing || createdAt > existing.created_at) {
+                try {
+                  const meta: NostrProfileMeta = JSON.parse(nostrEvent.content);
+                  latestEvents.set(pubkey, { created_at: createdAt, meta });
+
+                  // Apply to all card elements associated with this pubkey
+                  const targetCards = pubkeyToCardsMap.get(pubkey);
+                  if (targetCards && targetCards.length) {
+                    targetCards.forEach((c) => applyProfileToElement(c, meta));
+                  }
+
+                  // Save to cache
+                  setCachedProfile(pubkey, meta, createdAt);
+                } catch {
+                  // Ignore bad JSON inside kind 0 event
+                }
+              }
+            } else if (
+              msgType === 'EOSE' &&
+              typeof msgSubId === 'string' &&
+              msgSubId.startsWith(subIdPrefix)
+            ) {
+              // Received EOSE for one chunk
+              try {
+                ws.send(JSON.stringify(['CLOSE', msgSubId]));
+              } catch {
+                // Ignore
+              }
+            }
+          } catch {
+            // JSON parse safe ignore
+          }
+        };
+
+        ws.onerror = () => {
+          onRelayFinished(relayUrl);
+        };
+
+        ws.onclose = () => {
+          onRelayFinished(relayUrl);
+        };
+      } catch {
+        onRelayFinished(relayUrl);
+      }
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', execute, { once: true });
+  } else {
+    execute();
+  }
 }
