@@ -1,0 +1,43 @@
+---
+import ToolLayout from '../../components/tools/ToolLayout.astro';
+import KeypairGeneratorTool from '../../components/tools/KeypairGeneratorTool.astro';
+import { nostrTools } from '../../data/tools';
+import { ShieldCheck, Lock, AlertTriangle } from 'lucide-astro';
+
+const tool = nostrTools.find((t) => t.id === 'anahtar-ureticisi')!;
+---
+
+<ToolLayout tool={tool}>
+  <KeypairGeneratorTool />
+
+  <Fragment slot="guide">
+    <div class="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-6">
+      <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+        <Lock class="w-4 h-4 text-emerald-500" />
+        <span>Nostr Anahtar Güvenliği & Saklama Prensipleri</span>
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-2">
+          <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+            <ShieldCheck class="w-4 h-4 text-emerald-500" />
+            <span>nsec Asla Değiştirilemez ve Kurtarılamaz</span>
+          </span>
+          <p class="leading-relaxed text-slate-500 dark:text-slate-400">
+            Nostr ağında e-posta ile şifre sıfırlama veya "şifremi unuttum" özelliği yoktur. nsec anahtarınızı kaybederseniz hesabınıza, takipçilerinize ve kimliğinize erişiminizi kalıcı olarak kaybedersiniz.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-2">
+          <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+            <AlertTriangle class="w-4 h-4 text-amber-500" />
+            <span>NIP-07 Eklentileri veya İmzalayıcı Kullanın</span>
+          </span>
+          <p class="leading-relaxed text-slate-500 dark:text-slate-400">
+            Günlük kullanımda nsec anahtarınızı her web sitesine yapıştırmak yerine Alby, nos2x veya mobil ortamda Amber/Gossip gibi NIP-46/NIP-07 imzalayıcıları tercih edin.
+          </p>
+        </div>
+      </div>
+    </div>
+  </Fragment>
+</ToolLayout>

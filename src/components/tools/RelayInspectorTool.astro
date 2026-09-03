@@ -1,0 +1,351 @@
+---
+import { 
+  Radio, 
+  Search
+} from 'lucide-astro';
+---
+
+<div class="relay-inspector-card rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+  
+  <!-- Header Strip -->
+  <div class="p-6 sm:p-7 bg-slate-50/80 dark:bg-slate-950/70 border-b border-slate-200/80 dark:border-slate-800/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="space-y-1">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-nostr-100 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400 border border-nostr-200 dark:border-nostr-800">
+        <Radio class="w-3.5 h-3.5" />
+        <span>NIP-01 & NIP-11 Ağ Tanı Aracı</span>
+      </div>
+      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+        Canlı Nostr Röle Tanı & NIP-11 Bilgi Görüntüleyici
+      </h2>
+      <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+        Herhangi bir Nostr rölesine canlı WebSocket ping atın, gecikme süresini (RTT) ölçün ve NIP-11 desteklenen protokolleri inceleyin.
+      </p>
+    </div>
+
+    <!-- Quick Relay Presets -->
+    <div class="flex flex-wrap items-center gap-1.5 text-xs">
+      <span class="text-slate-400 dark:text-slate-500 text-[11px] font-medium mr-1">Önerilenler:</span>
+      <button 
+        type="button" 
+        class="relay-preset-btn px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-nostr-400 text-[11px] font-mono transition-colors"
+        data-relay="wss://relay.nostr.org.tr"
+      >
+        relay.nostr.org.tr
+      </button>
+      <button 
+        type="button" 
+        class="relay-preset-btn px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-nostr-400 text-[11px] font-mono transition-colors"
+        data-relay="wss://relay.damus.io"
+      >
+        relay.damus.io
+      </button>
+      <button 
+        type="button" 
+        class="relay-preset-btn px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-nostr-400 text-[11px] font-mono transition-colors"
+        data-relay="wss://nos.lol"
+      >
+        nos.lol
+      </button>
+    </div>
+  </div>
+
+  <div class="p-6 sm:p-8 space-y-6">
+    
+    <!-- Input Section -->
+    <div class="space-y-2">
+      <label for="relay-url-input" class="block text-sm font-semibold text-slate-800 dark:text-slate-200">
+        Röle WebSocket Adresi (wss://...)
+      </label>
+      <div class="flex flex-col sm:flex-row gap-2">
+        <input
+          id="relay-url-input"
+          type="text"
+          placeholder="wss://relay.nostr.org.tr"
+          value="wss://relay.nostr.org.tr"
+          class="flex-1 px-4 py-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-xs sm:text-sm font-mono focus:outline-none focus:ring-2 focus:ring-nostr-500/50 focus:border-nostr-500 transition-all placeholder:text-slate-400"
+        />
+        <button
+          type="button"
+          id="btn-inspect-relay"
+          class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-semibold bg-nostr-600 hover:bg-nostr-700 text-white shadow-sm transition-all active:scale-95 flex-shrink-0"
+        >
+          <Search class="w-4 h-4" />
+          <span>Röleyi Test Et & İncele</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Diagnostic Container -->
+    <div id="relay-diag-box" class="hidden space-y-6">
+      
+      <!-- Real-time Live Status Bar -->
+      <div id="relay-status-banner" class="p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div id="relay-status-icon" class="p-2 rounded-xl"></div>
+          <div>
+            <h3 id="relay-status-title" class="text-base font-bold"></h3>
+            <p id="relay-status-sub" class="text-xs mt-0.5 opacity-90 font-mono"></p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-mono">
+          <span class="text-slate-500">WebSocket RTT Ping:</span>
+          <span id="relay-ping-val" class="px-2.5 py-1 rounded-lg font-bold bg-black/10 dark:bg-white/10">-- ms</span>
+        </div>
+      </div>
+
+      <!-- NIP-11 Metadata Card -->
+      <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-5">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-200 dark:border-slate-800">
+          <div>
+            <h4 id="nip11-relay-name" class="text-lg font-bold text-slate-900 dark:text-white"></h4>
+            <p id="nip11-relay-desc" class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-2xl leading-relaxed"></p>
+          </div>
+          <div id="nip11-software-badge" class="px-3 py-1 rounded-xl text-xs font-mono font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 self-start sm:self-auto"></div>
+        </div>
+
+        <!-- Meta Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-mono">
+          <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span class="text-slate-400 text-[11px] block">İletişim / Operatör</span>
+            <span id="nip11-contact" class="text-slate-800 dark:text-slate-200 font-semibold break-all truncate block"></span>
+          </div>
+          <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span class="text-slate-400 text-[11px] block">Operatör Pubkey</span>
+            <span id="nip11-pubkey" class="text-nostr-600 dark:text-nostr-400 font-semibold select-all break-all truncate block"></span>
+          </div>
+          <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span class="text-slate-400 text-[11px] block">Ücret / Ödeme Durumu</span>
+            <span id="nip11-payments" class="text-emerald-600 dark:text-emerald-400 font-semibold block"></span>
+          </div>
+        </div>
+
+        <!-- Supported NIPs Badges -->
+        <div class="space-y-2">
+          <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">
+            Desteklenen NIP Standartları
+          </span>
+          <div id="nip11-nips-container" class="flex flex-wrap gap-1.5"></div>
+        </div>
+
+        <!-- Limitations Tags -->
+        <div id="nip11-limits-box" class="hidden space-y-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+          <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">
+            Röle Sınırlamaları ve Kuralları (Limitation Tags)
+          </span>
+          <div id="nip11-limits-container" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+  import { nip19 } from 'nostr-tools';
+
+  const initRelayInspector = () => {
+    const card = document.querySelector('.relay-inspector-card');
+    if (!card || card.getAttribute('data-init') === 'true') return;
+    card.setAttribute('data-init', 'true');
+
+    const input = card.querySelector('#relay-url-input') as HTMLInputElement | null;
+    const btnInspect = card.querySelector('#btn-inspect-relay');
+    const diagBox = card.querySelector('#relay-diag-box');
+    const statusBanner = card.querySelector('#relay-status-banner');
+    const statusTitle = card.querySelector('#relay-status-title');
+    const statusSub = card.querySelector('#relay-status-sub');
+    const pingVal = card.querySelector('#relay-ping-val');
+    const relayName = card.querySelector('#nip11-relay-name');
+    const relayDesc = card.querySelector('#nip11-relay-desc');
+    const swBadge = card.querySelector('#nip11-software-badge');
+    const contactEl = card.querySelector('#nip11-contact');
+    const pubkeyEl = card.querySelector('#nip11-pubkey');
+    const paymentsEl = card.querySelector('#nip11-payments');
+    const nipsContainer = card.querySelector('#nip11-nips-container');
+    const limitsBox = card.querySelector('#nip11-limits-box');
+    const limitsContainer = card.querySelector('#nip11-limits-container');
+    const presetBtns = card.querySelectorAll('.relay-preset-btn');
+
+    const inspectRelay = async () => {
+      let rawUrl = (input?.value || '').trim();
+      if (!rawUrl || !diagBox) return;
+
+      if (!rawUrl.startsWith('ws://') && !rawUrl.startsWith('wss://')) {
+        rawUrl = `wss://${rawUrl.replace(/^https?:\/\//, '')}`;
+        if (input) input.value = rawUrl;
+      }
+
+      diagBox.classList.remove('hidden');
+      if (statusBanner) {
+        statusBanner.className = 'p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300';
+      }
+      if (statusTitle) statusTitle.textContent = 'Röle test ediliyor...';
+      if (statusSub) statusSub.textContent = rawUrl;
+      if (pingVal) {
+        pingVal.textContent = 'Ölçülüyor...';
+        pingVal.className = 'px-2.5 py-1 rounded-lg font-bold bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400';
+      }
+
+      // 1. WebSocket Ping Test
+      const wsStart = performance.now();
+      let wsLatency: number | null = null;
+
+      try {
+        const ws = new WebSocket(rawUrl);
+
+        await new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            ws.close();
+            reject(new Error('WebSocket bağlantı zaman aşımı (5s)'));
+          }, 5000);
+
+          ws.onopen = () => {
+            clearTimeout(timeout);
+            wsLatency = Math.round(performance.now() - wsStart);
+            ws.close();
+            resolve(true);
+          };
+
+          ws.onerror = () => {
+            clearTimeout(timeout);
+            reject(new Error('WebSocket bağlantısı kurulamadı (CORS/SSL/Offline)'));
+          };
+        });
+
+        if (pingVal && wsLatency !== null) {
+          pingVal.textContent = `${wsLatency} ms`;
+          if (wsLatency < 150) {
+            pingVal.className = 'px-2.5 py-1 rounded-lg font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400';
+          } else if (wsLatency < 400) {
+            pingVal.className = 'px-2.5 py-1 rounded-lg font-bold bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400';
+          } else {
+            pingVal.className = 'px-2.5 py-1 rounded-lg font-bold bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-400';
+          }
+        }
+
+        if (statusBanner) {
+          statusBanner.className = 'p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-emerald-50 dark:bg-emerald-950/60 border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200';
+        }
+        if (statusTitle) statusTitle.textContent = '✓ Röle Çevrimiçi & Erişilebilir';
+
+      } catch (wsErr: any) {
+        if (pingVal) {
+          pingVal.textContent = 'Erişilemedi';
+          pingVal.className = 'px-2.5 py-1 rounded-lg font-bold bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-400';
+        }
+        if (statusBanner) {
+          statusBanner.className = 'p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-rose-50 dark:bg-rose-950/60 border-rose-200 dark:border-rose-800 text-rose-900 dark:text-rose-200';
+        }
+        if (statusTitle) statusTitle.textContent = `✕ ${wsErr.message || 'Röleye bağlanılamadı'}`;
+      }
+
+      // 2. NIP-11 Document Fetch
+      const httpUrl = rawUrl.replace(/^wss:\/\//, 'https://').replace(/^ws:\/\//, 'http://');
+
+      try {
+        const res = await fetch(httpUrl, {
+          headers: {
+            'Accept': 'application/nostr+json'
+          }
+        });
+
+        if (res.ok) {
+          const info: any = await res.json();
+
+          if (relayName) relayName.textContent = info.name || new URL(httpUrl).hostname;
+          if (relayDesc) relayDesc.textContent = info.description || 'Açıklama belirtilmemiş.';
+          if (swBadge) swBadge.textContent = info.software ? `${info.software} (v${info.version || '?'})` : 'Bilinmeyen Yazılım';
+          if (contactEl) contactEl.textContent = info.contact || 'Belirtilmemiş';
+          
+          if (pubkeyEl) {
+            if (info.pubkey) {
+              try {
+                const npub = nip19.npubEncode(info.pubkey);
+                pubkeyEl.textContent = `${info.pubkey.slice(0, 16)}... (${npub.slice(0, 12)}...)`;
+              } catch (e) {
+                pubkeyEl.textContent = info.pubkey;
+              }
+            } else {
+              pubkeyEl.textContent = 'Belirtilmemiş';
+            }
+          }
+
+          if (paymentsEl) {
+            if (info.payments_url || info.limitation?.payment_required) {
+              paymentsEl.textContent = 'Ücretli / Kayıt Gerekli';
+              paymentsEl.className = 'text-amber-600 dark:text-amber-400 font-semibold block';
+            } else {
+              paymentsEl.textContent = 'Ücretsiz & Açık Katılım';
+              paymentsEl.className = 'text-emerald-600 dark:text-emerald-400 font-semibold block';
+            }
+          }
+
+          if (nipsContainer) {
+            nipsContainer.innerHTML = '';
+            const nips: number[] = Array.isArray(info.supported_nips) ? info.supported_nips : [];
+            if (nips.length > 0) {
+              nips.sort((a, b) => a - b).forEach((n) => {
+                const badge = document.createElement('span');
+                badge.className = 'px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-nostr-600 dark:text-nostr-400';
+                badge.textContent = `NIP-${n < 10 ? '0' + n : n}`;
+                nipsContainer.appendChild(badge);
+              });
+            } else {
+              nipsContainer.innerHTML = '<span class="text-xs text-slate-400">NIP bilgisi sunulmuyor.</span>';
+            }
+          }
+
+          if (limitsBox && limitsContainer && info.limitation) {
+            limitsContainer.innerHTML = '';
+            const lim = info.limitation;
+            const entries = Object.entries(lim);
+            if (entries.length > 0) {
+              entries.forEach(([k, v]) => {
+                const item = document.createElement('div');
+                item.className = 'p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800';
+                item.innerHTML = `<span class="text-slate-400 text-[10px] block truncate">${k}</span><span class="font-bold text-slate-700 dark:text-slate-200 truncate block">${v}</span>`;
+                limitsContainer.appendChild(item);
+              });
+              limitsBox.classList.remove('hidden');
+            } else {
+              limitsBox.classList.add('hidden');
+            }
+          }
+
+        } else {
+          throw new Error('NIP-11 belgesi bulunamadı');
+        }
+      } catch (httpErr) {
+        if (relayName) relayName.textContent = new URL(httpUrl).hostname;
+        if (relayDesc) relayDesc.textContent = 'NIP-11 dokümanı çekilemedi (CORS veya HTTP başlığı eksik).';
+        if (swBadge) swBadge.textContent = 'NIP-11 Yok';
+        if (contactEl) contactEl.textContent = '—';
+        if (pubkeyEl) pubkeyEl.textContent = '—';
+        if (paymentsEl) paymentsEl.textContent = 'Bilinmiyor';
+        if (nipsContainer) nipsContainer.innerHTML = '<span class="text-xs text-slate-400">NIP-11 belgesine erişilemedi.</span>';
+        if (limitsBox) limitsBox.classList.add('hidden');
+      }
+    };
+
+    btnInspect?.addEventListener('click', inspectRelay);
+    input?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') inspectRelay();
+    });
+
+    presetBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const relay = btn.getAttribute('data-relay');
+        if (relay && input) {
+          input.value = relay;
+          inspectRelay();
+        }
+      });
+    });
+  };
+
+  initRelayInspector();
+  document.addEventListener('astro:after-swap', initRelayInspector);
+</script>

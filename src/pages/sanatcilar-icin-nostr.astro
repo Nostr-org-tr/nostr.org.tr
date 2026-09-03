@@ -1,0 +1,378 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { 
+  Palette, 
+  ShieldCheck, 
+  Zap, 
+  Scale, 
+  AlertTriangle, 
+  ArrowRight, 
+  Sparkles, 
+  BookOpen, 
+  Clock, 
+  Music, 
+  Image, 
+  HeartHandshake
+} from 'lucide-astro';
+
+import ArticleSchema from '../components/seo/ArticleSchema.astro';
+import BreadcrumbSchema from '../components/seo/BreadcrumbSchema.astro';
+
+const breadcrumbs = [
+  { name: 'Ana Sayfa', path: '/' },
+  { name: 'Kaynaklar', path: '/rehber' },
+  { name: 'Sanatçılar İçin Nostr Kılavuzu', path: '/sanatcilar-icin-nostr' },
+];
+
+const publishedDate = "2025-01-15";
+const modifiedDate = "2026-08-31";
+---
+
+<Layout 
+  title="Sanatçıysan Bilmen Gerekenler: Dijital Çağda Aracısız Telif, Eser Sahipliği ve Sansürsüz Yaratıcılık | Nostr Türkiye"
+  description="Müzisyenler, çizerler, dijital sanatçılar ve yazarlar için: Streaming tekellerinin yüksek komisyonlarına, algoritmik bastırmaya ve platform sansürüne karşı Nostr protokolü ile bağımsız sanat rehberi."
+  ogType="article"
+  publishedTime={publishedDate}
+  modifiedTime={modifiedDate}
+>
+  <Fragment slot="head">
+    <BreadcrumbSchema items={breadcrumbs} />
+    <ArticleSchema
+      title="Sanatçıysan Bilmen Gerekenler: Dijital Çağda Aracısız Telif, Eser Sahipliği ve Sansürsüz Yaratıcılık"
+      description="Müzisyenler, çizerler, dijital sanatçılar ve yazarlar için: Streaming tekellerinin yüksek komisyonlarına, algoritmik bastırmaya ve platform sansürüne karşı Nostr protokolü ile bağımsız sanat rehberi."
+      path="/sanatcilar-icin-nostr"
+      inLanguage="tr-TR"
+      datePublished={publishedDate}
+      dateModified={modifiedDate}
+    />
+  </Fragment>
+
+  <!-- Hero Header -->
+  <header class="py-14 sm:py-20 border-b border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-b from-pink-50/40 via-white to-slate-50/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-wrap items-center gap-2 mb-6">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-pink-100 text-pink-700 dark:bg-pink-950 dark:text-pink-300 border border-pink-200 dark:border-pink-800">
+          <Palette class="w-3.5 h-3.5" />
+          <span>Sanat & Yaratıcı Ekonomi Kılavuzu</span>
+        </span>
+        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+          <Clock class="w-3 h-3" />
+          <span>7 dk okuma</span>
+        </span>
+        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+          <ShieldCheck class="w-3 h-3" />
+          <span>Eser Sahipliği & Telif</span>
+        </span>
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.2]">
+        Sanatçıysan Bilmen Gerekenler: <br class="hidden sm:inline" />
+        <span class="nostr-gradient-text">Aracısız Telif, Eser Sahipliği ve Özgür Sanat</span>
+      </h1>
+
+      <p class="mt-6 text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+        Streaming tekellerinin binlerce dinleme karşılığı ödediği kuruşlar, galeri/dağıtımcı komisyonları ve sosyal medya algoritmalarının görünürlük engellerine karşı; sanatınızı doğrudan hayranlarınızla buluşturan ve anlık mikro telif kazandıran Nostr protokolünü keşfedin.
+      </p>
+
+      <!-- Key Takeaways Bar -->
+      <div class="mt-8 p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-slate-600 dark:text-slate-400">
+        <div class="flex items-center gap-3">
+          <div class="w-2.5 h-2.5 rounded-full bg-pink-500 animate-pulse"></div>
+          <span>Hedef: Müzisyenler, İllüstratörler, Yazarlar, Tasarımcılar & Bağımsız Üreticiler</span>
+        </div>
+        <div class="flex items-center gap-2 font-mono text-[11px]">
+          <span>Protokol Standardı: NIP-57 / NIP-94 / Podcasting 2.0</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Article Body -->
+  <main class="py-12 sm:py-16 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="space-y-12 sm:space-y-16">
+
+      <!-- Section 1: The Creative Industry Bottleneck -->
+      <section class="space-y-5">
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+          <span class="w-8 h-8 rounded-xl bg-pink-100 dark:bg-pink-950 text-pink-600 dark:text-pink-400 inline-flex items-center justify-center text-sm font-mono font-bold">01</span>
+          <span>Merkezi Sanat Dağıtımının Çıkmazı: Komisyonlar ve Görünmezlik</span>
+        </h2>
+
+        <p class="text-base text-slate-700 dark:text-slate-300 leading-relaxed">
+          Geleneksel internet ve streaming platformları başlangıçta sanatçılara küresel erişim vadetti. Ancak gelinen noktada sanatçılar ile dinleyiciler/hayranlar arasına devasa ticari aracılar girdi.
+        </p>
+
+        <div class="p-5 rounded-2xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 space-y-2">
+          <div class="flex items-center gap-2 font-semibold text-sm text-amber-900 dark:text-amber-300">
+            <AlertTriangle class="w-4 h-4 text-amber-600 dark:text-amber-400" />
+            <span>Dijital Sanatçıların Yaşadığı Temel Problemler:</span>
+          </div>
+          <ul class="space-y-1.5 text-xs sm:text-sm text-amber-900/90 dark:text-amber-200/90 list-disc list-inside">
+            <li><strong>Yetersiz Streaming Geliri:</strong> Spotify veya Apple Music gibi platformlar 1.000 dinleme başına yalnızca 2-4 Dolar öder. Paranın büyük kısmı plak şirketlerine ve platforma kalır.</li>
+            <li><strong>Yüksek Aracı Komisyonları:</strong> Patreon, App Store, YouTube ve galeri aracıları sanatçının gelirinden %30 ila %70 arasında pay keser.</li>
+            <li><strong>Algoritmik Görünmezlik:</strong> Sosyal medya platformları (Instagram, TikTok vb.) sanatçının kendi takipçilerine ulaşması için bile "reklam vermesini" talep eder.</li>
+            <li><strong>Keyfi İçerik ve Hesap Sansürü:</strong> Bir çizerin veya yazarın eseri, otomatik moderasyon filtreleri tarafından "topluluk kurallarına aykırı" denilerek gerekçesiz silinebilir.</li>
+          </ul>
+        </div>
+
+        <p class="text-base text-slate-700 dark:text-slate-300 leading-relaxed">
+          Nostr, sanatçı ile hayranı aradaki tüm aracıları, şirketleri ve algoritma filtrelerini kaldırarak <strong>doğrudan ve sansürsüz bir yaratıcı ekonomi</strong> kurar.
+        </p>
+      </section>
+
+      <!-- Section 2: Legal Framework in Turkey -->
+      <section class="space-y-5">
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+          <span class="w-8 h-8 rounded-xl bg-pink-100 dark:bg-pink-950 text-pink-600 dark:text-pink-400 inline-flex items-center justify-center text-sm font-mono font-bold">02</span>
+          <span>Hukuki Çerçeve: Sanatın Korunması ve Telif Hakları</span>
+        </h2>
+
+        <p class="text-base text-slate-700 dark:text-slate-300 leading-relaxed">
+          Sanatçıların eserlerini açık protokoller üzerinden yayınlaması ve bağış/telif kabul etmesi yasal güvence altındadır:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <div class="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
+              <Scale class="w-4 h-4 text-pink-500" />
+              <span>T.C. Anayasası Madde 64</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              <em>"Devlet, sanat faaliyetlerini ve sanatçıyı korur; sanat eserlerinin ve sanatçının korunması, değerlendirilmesi, desteklenmesi ve sanat sevgisinin yayılması için gereken tedbirleri alır."</em>
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <div class="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
+              <Scale class="w-4 h-4 text-pink-500" />
+              <span>5846 Sayılı FSEK</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Fikir ve Sanat Eserleri Kanunu uyarınca eserin yaratıcısı, eser üzerindeki manevi ve mali hakların asıl sahibidir. Açık anahtarla imzalanan dijital eserler, eserin yaratılış anını ve sahipliğini ispatlayan güçlü bir dijital delildir.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: 5 Reasons Why Artists Should Use Nostr -->
+      <section class="space-y-6">
+        <div class="space-y-2">
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl bg-pink-100 dark:bg-pink-950 text-pink-600 dark:text-pink-400 inline-flex items-center justify-center text-sm font-mono font-bold">03</span>
+            <span>Bir Sanatçının Nostr'ı Kullanması İçin 5 Neden</span>
+          </h2>
+          <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+            Nostr protokolü, yaratıcı üreticilere hem ekonomik özgürlük hem de kalıcı dijital mülkiyet sağlar.
+          </p>
+        </div>
+
+        <div class="space-y-6">
+          
+          <!-- Pillar 1 -->
+          <div class="p-6 sm:p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400">
+                <Zap class="w-5 h-5" />
+              </div>
+              <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                1. Aracısız Değer-İçin-Değer (Value4Value) & Anlık Zaps
+              </h3>
+            </div>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed pl-2">
+              Nostr'da her görsel, beste veya şiir bir Lightning ödeme adresine bağlanabilir. Eserinizi beğenen bir hayran, hiçbir aracı komisyonu olmadan saniyeler içinde doğrudan cüzdanınıza 500 veya 10.000 satoshi gönderebilir. Ay sonunu beklemeden, banka komisyonu ödemeden anında kazanç elde edersiniz.
+            </p>
+          </div>
+
+          <!-- Pillar 2 -->
+          <div class="p-6 sm:p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400">
+                <Music class="w-5 h-5" />
+              </div>
+              <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                2. Saniye Başına Telif: Wavlake & Podcasting 2.0
+              </h3>
+            </div>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed pl-2">
+              Nostr müzik ekosistemi (Wavlake, Fountain vb.) sayesinde parçalarınız dinlenirken, dinleyicinin cüzdanından her saniye veya dakika için belirlenen mikro ödeme doğrudan sanatçının hesabına akar (Streaming Sats). Plak şirketi veya platform aracı olmadan gerçek zamanlı gelir modeli.
+            </p>
+          </div>
+
+          <!-- Pillar 3 -->
+          <div class="p-6 sm:p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 rounded-xl bg-pink-100 dark:bg-pink-950 text-pink-600 dark:text-pink-400">
+                <HeartHandshake class="w-5 h-5" />
+              </div>
+              <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                3. Hayran Kitlesi Asla Kaybolmaz (Platform Bağımsızlığı)
+              </h3>
+            </div>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed pl-2">
+              Instagram veya YouTube'da hesabınız kapatıldığında 100 bin takipçinizi kaybedersiniz. Nostr'da takipçileriniz sizin açık anahtarınıza (<code class="font-mono text-xs text-pink-600 dark:text-pink-400">npub</code>) bağlıdır. İstemci değiştirseniz de tüm takipçileriniz sizinle kalır.
+            </p>
+          </div>
+
+          <!-- Pillar 4 -->
+          <div class="p-6 sm:p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400">
+                <Image class="w-5 h-5" />
+              </div>
+              <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                4. Kriptografik Eser İmzası & Sahiplik Tescili
+              </h3>
+            </div>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed pl-2">
+              Yayınladığınız her dijital sanat eseri, fotoğraf veya metin özel anahtarınızla (<code class="font-mono text-xs text-purple-600 dark:text-purple-400">nsec</code>) imzalanır. Bu imza, eserin ilk kim tarafından ve hangi tarihte yayınlandığının değiştirilemez matematiksel kanıtıdır.
+            </p>
+          </div>
+
+          <!-- Pillar 5 -->
+          <div class="p-6 sm:p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400">
+                <Palette class="w-5 h-5" />
+              </div>
+              <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                5. Sansürsüz Sanatsal İfade Alanı
+              </h3>
+            </div>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed pl-2">
+              Sosyal medya şirketlerinin keyfi filtreleri, politik baskıları veya ticari kaygıları sanatı kısıtlayamaz. Nostr'da hiçbir merkezi otorite sanat eserinizi yayından kaldıramaz.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section 4: 15-Minute Action Plan for Artists -->
+      <section class="space-y-6">
+        <div class="space-y-2">
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl bg-pink-100 dark:bg-pink-950 text-pink-600 dark:text-pink-400 inline-flex items-center justify-center text-sm font-mono font-bold">04</span>
+            <span>Sanatçılar İçin 15 Dakikalık Hızlı Başlangıç</span>
+          </h2>
+          <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+            Kendi dijital serginizi açmak ve mikro telif kabul etmek çok kolay:
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <div class="p-6 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-pink-600 dark:text-pink-400 uppercase tracking-wider">Adım 1</span>
+              <span class="w-6 h-6 rounded-full bg-pink-100 dark:bg-pink-950 text-pink-600 dark:text-pink-400 flex items-center justify-center text-xs font-bold">1</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">İstemci Kurun (Görsel Odaklı)</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Görsel ve multimedya için zengin deneyim sunan <strong>Primal</strong> veya <strong>Amethyst / Damus</strong> istemcilerini yükleyin.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Adım 2</span>
+              <span class="w-6 h-6 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xs font-bold">2</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">Lightning Cüzdanı Bağlayın</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              <strong>Alby</strong> veya <strong>Wallet of Satoshi</strong> ile anında Lightning adresi edinin (örneğin <code class="font-mono text-xs">sanatci@getalby.com</code>) ve profilinize ekleyin.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider">Adım 3</span>
+              <span class="w-6 h-6 rounded-full bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs font-bold">3</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">Wavlake'e Parçalarınızı Yükleyin</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Müzisyenseniz <a href="https://wavlake.com" target="_blank" rel="noopener noreferrer" class="text-pink-600 underline font-semibold">wavlake.com</a> üzerinden şarkılarınızı yükleyin ve Nostr açık anahtarınızı bağlayarak yayınlayın.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Adım 4</span>
+              <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-bold">4</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">Alan Adınızı Doğrulayın (NIP-05)</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Kendi portfolyo sitenizin alan adıyla mavi tik doğrulaması yapın (örneğin <strong class="font-mono text-slate-900 dark:text-white">ad@sanatcisitesi.com</strong>).
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section 5: FAQ -->
+      <section class="space-y-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+          <span class="w-8 h-8 rounded-xl bg-pink-100 dark:bg-pink-950 text-pink-600 dark:text-pink-400 inline-flex items-center justify-center text-sm font-mono font-bold">05</span>
+          <span>Sıkça Sorulan Sorular (SSS)</span>
+        </h2>
+
+        <div class="space-y-4">
+          <details class="group p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 open:shadow-sm transition-all">
+            <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 dark:text-white text-sm sm:text-base">
+              <span>Geleneksel Spotify / Apple Music hesaplarımı kapatmalı mıyım?</span>
+              <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <p class="mt-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3">
+              Hayır. Nostr ve Wavlake'i ek bir gelir ve hayran bağı kanalı olarak kullanabilirsiniz. En sadık hayranlarınız geleneksel platformlarda size 0.003 Dolar kazandırmak yerine, Nostr üzerinde doğrudan size destek olmayı tercih edecektir.
+            </p>
+          </details>
+
+          <details class="group p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 open:shadow-sm transition-all">
+            <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 dark:text-white text-sm sm:text-base">
+              <span>Zaps ile kazandığım gelirleri nasıl kullanabilirim?</span>
+              <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <p class="mt-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3">
+              Lightning cüzdanınızdaki satoshileri dilediğiniz zaman yerli veya uluslararası lisanslı kripto varlık borsaları üzerinden Türk Lirası'na veya diğer para birimlerine dönüştürebilir veya diğer üreticileri ödüllendirmek için kullanabilirsiniz.
+            </p>
+          </details>
+        </div>
+      </section>
+
+      <!-- Section 6: Actionable Conclusion -->
+      <section class="p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-pink-950 via-slate-900 to-slate-950 text-white space-y-6 shadow-xl">
+        <div class="space-y-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-pink-500/20 text-pink-300 border border-pink-500/30">
+            <Sparkles class="w-3.5 h-3.5" />
+            <span>Yaratıcı Özgürlüğe Adım Atın</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+            Sanatınızı ve Gelirinizi Aracılardan Kurtarın
+          </h2>
+          <p class="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
+            Nostr Türkiye Topluluğu olarak müzisyenlere, çizerlere ve tüm yaratıcı üreticilere teknik danışmanlık ve altyapı desteği vermeye hazırız.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-4 pt-2">
+          <a
+            href="/rehber"
+            class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-slate-900 bg-white hover:bg-slate-100 transition-all shadow-md active:scale-98"
+          >
+            <BookOpen class="w-4 h-4 text-pink-600" />
+            <span>Temel Kurulum Kılavuzunu Oku</span>
+          </a>
+
+          <a
+            href="mailto:ekip@nostr.org.tr?subject=Sanatcilar%20Icin%20Nostr%20Destek"
+            class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-all"
+          >
+            <span>Toplulukla İletişime Geç</span>
+            <ArrowRight class="w-4 h-4" />
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</Layout>

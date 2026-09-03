@@ -1,0 +1,365 @@
+---
+import { 
+  Plug, 
+  KeyRound, 
+  Radio, 
+  FileCheck2, 
+  Lock, 
+  RefreshCw,
+  Terminal,
+  ExternalLink
+} from 'lucide-astro';
+---
+
+<div class="nip07-tool-card space-y-6">
+  
+  <div class="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+    
+    <!-- Header -->
+    <div class="p-6 sm:p-7 bg-slate-50/80 dark:bg-slate-950/70 border-b border-slate-200/80 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div class="space-y-1">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">
+          <Plug class="w-3.5 h-3.5" />
+          <span>NIP-07 / NIP-04 / NIP-44 Sandbox</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+          NIP-07 Tarayıcı Eklentisi Test Laboratuvarı
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+          Alby, nos2x, Amber vb. tarayıcı eklentinizin <code class="text-indigo-600 dark:text-indigo-400 font-mono">window.nostr</code> arayüzünü interaktif olarak test edin.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        id="btn-detect-ext"
+        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white transition-all shadow-sm active:scale-95 self-start sm:self-auto flex-shrink-0"
+      >
+        <RefreshCw class="w-3.5 h-3.5" />
+        <span>Eklentiyi Yeniden Tara</span>
+      </button>
+    </div>
+
+    <div class="p-6 sm:p-8 space-y-6">
+      
+      <!-- Extension Detection Status Banner -->
+      <div id="ext-status-banner" class="p-4 sm:p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm">
+        <div class="flex items-center gap-3">
+          <div id="ext-status-icon" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800">
+            <Plug class="w-5 h-5 text-slate-500" />
+          </div>
+          <div>
+            <h3 id="ext-status-title" class="font-bold text-slate-900 dark:text-white">
+              Eklenti Taranıyor...
+            </h3>
+            <p id="ext-status-desc" class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Tarayıcınızda window.nostr nesnesi kontrol ediliyor.
+            </p>
+          </div>
+        </div>
+        <div id="ext-guide-link" class="hidden">
+          <a
+            href="https://getalby.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
+          >
+            <span>Alby Eklentisini İndir</span>
+            <ExternalLink class="w-3 h-3" />
+          </a>
+        </div>
+      </div>
+
+      <!-- Action Test Buttons Grid -->
+      <div class="space-y-3">
+        <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">
+          NIP-07 Test Fonksiyonları
+        </span>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          
+          <!-- Test 1: getPublicKey -->
+          <button
+            type="button"
+            id="btn-test-pubkey"
+            disabled
+            class="ext-action-btn group p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-indigo-400 text-left transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <div class="w-8 h-8 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-3">
+              <KeyRound class="w-4 h-4" />
+            </div>
+            <h4 class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+              1. getPublicKey()
+            </h4>
+            <p class="text-[11px] text-slate-500 mt-1">
+              Açık anahtarı (npub/hex) eklentiden iste.
+            </p>
+          </button>
+
+          <!-- Test 2: getRelays -->
+          <button
+            type="button"
+            id="btn-test-relays"
+            disabled
+            class="ext-action-btn group p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-indigo-400 text-left transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <div class="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3">
+              <Radio class="w-4 h-4" />
+            </div>
+            <h4 class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+              2. getRelays()
+            </h4>
+            <p class="text-[11px] text-slate-500 mt-1">
+              Kayıtlı röle listesini eklentiden al.
+            </p>
+          </button>
+
+          <!-- Test 3: signEvent -->
+          <button
+            type="button"
+            id="btn-test-sign"
+            disabled
+            class="ext-action-btn group p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-indigo-400 text-left transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <div class="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-3">
+              <FileCheck2 class="w-4 h-4" />
+            </div>
+            <h4 class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+              3. signEvent()
+            </h4>
+            <p class="text-[11px] text-slate-500 mt-1">
+              Örnek notu eklentiyle imzala ve doğrula.
+            </p>
+          </button>
+
+          <!-- Test 4: nip04 Encrypt/Decrypt -->
+          <button
+            type="button"
+            id="btn-test-nip04"
+            disabled
+            class="ext-action-btn group p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-indigo-400 text-left transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <div class="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-3">
+              <Lock class="w-4 h-4" />
+            </div>
+            <h4 class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+              4. nip04.encrypt()
+            </h4>
+            <p class="text-[11px] text-slate-500 mt-1">
+              Mesaj şifreleme ve çözme testi yap.
+            </p>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Live Execution Terminal / Console -->
+      <div class="rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden shadow-inner">
+        <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800 text-xs font-mono text-slate-400">
+          <span class="flex items-center gap-2 text-slate-300 font-semibold">
+            <Terminal class="w-3.5 h-3.5 text-indigo-400" />
+            <span>NIP-07 Konsol & Çağrı Çıktısı</span>
+          </span>
+          <button
+            type="button"
+            id="btn-clear-console"
+            class="px-2 py-0.5 rounded text-[11px] hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
+          >
+            Konsolu Temizle
+          </button>
+        </div>
+        <div id="ext-console" class="p-4 font-mono text-xs text-slate-300 space-y-1.5 max-h-72 overflow-y-auto leading-relaxed">
+          <div class="text-slate-500">// NIP-07 testleri için hazır.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  import { nip19, verifyEvent } from 'nostr-tools';
+
+  const initNip07Tool = () => {
+    const card = document.querySelector('.nip07-tool-card');
+    if (!card || card.getAttribute('data-init') === 'true') return;
+    card.setAttribute('data-init', 'true');
+
+    const statusBanner = card.querySelector('#ext-status-banner');
+    const statusTitle = card.querySelector('#ext-status-title');
+    const statusDesc = card.querySelector('#ext-status-desc');
+    const guideLink = card.querySelector('#ext-guide-link');
+    const btnDetect = card.querySelector('#btn-detect-ext');
+    const btnPubkey = card.querySelector('#btn-test-pubkey') as HTMLButtonElement | null;
+    const btnRelays = card.querySelector('#btn-test-relays') as HTMLButtonElement | null;
+    const btnSign = card.querySelector('#btn-test-sign') as HTMLButtonElement | null;
+    const btnNip04 = card.querySelector('#btn-test-nip04') as HTMLButtonElement | null;
+    const consoleBox = card.querySelector('#ext-console');
+    const btnClearConsole = card.querySelector('#btn-clear-console');
+
+    const log = (msg: string, type: 'info' | 'success' | 'error' | 'code' = 'info') => {
+      if (!consoleBox) return;
+      const row = document.createElement('div');
+      const time = new Date().toLocaleTimeString();
+
+      if (type === 'success') {
+        row.className = 'text-emerald-400';
+        row.innerHTML = `<span class="text-slate-500">[${time}]</span> ✓ ${msg}`;
+      } else if (type === 'error') {
+        row.className = 'text-rose-400 font-semibold';
+        row.innerHTML = `<span class="text-slate-500">[${time}]</span> ✕ ${msg}`;
+      } else if (type === 'code') {
+        row.className = 'p-2 rounded bg-slate-900 border border-slate-800 text-slate-200 overflow-x-auto my-1';
+        row.innerHTML = `<pre>${msg}</pre>`;
+      } else {
+        row.className = 'text-slate-300';
+        row.innerHTML = `<span class="text-slate-500">[${time}]</span> ${msg}`;
+      }
+
+      consoleBox.appendChild(row);
+      consoleBox.scrollTop = consoleBox.scrollHeight;
+    };
+
+    btnClearConsole?.addEventListener('click', () => {
+      if (consoleBox) consoleBox.innerHTML = '<div class="text-slate-500">// Konsol temizlendi.</div>';
+    });
+
+    const detectExtension = () => {
+      // @ts-ignore
+      const hasNostr = typeof window !== 'undefined' && Boolean(window.nostr);
+
+      if (hasNostr) {
+        if (statusBanner) {
+          statusBanner.className = 'p-4 sm:p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm bg-emerald-50 dark:bg-emerald-950/60 border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200';
+        }
+        if (statusTitle) statusTitle.textContent = '✓ NIP-07 Nostr Eklentisi Bulundu!';
+        if (statusDesc) statusDesc.textContent = 'window.nostr nesnesi aktif. Aşağıdaki butonlarla fonksiyonları test edebilirsiniz.';
+        if (guideLink) guideLink.classList.add('hidden');
+
+        [btnPubkey, btnRelays, btnSign, btnNip04].forEach((b) => {
+          if (b) {
+            b.disabled = false;
+            b.classList.remove('opacity-50', 'cursor-not-allowed');
+          }
+        });
+
+        log('NIP-07 eklentisi algılandı (window.nostr mevcut).', 'success');
+      } else {
+        if (statusBanner) {
+          statusBanner.className = 'p-4 sm:p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm bg-amber-50 dark:bg-amber-950/60 border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200';
+        }
+        if (statusTitle) statusTitle.textContent = 'NIP-07 Eklentisi Algılanamadı';
+        if (statusDesc) statusDesc.textContent = 'Tarayıcınızda aktif bir Nostr uzantısı (Alby, nos2x vb.) bulunamadı veya henüz sayfa izni verilmedi.';
+        if (guideLink) guideLink.classList.remove('hidden');
+
+        [btnPubkey, btnRelays, btnSign, btnNip04].forEach((b) => {
+          if (b) {
+            b.disabled = true;
+            b.classList.add('opacity-50', 'cursor-not-allowed');
+          }
+        });
+
+        log('window.nostr nesnesi bulunamadı. Lütfen Alby veya nos2x kurun/aktif edin.', 'error');
+      }
+    };
+
+    btnDetect?.addEventListener('click', detectExtension);
+
+    // 1. getPublicKey() Test
+    btnPubkey?.addEventListener('click', async () => {
+      try {
+        log('window.nostr.getPublicKey() çağrılıyor...');
+        // @ts-ignore
+        const pubkey = await window.nostr.getPublicKey();
+        const npub = nip19.npubEncode(pubkey);
+        log(`Açık Anahtar Alındı:\nHex: ${pubkey}\nnpub: ${npub}`, 'success');
+      } catch (err: any) {
+        log(`getPublicKey() hatası: ${err.message || err}`, 'error');
+      }
+    });
+
+    // 2. getRelays() Test
+    btnRelays?.addEventListener('click', async () => {
+      try {
+        log('window.nostr.getRelays() çağrılıyor...');
+        // @ts-ignore
+        const relays = await window.nostr.getRelays();
+        log('Kayıtlı Röleler Alındı:', 'success');
+        log(JSON.stringify(relays, null, 2), 'code');
+      } catch (err: any) {
+        log(`getRelays() hatası: ${err.message || err}`, 'error');
+      }
+    });
+
+    // 3. signEvent() Test
+    btnSign?.addEventListener('click', async () => {
+      try {
+        log('Örnek kind:1 notu hazırlanıyor ve imzaya gönderiliyor...');
+        // @ts-ignore
+        const pubkey = await window.nostr.getPublicKey();
+        const unsignedEvent = {
+          kind: 1,
+          created_at: Math.floor(Date.now() / 1000),
+          tags: [['client', 'nostr.org.tr']],
+          content: `nostr.org.tr NIP-07 Test Mesajı (${new Date().toLocaleTimeString()})`,
+          pubkey,
+        };
+
+        log('İmzalanacak Taslak Event:', 'info');
+        log(JSON.stringify(unsignedEvent, null, 2), 'code');
+
+        // @ts-ignore
+        const signedEvent = await window.nostr.signEvent(unsignedEvent);
+        log('Etkinlik eklenti tarafından imzalandı!', 'success');
+        log(JSON.stringify(signedEvent, null, 2), 'code');
+
+        const isValid = verifyEvent(signedEvent);
+        if (isValid) {
+          log('✓ BIP-340 Schnorr İmzası (%100 geçerli) doğrulandı!', 'success');
+        } else {
+          log('✕ İmzalanan etkinliğin Schnorr imzası GEÇERSİZ!', 'error');
+        }
+      } catch (err: any) {
+        log(`signEvent() hatası: ${err.message || err}`, 'error');
+      }
+    });
+
+    // 4. NIP-04 Encrypt/Decrypt Test
+    btnNip04?.addEventListener('click', async () => {
+      try {
+        log('NIP-04 doğrudan mesaj şifreleme testi başlatılıyor...');
+        // @ts-ignore
+        const pubkey = await window.nostr.getPublicKey();
+        const plainText = 'Gizli test mesajı: Nostr Türkiye!';
+
+        log(`Şifrelenecek metin: "${plainText}"`);
+        // @ts-ignore
+        if (!window.nostr.nip04 || !window.nostr.nip04.encrypt) {
+          throw new Error('Eklentiniz NIP-04 şifreleme modülünü desteklemiyor');
+        }
+
+        // @ts-ignore
+        const cipherText = await window.nostr.nip04.encrypt(pubkey, plainText);
+        log(`Şifrelenmiş Çıktı (Ciphertext):\n${cipherText}`, 'success');
+
+        log('Şimdi şifre çözme (decrypt) test ediliyor...');
+        // @ts-ignore
+        const decryptedText = await window.nostr.nip04.decrypt(pubkey, cipherText);
+        log(`Şifresi Çözülen Metin: "${decryptedText}"`, 'success');
+
+        if (decryptedText === plainText) {
+          log('✓ NIP-04 Şifreleme ve Çözme başarıyla tamamlandı!', 'success');
+        }
+      } catch (err: any) {
+        log(`NIP-04 hatası: ${err.message || err}`, 'error');
+      }
+    });
+
+    // Initial check (delay slightly for extension injection)
+    setTimeout(detectExtension, 300);
+  };
+
+  initNip07Tool();
+  document.addEventListener('astro:after-swap', initNip07Tool);
+</script>

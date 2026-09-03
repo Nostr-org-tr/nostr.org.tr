@@ -1,0 +1,379 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { 
+  Vote, 
+  ShieldCheck, 
+  Key, 
+  BadgeCheck, 
+  Scale, 
+  AlertTriangle, 
+  ArrowRight, 
+  Sparkles, 
+  BookOpen, 
+  Clock, 
+  Landmark, 
+  FileCheck2, 
+  BotOff
+} from 'lucide-astro';
+
+import ArticleSchema from '../components/seo/ArticleSchema.astro';
+import BreadcrumbSchema from '../components/seo/BreadcrumbSchema.astro';
+
+const breadcrumbs = [
+  { name: 'Ana Sayfa', path: '/' },
+  { name: 'Kaynaklar', path: '/rehber' },
+  { name: 'Siyasetçiler İçin Nostr Kılavuzu', path: '/siyasetciler-icin-nostr' },
+];
+
+const publishedDate = "2025-01-15";
+const modifiedDate = "2026-08-31";
+---
+
+<Layout 
+  title="Siyasetçiysen Bilmen Gerekenler: Seçmenle Kesintisiz İletişim, Manipülasyonsuz Dijital Meydan ve Kapatılamaz Hesaplar | Nostr Türkiye"
+  description="Milletvekilleri, belediye başkanları, parti yöneticileri ve adaylar için: Merkezi sosyal medya sansürüne, troll ordularına ve hesap kapatma risklerine karşı bağımsız iletişim rehberi."
+  ogType="article"
+  publishedTime={publishedDate}
+  modifiedTime={modifiedDate}
+>
+  <Fragment slot="head">
+    <BreadcrumbSchema items={breadcrumbs} />
+    <ArticleSchema
+      title="Siyasetçiysen Bilmen Gerekenler: Seçmenle Kesintisiz İletişim, Manipülasyonsuz Dijital Meydan ve Kapatılamaz Hesaplar"
+      description="Milletvekilleri, belediye başkanları, parti yöneticileri ve adaylar için: Merkezi sosyal medya sansürüne, troll ordularına ve hesap kapatma risklerine karşı bağımsız iletişim rehberi."
+      path="/siyasetciler-icin-nostr"
+      inLanguage="tr-TR"
+      datePublished={publishedDate}
+      dateModified={modifiedDate}
+    />
+  </Fragment>
+
+  <!-- Hero Header -->
+  <header class="py-14 sm:py-20 border-b border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-b from-indigo-50/40 via-white to-slate-50/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-wrap items-center gap-2 mb-6">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+          <Vote class="w-3.5 h-3.5" />
+          <span>Siyaset & Kamu İletişimi Kılavuzu</span>
+        </span>
+        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+          <Clock class="w-3 h-3" />
+          <span>8 dk okuma</span>
+        </span>
+        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+          <ShieldCheck class="w-3 h-3" />
+          <span>Demokratik Temsil & Güvenlik</span>
+        </span>
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.2]">
+        Siyasetçiysen Bilmen Gerekenler: <br class="hidden sm:inline" />
+        <span class="nostr-gradient-text">Seçmenle Kesintisiz İletişim ve Dijital Güvenlik</span>
+      </h1>
+
+      <p class="mt-6 text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+        Seçim dönemlerinde veya kriz anlarında merkezi sosyal medya platformlarının hesap askıya alma, görünürlük kısma (shadowban) ve troll ordusu manipülasyonu tehditlerine karşı; seçmenle doğrudan bağ kuran ve kapatılamayan açık protokol Nostr'ı neden kullanmalısınız?
+      </p>
+
+      <!-- Key Takeaways Bar -->
+      <div class="mt-8 p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-slate-600 dark:text-slate-400">
+        <div class="flex items-center gap-3">
+          <div class="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse"></div>
+          <span>Hedef: Milletvekilleri, Belediye Başkanları, Parti Sözcüleri & Adaylar</span>
+        </div>
+        <div class="flex items-center gap-2 font-mono text-[11px]">
+          <span>Protokol Standardı: NIP-05 / NIP-01 / Web of Trust</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Article Body -->
+  <main class="py-12 sm:py-16 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="space-y-12 sm:space-y-16">
+
+      <!-- Section 1: Risks in Centralized Platforms for Political Communication -->
+      <section class="space-y-5">
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+          <span class="w-8 h-8 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 inline-flex items-center justify-center text-sm font-mono font-bold">01</span>
+          <span>Siyasette "Dijital Egemenlik" Riski ve Merkezi Tehditler</span>
+        </h2>
+
+        <p class="text-base text-slate-700 dark:text-slate-300 leading-relaxed">
+          Demokratik toplumlarda siyasetçinin halkla kurduğu iletişim doğrudan kamu yararı taşır. Ancak günümüzde siyasi partilerin ve temsilcilerin tüm dijital iletişimi, yurtdışı merkezli özel şirketlerin algoritmalarına ve sunucularına bağımlı hale gelmiştir.
+        </p>
+
+        <div class="p-5 rounded-2xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 space-y-2">
+          <div class="flex items-center gap-2 font-semibold text-sm text-amber-900 dark:text-amber-300">
+            <AlertTriangle class="w-4 h-4 text-amber-600 dark:text-amber-400" />
+            <span>Siyasetçilerin Merkezi Ağlarda Karşılaştığı Kritik Tehditler:</span>
+          </div>
+          <ul class="space-y-1.5 text-xs sm:text-sm text-amber-900/90 dark:text-amber-200/90 list-disc list-inside">
+            <li><strong>Seçim Arifesinde Hesap Kapatma & Askıya Alma:</strong> Kampanyanın en yoğun gününde tek bir şikayet dalgası veya algoritma kararıyla resmi hesabın kilitlenmesi.</li>
+            <li><strong>Troll Orduları ve Bot Manipülasyonu:</strong> Yapay zeka ve sahte bot ordularının algoritmaları manipüle ederek gerçek seçmen sesini bastırması.</li>
+            <li><strong>Deepfake ve Kimlik Taklidi:</strong> Ücret karşılığı satılan mavi tikler nedeniyle siyasetçilerin adıyla sahte hesaplar açılması ve halkın yanıltılması.</li>
+            <li><strong>Veri ve Seçmen Bağımlılığı:</strong> Platform el değiştirdiğinde veya erişim engeline uğradığında milyonlarca seçmene ulaşma kanalının bir anda yok olması.</li>
+          </ul>
+        </div>
+
+        <p class="text-base text-slate-700 dark:text-slate-300 leading-relaxed">
+          Nostr, siyasetçiye şirketlerin lütfuna veya algoritmalarına muhtaç olmadan, <strong>kendi resmi dijital egemenliğini kurma</strong> imkânı sunar.
+        </p>
+      </section>
+
+      <!-- Section 2: Legal & Constitutional Framework -->
+      <section class="space-y-5">
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+          <span class="w-8 h-8 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 inline-flex items-center justify-center text-sm font-mono font-bold">02</span>
+          <span>Hukuki Çerçeve: Siyasi Faaliyet ve Temsil Hürriyeti</span>
+        </h2>
+
+        <p class="text-base text-slate-700 dark:text-slate-300 leading-relaxed">
+          Siyasetçilerin açık protokoller üzerinden halkı bilgilendirmesi Anayasal güvenceye dayanır:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <div class="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
+              <Scale class="w-4 h-4 text-indigo-500" />
+              <span>T.C. Anayasası Madde 67</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              <em>"Vatandaşlar, kanunda gösterilen şartlara uygun olarak, seçme, seçilme ve bağımsız olarak veya bir siyasî parti içinde siyasî faaliyette bulunma ve halkoylamasına katılma hakkına sahiptir."</em>
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <div class="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white">
+              <Scale class="w-4 h-4 text-indigo-500" />
+              <span>T.C. Anayasası Madde 26</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Düşünceyi açıklama ve yayma hürriyeti; resmi makamların veya ticari şirketlerin müdahalesi olmaksızın halka haber ve fikir verme serbestliğini tam olarak kapsar.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: 5 Reasons Why Politicians Should Use Nostr -->
+      <section class="space-y-6">
+        <div class="space-y-2">
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 inline-flex items-center justify-center text-sm font-mono font-bold">03</span>
+            <span>Bir Siyasetçinin Nostr'ı Kullanması İçin 5 Neden</span>
+          </h2>
+          <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+            Nostr protokolü, kamu temsilcilerine sansürsüz, tahrifatsız ve manipülasyondan uzak bir dijital meydan kazandırır.
+          </p>
+        </div>
+
+        <div class="space-y-6">
+          
+          <!-- Pillar 1 -->
+          <div class="p-6 sm:p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
+                <Key class="w-5 h-5" />
+              </div>
+              <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                1. Kapatılamaz ve Askıya Alınamaz Resmi Hesap (Kriptografik Kimlik)
+              </h3>
+            </div>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed pl-2">
+              Nostr'da hesabınız bir şirketin veritabanında değil, matematiksel açık anahtarınızdadır. Hiçbir platform yöneticisi veya rakip kampanya manipülasyonu resmi hesabınızı kapatamaz, askıya alamaz veya seçmenle bağınızı kesemez.
+            </p>
+          </div>
+
+          <!-- Pillar 2 -->
+          <div class="p-6 sm:p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400">
+                <BadgeCheck class="w-5 h-5" />
+              </div>
+              <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                2. Resmi Alan Adı ile Taklit Edilemez Doğrulama (NIP-05)
+              </h3>
+            </div>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed pl-2">
+              Siyasetçiler için en büyük tehlikelerden biri sahte hesaplar ve dezenformasyondur. NIP-05 standardı sayesinde parti veya belediyenizin resmi alan adı ile profiliniz doğrulanır (örneğin <strong class="font-mono text-slate-900 dark:text-white">baskan@istanbul.bel.tr</strong> veya <strong class="font-mono text-slate-900 dark:text-white">vekil@parti.org.tr</strong>). Bu imzayı hiçbir troll veya sahte hesap taklit edemez.
+            </p>
+          </div>
+
+          <!-- Pillar 3 -->
+          <div class="p-6 sm:p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400">
+                <BotOff class="w-5 h-5" />
+              </div>
+              <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                3. Bot Ordularına ve Troll Manipülasyonuna Karşı Güven Ağı
+              </h3>
+            </div>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed pl-2">
+              Nostr ekosistemi, Proof-of-Work (PoW) ve Web-of-Trust (Güven Ağı) filtreleri sunar. Sahte bot ordularının yorum akışınızı işgal etmesi engellenir; gerçek seçmenlerin soru ve görüşleri öne çıkar.
+            </p>
+          </div>
+
+          <!-- Pillar 4 -->
+          <div class="p-6 sm:p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400">
+                <FileCheck2 class="w-5 h-5" />
+              </div>
+              <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                4. Tahrif Edilemez ve Silinemez Resmi Arşiv
+              </h3>
+            </div>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed pl-2">
+              Seçim beyannameleri, basın açıklamaları ve halka verilen vaatler kriptografik zaman damgasıyla imzalanır. Açıklamalarınız dağıtık rölelerde kalıcı olarak arşivlenir; geriye dönük tahrifat yapılamaz.
+            </p>
+          </div>
+
+          <!-- Pillar 5 -->
+          <div class="p-6 sm:p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400">
+                <Landmark class="w-5 h-5" />
+              </div>
+              <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                5. Kendi Parti / Belediye Rölenizi Kurma Bağımsızlığı
+              </h3>
+            </div>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed pl-2">
+              Bir siyasi parti veya belediye, dakikalar içinde kendi bağımsız röle sunucusunu kurabilir (örneğin <code class="font-mono text-xs text-amber-600 dark:text-amber-400">relay.parti.org.tr</code>). Böylece tüm teşkilat ve seçmenler doğrudan yerli ve bağımsız sunucu üzerinden güvenle haberleşir.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section 4: Practical Guide for Political Teams -->
+      <section class="space-y-6">
+        <div class="space-y-2">
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 inline-flex items-center justify-center text-sm font-mono font-bold">04</span>
+            <span>Siyasi İletişim Ekipleri İçin 4 Adımlı Kurulum</span>
+          </h2>
+          <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+            Resmi hesabınızı açmak ve kurumsal güvenceye almak için adımlar:
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <div class="p-6 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">Adım 1</span>
+              <span class="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs font-bold">1</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">Resmi İstemci ve Güvenli Giriş</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Basın danışmanları ve ekip için <strong>Primal</strong> (iOS/Android/Web) veya <strong>Coracle</strong> istemcisi üzerinden resmi anahtar çifti oluşturun.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider">Adım 2 • Kritik</span>
+              <span class="w-6 h-6 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-400 flex items-center justify-center text-xs font-bold">2</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">nsec Anahtarını Donanım/Kasa ile Koruyun</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Resmi imza anahtarınızı (<code class="font-mono text-xs">nsec</code>) yetkisiz personelle paylaşmayın; kurumsal parola kasasında şifreli olarak saklayın.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider">Adım 3</span>
+              <span class="w-6 h-6 rounded-full bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs font-bold">3</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">Resmi Web Sitesinden NIP-05 Bağlayın</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Kurumunuzun resmi web sitesine <code class="font-mono text-xs">/.well-known/nostr.json</code> ekleyerek hesabınızı onaylayın (<a href="/rehber#nip-05" class="text-indigo-600 underline font-semibold">NIP-05 Kılavuzumuzu inceleyin</a>).
+            </p>
+          </div>
+
+          <div class="p-6 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Adım 4</span>
+              <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-bold">4</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">Otomatik Basın Bülteni Köprüsü</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              <a href="https://bridge.workouse.com" target="_blank" rel="noopener noreferrer" class="text-indigo-600 underline font-semibold">Bridge by Workouse</a> ile resmi web sitenizin RSS akışını otomatik olarak Nostr'a bağlayın.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section 5: FAQ -->
+      <section class="space-y-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+          <span class="w-8 h-8 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 inline-flex items-center justify-center text-sm font-mono font-bold">05</span>
+          <span>Sıkça Sorulan Sorular (SSS)</span>
+        </h2>
+
+        <div class="space-y-4">
+          <details class="group p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 open:shadow-sm transition-all">
+            <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 dark:text-white text-sm sm:text-base">
+              <span>Siyasi partiler kendi Nostr rölesini nasıl çalıştırabilir?</span>
+              <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <p class="mt-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3">
+              Açık kaynaklı röle yazılımları (örneğin strfry, khatru vb.) partinizin kendi yerli sunucularında saniyeler içinde kurulabilir. Nostr Türkiye Topluluğu teknik ekiplerinize bu konuda ücretsiz açık kaynak rehberlik sağlamaktadır.
+            </p>
+          </details>
+
+          <details class="group p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 open:shadow-sm transition-all">
+            <summary class="flex items-center justify-between cursor-pointer font-bold text-slate-900 dark:text-white text-sm sm:text-base">
+              <span>Nostr hesabı seçim yasakları veya yasal mevzuata nasıl uyar?</span>
+              <span class="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <p class="mt-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3">
+              Tıpkı resmi bir web sitesi veya e-posta bülteni gibi, paylaşımların içeriği Türkiye Cumhuriyeti Seçim Kanunu ve yürürlükteki mevzuata tabidir. Nostr bu iletişimi daha güvenli, tahrifatsız ve bağımsız kılan teknik bir altyapıdır.
+            </p>
+          </details>
+        </div>
+      </section>
+
+      <!-- Section 6: Actionable Conclusion -->
+      <section class="p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 text-white space-y-6 shadow-xl">
+        <div class="space-y-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            <Sparkles class="w-3.5 h-3.5" />
+            <span>Demokrasi ve İletişim Güvencesi</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+            Seçmeninizle Olan İletişiminizi Şirketlerin İnsafına Bırakmayın
+          </h2>
+          <p class="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
+            Nostr Türkiye Topluluğu olarak kamu temsilcilerine, siyasi partilere ve adaylara bağımsız iletişim kanallarını kurmaları için açık kaynak teknik destek sunuyoruz.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-4 pt-2">
+          <a
+            href="/rehber"
+            class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold text-slate-900 bg-white hover:bg-slate-100 transition-all shadow-md active:scale-98"
+          >
+            <BookOpen class="w-4 h-4 text-indigo-600" />
+            <span>Nostr Başlangıç Rehberini Oku</span>
+          </a>
+
+          <a
+            href="mailto:ekip@nostr.org.tr?subject=Siyasetciler%20Icin%20Nostr%20Destek"
+            class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-all"
+          >
+            <span>Toplulukla İletişime Geç</span>
+            <ArrowRight class="w-4 h-4" />
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</Layout>

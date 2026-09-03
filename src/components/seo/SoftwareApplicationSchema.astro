@@ -1,0 +1,46 @@
+---
+import JsonLd from './JsonLd.astro';
+
+interface Props {
+  name: string;
+  description: string;
+  url: string;
+  applicationCategory?: string;
+  operatingSystem?: string;
+  siteUrl?: string;
+}
+
+const {
+  name,
+  description,
+  url,
+  applicationCategory = 'UtilityApplication',
+  operatingSystem = 'All',
+  siteUrl = 'https://nostr.org.tr',
+} = Astro.props;
+
+const canonicalUrl = url.startsWith('http') ? url : `${siteUrl.replace(/\/$/, '')}${url.startsWith('/') ? url : `/${url}`}`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name,
+  description,
+  url: canonicalUrl,
+  applicationCategory,
+  operatingSystem,
+  browserRequirements: 'Requires JavaScript. Requires HTML5.',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'TRY',
+  },
+  author: {
+    '@type': 'Organization',
+    name: 'Nostr Türkiye Topluluğu',
+    url: siteUrl,
+  },
+};
+---
+
+<JsonLd schema={schema} />

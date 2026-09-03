@@ -1,0 +1,43 @@
+---
+import ToolLayout from '../../components/tools/ToolLayout.astro';
+import EventVerifierTool from '../../components/tools/EventVerifierTool.astro';
+import { nostrTools } from '../../data/tools';
+import { Code2, FileCheck2, ShieldCheck } from 'lucide-astro';
+
+const tool = nostrTools.find((t) => t.id === 'event-dogrulayici-ve-inceleyici')!;
+---
+
+<ToolLayout tool={tool}>
+  <EventVerifierTool />
+
+  <Fragment slot="guide">
+    <div class="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-6">
+      <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+        <Code2 class="w-4 h-4 text-nostr-500" />
+        <span>NIP-01 Event Serileştirme ve Schnorr İmza Kuralları</span>
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-2">
+          <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+            <FileCheck2 class="w-4 h-4 text-nostr-500" />
+            <span>Kanonik Serileştirme (Canonical JSON)</span>
+          </span>
+          <p class="leading-relaxed text-slate-500 dark:text-slate-400">
+            Nostr Event ID, <code class="text-nostr-600 dark:text-nostr-400 font-mono">[0, pubkey, created_at, kind, tags, content]</code> biçimindeki dizinin boşluksuz ve sıralı UTF-8 JSON karşılığının SHA-256 özetidir.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-2">
+          <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+            <ShieldCheck class="w-4 h-4 text-emerald-500" />
+            <span>BIP-340 Schnorr İmzası</span>
+          </span>
+          <p class="leading-relaxed text-slate-500 dark:text-slate-400">
+            Etkinliğin imzası (sig), hesaplanan 32-byte event ID'sinin yazarın özel anahtarıyla imzalanmasıyla elde edilir. Bu imza herkes tarafından yazarın açık anahtarı (pubkey) ile doğrulanabilir.
+          </p>
+        </div>
+      </div>
+    </div>
+  </Fragment>
+</ToolLayout>

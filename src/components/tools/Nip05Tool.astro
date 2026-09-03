@@ -1,0 +1,655 @@
+---
+import { 
+  BadgeCheck, 
+  Search, 
+  Code2, 
+  Download, 
+  Copy, 
+  Server, 
+  Plus,
+  ExternalLink,
+  Sparkles
+} from 'lucide-astro';
+---
+
+<div class="nip05-suite-card space-y-8">
+  
+  <!-- Sub-Tabs / Mode Switcher -->
+  <div class="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 max-w-md">
+    <button
+      type="button"
+      id="tab-validator-btn"
+      class="mode-tab flex-1 py-2 px-4 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-white dark:bg-slate-800 text-nostr-600 dark:text-nostr-400 shadow-sm"
+      data-target="panel-validator"
+    >
+      <span class="flex items-center justify-center gap-1.5">
+        <BadgeCheck class="w-4 h-4" />
+        <span>Canlı Doğrulayıcı</span>
+      </span>
+    </button>
+    <button
+      type="button"
+      id="tab-generator-btn"
+      class="mode-tab flex-1 py-2 px-4 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+      data-target="panel-generator"
+    >
+      <span class="flex items-center justify-center gap-1.5">
+        <Code2 class="w-4 h-4" />
+        <span>nostr.json Üretici</span>
+      </span>
+    </button>
+  </div>
+
+  <!-- rehber.dev Promotion / Zero-Config Banner -->
+  <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-purple-500/10 via-nostr-500/10 to-indigo-500/10 border border-purple-300/40 dark:border-purple-800/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <div class="space-y-1">
+      <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+        <Sparkles class="w-3 h-3 text-purple-600 dark:text-purple-400" />
+        <span>Kendi Alan Adınız Yok mu?</span>
+      </div>
+      <p class="text-xs sm:text-sm text-slate-800 dark:text-slate-200 font-medium">
+        <strong class="text-purple-700 dark:text-purple-300 font-bold">rehber.dev</strong> ile hiçbir sunucu veya dosya ayarı yapmadan ücretsiz <code class="px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-900/50 font-mono text-purple-800 dark:text-purple-200 text-xs">adınız@rehber.dev</code> NIP-05 kimliği ve Lightning adres yönlendiricisi edinebilirsiniz.
+      </p>
+    </div>
+    <a
+      href="https://rehber.dev"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-purple-600 hover:bg-purple-700 shadow-sm transition-all active:scale-95 flex-shrink-0"
+    >
+      <span>rehber.dev'i Aç</span>
+      <ExternalLink class="w-3.5 h-3.5" />
+    </a>
+  </div>
+
+  <!-- PANEL 1: CANLI DOĞRULAYICI (VALIDATOR) -->
+  <div id="panel-validator" class="panel-section rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+    <div class="p-6 sm:p-7 bg-slate-50/80 dark:bg-slate-950/70 border-b border-slate-200/80 dark:border-slate-800/80">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 mb-2">
+        <BadgeCheck class="w-3.5 h-3.5" />
+        <span>Canlı Tanı & Sağlık Kontrolü</span>
+      </div>
+      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+        NIP-05 Alan Adı Doğrulama Testi
+      </h2>
+      <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+        Herhangi bir NIP-05 tanımlayıcısını (ör: <code class="text-slate-700 dark:text-slate-300">delirehberi@nostr.org.tr</code> veya <code class="text-slate-700 dark:text-slate-300">delirehberi@rehber.dev</code>) sorgulayarak CORS, HTTPS ve açık anahtar uyumunu test edin.
+      </p>
+    </div>
+
+    <div class="p-6 sm:p-8 space-y-6">
+      <div class="space-y-2">
+        <div class="flex items-center justify-between">
+          <label for="nip05-val-input" class="block text-sm font-semibold text-slate-800 dark:text-slate-200">
+            NIP-05 Adresi veya Alan Adı
+          </label>
+          <div class="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+            <span>Örnekler:</span>
+            <button
+              type="button"
+              class="quick-val-preset text-nostr-600 dark:text-nostr-400 hover:underline font-mono"
+              data-preset="delirehberi@nostr.org.tr"
+            >
+              delirehberi@nostr.org.tr
+            </button>
+            <span>•</span>
+            <button
+              type="button"
+              class="quick-val-preset text-purple-600 dark:text-purple-400 hover:underline font-mono"
+              data-preset="delirehberi@rehber.dev"
+            >
+              delirehberi@rehber.dev
+            </button>
+          </div>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <input
+            id="nip05-val-input"
+            type="text"
+            placeholder="ör: delirehberi@nostr.org.tr veya delirehberi@rehber.dev"
+            value="delirehberi@nostr.org.tr"
+            class="flex-1 px-4 py-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-xs sm:text-sm font-mono focus:outline-none focus:ring-2 focus:ring-nostr-500/50 focus:border-nostr-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
+          />
+          <button
+            type="button"
+            id="nip05-test-btn"
+            class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-semibold bg-nostr-600 hover:bg-nostr-700 text-white shadow-sm transition-all active:scale-95 flex-shrink-0"
+          >
+            <Search class="w-4 h-4" />
+            <span>Doğrula & Test Et</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Test Diagnostic Output -->
+      <div id="validator-result" class="hidden space-y-4">
+        
+        <!-- Status Banner -->
+        <div id="val-status-banner" class="p-4 rounded-2xl border flex items-center justify-between gap-3 text-xs sm:text-sm font-medium">
+          <div class="flex items-center gap-2.5">
+            <span id="val-status-icon"></span>
+            <span id="val-status-text"></span>
+          </div>
+          <span id="val-latency" class="font-mono text-xs px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800"></span>
+        </div>
+
+        <!-- Checklist Steps -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          
+          <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <span class="text-slate-700 dark:text-slate-300">1. HTTPS Uç Noktası Erişimi</span>
+            <span id="step-https" class="font-bold text-slate-400">Bekleniyor</span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <span class="text-slate-700 dark:text-slate-300">2. CORS Başlığı (Access-Control-Allow-Origin)</span>
+            <span id="step-cors" class="font-bold text-slate-400">Bekleniyor</span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <span class="text-slate-700 dark:text-slate-300">3. JSON Sözdizimi & Formatı</span>
+            <span id="step-json" class="font-bold text-slate-400">Bekleniyor</span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <span class="text-slate-700 dark:text-slate-300">4. Kullanıcı Açık Anahtarı Eşleşmesi</span>
+            <span id="step-pubkey" class="font-bold text-slate-400">Bekleniyor</span>
+          </div>
+
+        </div>
+
+        <!-- Resolved Data Card -->
+        <div id="val-details" class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-3">
+          <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+            Çözümlenen NIP-05 Detayları
+          </span>
+          <div class="space-y-2 text-xs font-mono">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+              <span class="text-slate-500">Hex Pubkey:</span>
+              <span id="val-hex-out" class="text-emerald-600 dark:text-emerald-400 select-all break-all font-semibold"></span>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+              <span class="text-slate-500">NIP-19 npub:</span>
+              <span id="val-npub-out" class="text-nostr-600 dark:text-nostr-400 select-all break-all"></span>
+            </div>
+            <div id="val-relays-box" class="hidden flex-col gap-1 p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+              <span class="text-slate-500">Önerilen Röleler:</span>
+              <span id="val-relays-out" class="text-indigo-600 dark:text-indigo-400 select-all break-all"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 2: NOSTR.JSON ÜRETİCİ (GENERATOR) -->
+  <div id="panel-generator" class="panel-section hidden rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+    <div class="p-6 sm:p-7 bg-slate-50/80 dark:bg-slate-950/70 border-b border-slate-200/80 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div class="space-y-1">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-nostr-100 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400 border border-nostr-200 dark:border-nostr-800">
+          <Code2 class="w-3.5 h-3.5" />
+          <span>Hazır Dosya Üretici</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+          nostr.json Dosyası ve Sunucu Ayarı Oluşturucu
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+          Alan adınızda sunacağınız <code class="text-nostr-600 dark:text-nostr-400 font-mono">/.well-known/nostr.json</code> dosyasını özelleştirin.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        id="gen-download-btn"
+        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-nostr-600 hover:bg-nostr-700 text-white transition-all shadow-sm active:scale-95 self-start sm:self-auto flex-shrink-0"
+      >
+        <Download class="w-4 h-4" />
+        <span>nostr.json İndir</span>
+      </button>
+    </div>
+
+    <div class="p-6 sm:p-8 space-y-6">
+      
+      <!-- User / Key Rows -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-semibold text-slate-800 dark:text-slate-200">
+            Kullanıcı Adları ve Açık Anahtarlar
+          </span>
+          <button
+            type="button"
+            id="add-user-row-btn"
+            class="inline-flex items-center gap-1 text-xs font-semibold text-nostr-600 dark:text-nostr-400 hover:underline"
+          >
+            <Plus class="w-3.5 h-3.5" />
+            <span>Kullanıcı Ekle</span>
+          </button>
+        </div>
+
+        <div id="user-rows-container" class="space-y-2.5">
+          <!-- Row 1 (Default) -->
+          <div class="user-row flex flex-col sm:flex-row items-center gap-2 p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+            <div class="w-full sm:w-1/3">
+              <input
+                type="text"
+                class="row-username w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-mono text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
+                placeholder="Kullanıcı adı (ör: alice veya _)"
+                value="delirehberi"
+              />
+            </div>
+            <div class="w-full sm:w-2/3">
+              <input
+                type="text"
+                class="row-pubkey w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-mono text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
+                placeholder="npub1... veya 64-karakter Hex anahtar"
+                value="npub1gmeu0wenescpjpymwmwgnkaedc6vy3aamf5tdtvxxf5z0yll3gdqatwl3v"
+              />
+            </div>
+          </div>
+        </div>
+
+        <p class="text-[11px] text-slate-500 dark:text-slate-400">
+          Kök alan adı için kullanıcı adına <code class="text-slate-700 dark:text-slate-300 font-mono">_</code> (alt çizgi) girin (ör: <code class="text-slate-700 dark:text-slate-300 font-mono">@siteniz.com</code>).
+        </p>
+      </div>
+
+      <!-- Relays Input -->
+      <div class="space-y-1.5">
+        <label for="gen-relays-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+          Önerilen Röleler (Virgülle ayrılmış)
+        </label>
+        <input
+          id="gen-relays-input"
+          type="text"
+          value="wss://relay.nostr.org.tr, wss://relay.damus.io, wss://nos.lol"
+          class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-xs font-mono text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
+        />
+      </div>
+
+      <!-- Live JSON Code Preview -->
+      <div class="rounded-2xl bg-slate-900 text-slate-100 border border-slate-800 overflow-hidden">
+        <div class="flex items-center justify-between px-4 py-2.5 bg-slate-950/80 border-b border-slate-800 text-xs font-mono text-slate-400">
+          <span class="flex items-center gap-1.5 text-slate-300">
+            <Server class="w-3.5 h-3.5 text-nostr-400" />
+            <span>/.well-known/nostr.json</span>
+          </span>
+          <button
+            type="button"
+            id="gen-copy-json-btn"
+            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors"
+          >
+            <Copy class="w-3 h-3" />
+            <span>Kopyala</span>
+          </button>
+        </div>
+        <pre class="p-4 overflow-x-auto text-xs font-mono leading-relaxed text-emerald-400"><code id="gen-json-preview"></code></pre>
+      </div>
+
+      <!-- Web Server Config Snippets -->
+      <div class="space-y-3 pt-2">
+        <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+          Sunucu CORS Yapılandırma Şablonları
+        </span>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <!-- Cloudflare Worker -->
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
+            <span class="font-bold text-slate-900 dark:text-white">Cloudflare Worker / Pages</span>
+            <p class="text-slate-500 text-[11px]">_headers dosyası oluşturun:</p>
+            <pre class="p-2.5 rounded-lg bg-slate-900 text-slate-300 font-mono text-[11px] overflow-x-auto"><code>/.well-known/nostr.json
+  Access-Control-Allow-Origin: *
+  Content-Type: application/json</code></pre>
+          </div>
+
+          <!-- Nginx -->
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
+            <span class="font-bold text-slate-900 dark:text-white">NGINX</span>
+            <p class="text-slate-500 text-[11px]">server bloğuna ekleyin:</p>
+            <pre class="p-2.5 rounded-lg bg-slate-900 text-slate-300 font-mono text-[11px] overflow-x-auto"><code>{`location /.well-known/nostr.json {
+  add_header Access-Control-Allow-Origin *;
+  default_type application/json;
+}`}</code></pre>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  import { nip19 } from 'nostr-tools';
+
+  const initNip05Tool = () => {
+    const root = document.querySelector('.nip05-suite-card');
+    if (!root || root.getAttribute('data-init') === 'true') return;
+    root.setAttribute('data-init', 'true');
+
+    // Tab switching
+    const tabs = root.querySelectorAll('.mode-tab');
+    const panels = root.querySelectorAll('.panel-section');
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const targetId = tab.getAttribute('data-target');
+        panels.forEach((p) => {
+          if (p.id === targetId) p.classList.remove('hidden');
+          else p.classList.add('hidden');
+        });
+
+        tabs.forEach((t) => {
+          if (t === tab) {
+            t.className = 'mode-tab flex-1 py-2 px-4 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-white dark:bg-slate-800 text-nostr-600 dark:text-nostr-400 shadow-sm';
+          } else {
+            t.className = 'mode-tab flex-1 py-2 px-4 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white';
+          }
+        });
+      });
+    });
+
+    // 1. VALIDATOR LOGIC
+    const valInput = root.querySelector('#nip05-val-input') as HTMLInputElement | null;
+    const valBtn = root.querySelector('#nip05-test-btn');
+    const valResult = root.querySelector('#validator-result');
+    const valStatusBanner = root.querySelector('#val-status-banner');
+    const valStatusText = root.querySelector('#val-status-text');
+    const valLatency = root.querySelector('#val-latency');
+    const stepHttps = root.querySelector('#step-https');
+    const stepCors = root.querySelector('#step-cors');
+    const stepJson = root.querySelector('#step-json');
+    const stepPubkey = root.querySelector('#step-pubkey');
+    const valHexOut = root.querySelector('#val-hex-out');
+    const valNpubOut = root.querySelector('#val-npub-out');
+    const valRelaysBox = root.querySelector('#val-relays-box');
+    const valRelaysOut = root.querySelector('#val-relays-out');
+
+    const runValidation = async () => {
+      const raw = (valInput?.value || '').trim();
+      if (!raw || !valResult) return;
+
+      valResult.classList.remove('hidden');
+      if (valStatusBanner) {
+        valStatusBanner.className = 'p-4 rounded-2xl border flex items-center justify-between gap-3 text-xs sm:text-sm font-medium bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300';
+      }
+      if (valStatusText) valStatusText.textContent = 'Doğrulanıyor, lütfen bekleyin...';
+      if (valLatency) valLatency.textContent = '...';
+
+      if (stepHttps) { stepHttps.className = 'font-bold text-amber-500'; stepHttps.textContent = 'Test ediliyor...'; }
+      if (stepCors) { stepCors.className = 'font-bold text-slate-400'; stepCors.textContent = 'Bekleniyor'; }
+      if (stepJson) { stepJson.className = 'font-bold text-slate-400'; stepJson.textContent = 'Bekleniyor'; }
+      if (stepPubkey) { stepPubkey.className = 'font-bold text-slate-400'; stepPubkey.textContent = 'Bekleniyor'; }
+
+      const startTime = performance.now();
+
+      // Normalize nip05 address
+      let name = '_';
+      let domain = raw;
+      if (raw.includes('@')) {
+        const parts = raw.split('@');
+        name = parts[0] || '_';
+        domain = parts[1];
+      }
+
+      domain = domain.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+      const isCurrentHost = (typeof window !== 'undefined') && (
+        domain === window.location.hostname || 
+        (domain === 'nostr.org.tr' && (window.location.hostname === 'localhost' || window.location.hostname.includes('nostr.org.tr')))
+      );
+      
+      const targetUrl = `https://${domain}/.well-known/nostr.json?name=${encodeURIComponent(name)}`;
+      const fetchUrl = isCurrentHost ? `/.well-known/nostr.json?name=${encodeURIComponent(name)}` : targetUrl;
+
+      let hasCors = true;
+      let data: any = null;
+
+      try {
+        let response: Response;
+        try {
+          response = await fetch(fetchUrl, {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' }
+          });
+        } catch (directErr) {
+          // Direct fetch failed (likely CORS or cross-origin restrictions). Try public proxy for diagnostic
+          hasCors = false;
+          const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+          response = await fetch(proxyUrl);
+        }
+
+        const elapsed = Math.round(performance.now() - startTime);
+        if (valLatency) valLatency.textContent = `${elapsed} ms`;
+
+        if (stepHttps) {
+          stepHttps.className = 'font-bold text-emerald-500';
+          stepHttps.textContent = '✓ Başarılı (HTTPS)';
+        }
+
+        if (stepCors) {
+          if (hasCors) {
+            stepCors.className = 'font-bold text-emerald-500';
+            stepCors.textContent = '✓ Başarılı (CORS Açık)';
+          } else {
+            stepCors.className = 'font-bold text-amber-500';
+            stepCors.textContent = '⚠ CORS Başlığı Eksik';
+          }
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} ${response.statusText}`);
+        }
+
+        data = await response.json();
+        if (stepJson) {
+          stepJson.className = 'font-bold text-emerald-500';
+          stepJson.textContent = '✓ Geçerli JSON';
+        }
+
+        if (!data || !data.names || typeof data.names !== 'object') {
+          throw new Error('nostr.json dosyasında "names" objesi bulunamadı');
+        }
+
+        const pubkey = data.names[name];
+        if (!pubkey) {
+          throw new Error(`"${name}" kullanıcı adı nostr.json dosyasında bulunamadı`);
+        }
+
+        const cleanHex = pubkey.trim().toLowerCase();
+        if (!/^[0-9a-f]{64}$/.test(cleanHex)) {
+          throw new Error(`Geçersiz hex açık anahtar uzunluğu (64 karakter olmalı)`);
+        }
+
+        if (stepPubkey) {
+          stepPubkey.className = 'font-bold text-emerald-500';
+          stepPubkey.textContent = '✓ Eşleşti (32-byte Hex)';
+        }
+
+        if (valStatusBanner) {
+          if (hasCors) {
+            valStatusBanner.className = 'p-4 rounded-2xl border flex items-center justify-between gap-3 text-xs sm:text-sm font-medium bg-emerald-50 dark:bg-emerald-950/60 border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200';
+          } else {
+            valStatusBanner.className = 'p-4 rounded-2xl border flex items-center justify-between gap-3 text-xs sm:text-sm font-medium bg-amber-50 dark:bg-amber-950/60 border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200';
+          }
+        }
+
+        if (valStatusText) {
+          if (hasCors) {
+            valStatusText.textContent = `✓ NIP-05 doğrulandı: ${name === '_' ? `@${domain}` : `${name}@${domain}`}`;
+          } else {
+            valStatusText.textContent = `⚠ NIP-05 bulundu fakat sunucuda CORS (Access-Control-Allow-Origin: *) başlığı eksik!`;
+          }
+        }
+
+        if (valHexOut) valHexOut.textContent = cleanHex;
+        if (valNpubOut) valNpubOut.textContent = nip19.npubEncode(cleanHex);
+
+        const relays = data.relays && data.relays[cleanHex];
+        if (relays && Array.isArray(relays) && relays.length > 0) {
+          if (valRelaysBox && valRelaysOut) {
+            valRelaysOut.textContent = relays.join(', ');
+            valRelaysBox.classList.remove('hidden');
+          }
+        } else if (valRelaysBox) {
+          valRelaysBox.classList.add('hidden');
+        }
+
+      } catch (err: any) {
+        const elapsed = Math.round(performance.now() - startTime);
+        if (valLatency) valLatency.textContent = `${elapsed} ms`;
+
+        if (valStatusBanner) {
+          valStatusBanner.className = 'p-4 rounded-2xl border flex items-center justify-between gap-3 text-xs sm:text-sm font-medium bg-rose-50 dark:bg-rose-950/60 border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200';
+        }
+        if (valStatusText) {
+          valStatusText.textContent = `✕ Doğrulama başarısız: ${err.message || 'Erişim engellendi veya alan adına ulaşılamıyor'}`;
+        }
+
+        if (stepCors) {
+          stepCors.className = 'font-bold text-rose-500';
+          stepCors.textContent = '✕ Ulaşılamadı';
+        }
+      }
+    };
+
+    valBtn?.addEventListener('click', runValidation);
+    valInput?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') runValidation();
+    });
+
+    const presetBtns = root.querySelectorAll('.quick-val-preset');
+    presetBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const val = btn.getAttribute('data-preset');
+        if (val && valInput) {
+          valInput.value = val;
+          runValidation();
+        }
+      });
+    });
+
+    // 2. GENERATOR LOGIC
+    const userContainer = root.querySelector('#user-rows-container');
+    const addUserBtn = root.querySelector('#add-user-row-btn');
+    const genRelaysInput = root.querySelector('#gen-relays-input') as HTMLInputElement | null;
+    const genPreview = root.querySelector('#gen-json-preview');
+    const genDownloadBtn = root.querySelector('#gen-download-btn');
+    const genCopyBtn = root.querySelector('#gen-copy-json-btn');
+
+    let currentJsonString = '';
+
+    const updateGenerator = () => {
+      const rows = root.querySelectorAll('.user-row');
+      const namesObj: Record<string, string> = {};
+      const relaysObj: Record<string, string[]> = {};
+
+      const relaysList = (genRelaysInput?.value || '')
+        .split(',')
+        .map(r => r.trim())
+        .filter(Boolean);
+
+      rows.forEach((row) => {
+        const uInput = row.querySelector('.row-username') as HTMLInputElement | null;
+        const pInput = row.querySelector('.row-pubkey') as HTMLInputElement | null;
+        const uName = (uInput?.value || '').trim().toLowerCase();
+        const rawPub = (pInput?.value || '').trim();
+
+        if (uName && rawPub) {
+          let hexKey = rawPub.replace(/^0x/i, '').toLowerCase();
+          if (rawPub.startsWith('npub1')) {
+            try {
+              const decoded = nip19.decode(rawPub);
+              if (decoded.type === 'npub') {
+                hexKey = decoded.data as string;
+              }
+            } catch (e) {}
+          }
+
+          namesObj[uName] = hexKey;
+          if (relaysList.length > 0) {
+            relaysObj[hexKey] = relaysList;
+          }
+        }
+      });
+
+      const outputData: any = { names: namesObj };
+      if (Object.keys(relaysObj).length > 0) {
+        outputData.relays = relaysObj;
+      }
+
+      currentJsonString = JSON.stringify(outputData, null, 2);
+      if (genPreview) genPreview.textContent = currentJsonString;
+    };
+
+    const attachRowListeners = (row: Element) => {
+      const inputs = row.querySelectorAll('input');
+      inputs.forEach(input => input.addEventListener('input', updateGenerator));
+    };
+
+    root.querySelectorAll('.user-row').forEach(attachRowListeners);
+
+    addUserBtn?.addEventListener('click', () => {
+      if (!userContainer) return;
+      const newRow = document.createElement('div');
+      newRow.className = 'user-row flex flex-col sm:flex-row items-center gap-2 p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800';
+      newRow.innerHTML = `
+        <div class="w-full sm:w-1/3">
+          <input
+            type="text"
+            class="row-username w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-mono text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
+            placeholder="Kullanıcı adı"
+          />
+        </div>
+        <div class="w-full sm:w-2/3 flex items-center gap-2">
+          <input
+            type="text"
+            class="row-pubkey flex-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-mono text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
+            placeholder="npub1... veya Hex anahtar"
+          />
+          <button type="button" class="del-row-btn p-2 rounded-lg text-slate-400 hover:text-rose-500 transition-colors" title="Satırı Sil">
+            ✕
+          </button>
+        </div>
+      `;
+      userContainer.appendChild(newRow);
+      attachRowListeners(newRow);
+
+      newRow.querySelector('.del-row-btn')?.addEventListener('click', () => {
+        newRow.remove();
+        updateGenerator();
+      });
+      updateGenerator();
+    });
+
+    genRelaysInput?.addEventListener('input', updateGenerator);
+
+    genCopyBtn?.addEventListener('click', async () => {
+      if (!currentJsonString) return;
+      try {
+        await navigator.clipboard.writeText(currentJsonString);
+        const orig = genCopyBtn.innerHTML;
+        genCopyBtn.innerHTML = '<span>✓ Kopyalandı</span>';
+        setTimeout(() => { genCopyBtn.innerHTML = orig; }, 2000);
+      } catch (e) {}
+    });
+
+    genDownloadBtn?.addEventListener('click', () => {
+      if (!currentJsonString) return;
+      const blob = new Blob([currentJsonString], { type: 'application/json;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'nostr.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // Initialize preview
+    updateGenerator();
+  };
+
+  initNip05Tool();
+  document.addEventListener('astro:after-swap', initNip05Tool);
+</script>

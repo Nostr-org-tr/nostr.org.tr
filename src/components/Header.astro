@@ -7,12 +7,17 @@ import {
   ListChecks, 
   BookOpen, 
   Mic, 
+  Newspaper,
+  Palette,
+  Vote,
   Menu, 
   X,
   ChevronDown,
   Compass,
   Library,
-  Languages
+  Languages,
+  Feather,
+  Wrench
 } from 'lucide-astro';
 import ThemeToggle from './ThemeToggle.astro';
 
@@ -27,9 +32,11 @@ const { currentPath = '/', isEn = false } = Astro.props;
 const singleNavs = [
   { href: '/manifesto', label: 'Manifesto', icon: ScrollText },
   { href: '/topluluk', label: 'Topluluk', icon: Users },
+  { href: '/blog', label: 'Blog', icon: Feather },
 ];
 
 const discoverItems = [
+  { href: '/araclar', label: 'Araçlar', desc: 'NIP-19, NIP-05, eklenti & ağ testleri', icon: Wrench },
   { href: '/roleler', label: 'Röleler', desc: 'Röle listesi & bağlantılar', icon: Radio },
   { href: '/projeler', label: 'Projeler', desc: 'Açık kaynak araçlar & botlar', icon: FolderGit2 },
   { href: '/takip-listeleri', label: 'Takip Listeleri', desc: 'Kategorize edilmiş hesaplar', icon: ListChecks },
@@ -37,6 +44,9 @@ const discoverItems = [
 
 const resourceItems = [
   { href: '/rehber', label: 'Başlangıç Rehberi', desc: 'Nostr istemcileri & kurulum', icon: BookOpen },
+  { href: '/gazeteciler-icin-nostr', label: 'Gazeteciler İçin', desc: 'Özgür & dayanıklı habercilik', icon: Newspaper },
+  { href: '/sanatcilar-icin-nostr', label: 'Sanatçılar İçin', desc: 'Aracısız telif & eser sahipliği', icon: Palette },
+  { href: '/siyasetciler-icin-nostr', label: 'Siyasetçiler İçin', desc: 'Kesintisiz iletişim & güvenlik', icon: Vote },
   { href: '/konusmalar', label: 'Konuşmalar & Sunumlar', desc: 'Etkinlik ve sunum kayıtları', icon: Mic },
 ];
 

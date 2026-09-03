@@ -14,8 +14,12 @@ const SECURITY_HEADERS: Record<string, string> = {
 
 const NOSTR_NIP05_JSON = JSON.stringify({
   names: {
+    _: 'ed15e54b8d525b7faa43aa142221f838c415aac699bbb4e74a1004e4b7e7adf8',
     topluluk: 'ed15e54b8d525b7faa43aa142221f838c415aac699bbb4e74a1004e4b7e7adf8',
+    delirehberi: '46f3c7bb33cc3019049b76dc89dbb96e34c247bdda68b6ad8632682793ff8a1a',
     emre: '46f3c7bb33cc3019049b76dc89dbb96e34c247bdda68b6ad8632682793ff8a1a',
+    mustafaakman: '113a2a2c9d74956513ddd3a1f808859c54525accb08b04a1f1c09cea34813d8c',
+    fadim: '628b2c9aedcf9da47f42128402f3fd82787dac75c3595db1bccf3b7baab0452f',
   },
   relays: {
     'ed15e54b8d525b7faa43aa142221f838c415aac699bbb4e74a1004e4b7e7adf8': [
@@ -28,6 +32,16 @@ const NOSTR_NIP05_JSON = JSON.stringify({
       'wss://relay.damus.io',
       'wss://nos.lol',
     ],
+    '113a2a2c9d74956513ddd3a1f808859c54525accb08b04a1f1c09cea34813d8c': [
+      'wss://relay.nostr.org.tr',
+      'wss://relay.damus.io',
+      'wss://nos.lol',
+    ],
+    '628b2c9aedcf9da47f42128402f3fd82787dac75c3595db1bccf3b7baab0452f': [
+      'wss://relay.nostr.org.tr',
+      'wss://relay.damus.io',
+      'wss://nos.lol',
+    ],
   },
 });
 
@@ -35,16 +49,33 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
 
+    const normalizedPath = url.pathname.replace(/\/+$/, '');
+
     // Handle NIP-05 Nostr verification with CORS enabled
-    if (url.pathname === '/.well-known/nostr.json') {
-      return new Response(NOSTR_NIP05_JSON, {
+    if (normalizedPath === '/.well-known/nostr.json') {
+      const corsHeaders = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Accept, Authorization, X-Requested-With',
+        'Access-Control-Max-Age': '86400',
+      };
+
+      if (request.method === 'OPTIONS') {
+        return new Response(null, {
+          status: 204,
+          headers: {
+            ...corsHeaders,
+            ...SECURITY_HEADERS,
+          },
+        });
+      }
+
+      return new Response(request.method === 'HEAD' ? null : NOSTR_NIP05_JSON, {
         status: 200,
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type',
           'Cache-Control': 'public, max-age=3600',
+          ...corsHeaders,
           ...SECURITY_HEADERS,
         },
       });
@@ -56,6 +87,12 @@ export default {
 
     for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
       newHeaders.set(key, value);
+    }
+
+    if (normalizedPath === '/.well-known/nostr.json') {
+      newHeaders.set('Access-Control-Allow-Origin', '*');
+      newHeaders.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
+      newHeaders.set('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization, X-Requested-With');
     }
 
     return new Response(response.body, {

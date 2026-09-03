@@ -1,0 +1,294 @@
+---
+import { 
+  Zap, 
+  Search, 
+  Copy, 
+  FileCode2
+} from 'lucide-astro';
+---
+
+<div class="zap-checker-card rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+  
+  <!-- Header Strip -->
+  <div class="p-6 sm:p-7 bg-slate-50/80 dark:bg-slate-950/70 border-b border-slate-200/80 dark:border-slate-800/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="space-y-1">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800">
+        <Zap class="w-3.5 h-3.5" />
+        <span>NIP-57 & LNURL-pay Test Aracı</span>
+      </div>
+      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+        Lightning & Nostr Zap Uyumluluk Denetleyicisi
+      </h2>
+      <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+        Bir Lightning adresinin Nostr Zaps (NIP-57) alıp alamayacağını ve LNURL-pay parametrelerini canlı sorgulayın.
+      </p>
+    </div>
+
+    <!-- Quick Samples -->
+    <div class="flex flex-wrap items-center gap-1.5 text-xs">
+      <span class="text-slate-400 dark:text-slate-500 text-[11px] font-medium mr-1">Örnekler:</span>
+      <button 
+        type="button" 
+        class="zap-sample-btn px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-amber-400 text-[11px] font-mono transition-colors"
+        data-sample="delirehberi@getalby.com"
+      >
+        delirehberi@getalby.com
+      </button>
+      <button 
+        type="button" 
+        class="zap-sample-btn px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-amber-400 text-[11px] font-mono transition-colors"
+        data-sample="jb55@sendsats.lol"
+      >
+        jb55@sendsats.lol
+      </button>
+    </div>
+  </div>
+
+  <div class="p-6 sm:p-8 space-y-6">
+    
+    <!-- Input Section -->
+    <div class="space-y-2">
+      <label for="ln-address-input" class="block text-sm font-semibold text-slate-800 dark:text-slate-200">
+        Lightning Adresi (Lightning Address)
+      </label>
+      <div class="flex flex-col sm:flex-row gap-2">
+        <input
+          id="ln-address-input"
+          type="text"
+          placeholder="kullanici@alanadi.com veya LNURL..."
+          value="delirehberi@getalby.com"
+          class="flex-1 px-4 py-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-xs sm:text-sm font-mono focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 transition-all placeholder:text-slate-400"
+        />
+        <button
+          type="button"
+          id="btn-test-zap"
+          class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-semibold bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold shadow-sm transition-all active:scale-95 flex-shrink-0"
+        >
+          <Search class="w-4 h-4" />
+          <span>Zap Desteğini Sorgula</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Diagnostic Results -->
+    <div id="zap-results-box" class="hidden space-y-6">
+      
+      <!-- Primary Status Badge -->
+      <div id="zap-status-banner" class="p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div id="zap-badge-icon" class="p-2 rounded-xl"></div>
+          <div>
+            <h3 id="zap-status-title" class="text-base font-bold"></h3>
+            <p id="zap-status-desc" class="text-xs mt-0.5 opacity-90"></p>
+          </div>
+        </div>
+        <div id="zap-lnurlp-url" class="text-[11px] font-mono px-3 py-1 rounded bg-black/10 dark:bg-white/10 truncate max-w-xs select-all"></div>
+      </div>
+
+      <!-- Key Parameters Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+        
+        <!-- Parameter 1: Nostr Zap Pubkey -->
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
+          <span class="text-slate-500 text-[11px] font-semibold uppercase tracking-wider block">
+            NIP-57 Zap Sağlayıcı Pubkey
+          </span>
+          <div id="zap-pubkey-val" class="font-mono text-xs text-slate-800 dark:text-slate-200 break-all select-all font-semibold">
+            —
+          </div>
+        </div>
+
+        <!-- Parameter 2: Min / Max Satoshis -->
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
+          <span class="text-slate-500 text-[11px] font-semibold uppercase tracking-wider block">
+            Gönderim Limitleri (Sat)
+          </span>
+          <div id="zap-limits-val" class="font-mono text-xs text-amber-600 dark:text-amber-400 font-bold">
+            —
+          </div>
+        </div>
+
+        <!-- Parameter 3: Comment Allowed -->
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
+          <span class="text-slate-500 text-[11px] font-semibold uppercase tracking-wider block">
+            Yorum İzni (Comment Length)
+          </span>
+          <div id="zap-comment-val" class="font-mono text-xs text-slate-800 dark:text-slate-200 font-semibold">
+            —
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Raw LNURL-pay JSON Payload -->
+      <div class="rounded-2xl bg-slate-900 text-slate-100 border border-slate-800 overflow-hidden">
+        <div class="flex items-center justify-between px-4 py-2.5 bg-slate-950/80 border-b border-slate-800 text-xs font-mono text-slate-400">
+          <span class="flex items-center gap-1.5 text-slate-300">
+            <FileCode2 class="w-3.5 h-3.5 text-amber-400" />
+            <span>LNURL-pay Yanıt Gövdesi (JSON)</span>
+          </span>
+          <button
+            type="button"
+            id="copy-zap-json-btn"
+            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors"
+          >
+            <Copy class="w-3 h-3" />
+            <span>Kopyala</span>
+          </button>
+        </div>
+        <pre class="p-4 overflow-x-auto text-xs font-mono leading-relaxed text-amber-300/90"><code id="zap-json-preview"></code></pre>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+  import { nip19 } from 'nostr-tools';
+
+  const initZapChecker = () => {
+    const card = document.querySelector('.zap-checker-card');
+    if (!card || card.getAttribute('data-init') === 'true') return;
+    card.setAttribute('data-init', 'true');
+
+    const input = card.querySelector('#ln-address-input') as HTMLInputElement | null;
+    const testBtn = card.querySelector('#btn-test-zap');
+    const resultsBox = card.querySelector('#zap-results-box');
+    const statusBanner = card.querySelector('#zap-status-banner');
+    const statusTitle = card.querySelector('#zap-status-title');
+    const statusDesc = card.querySelector('#zap-status-desc');
+    const lnurlpUrlBox = card.querySelector('#zap-lnurlp-url');
+    const pubkeyVal = card.querySelector('#zap-pubkey-val');
+    const limitsVal = card.querySelector('#zap-limits-val');
+    const commentVal = card.querySelector('#zap-comment-val');
+    const jsonPreview = card.querySelector('#zap-json-preview');
+    const copyJsonBtn = card.querySelector('#copy-zap-json-btn');
+    const sampleBtns = card.querySelectorAll('.zap-sample-btn');
+
+    let currentJsonText = '';
+
+    const checkZapSupport = async () => {
+      const raw = (input?.value || '').trim().toLowerCase();
+      if (!raw || !resultsBox) return;
+
+      resultsBox.classList.remove('hidden');
+      if (statusBanner) {
+        statusBanner.className = 'p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300';
+      }
+      if (statusTitle) statusTitle.textContent = 'LNURL-pay uç noktası sorgulanıyor...';
+      if (statusDesc) statusDesc.textContent = 'Lütfen bekleyin...';
+
+      let user = '';
+      let domain = '';
+
+      if (raw.includes('@')) {
+        const parts = raw.split('@');
+        user = parts[0];
+        domain = parts[1];
+      } else {
+        alert('Lütfen "kullanici@alanadi.com" formatında bir Lightning adresi girin.');
+        return;
+      }
+
+      domain = domain.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+      const endpoint = `https://${domain}/.well-known/lnurlp/${user}`;
+      if (lnurlpUrlBox) lnurlpUrlBox.textContent = endpoint;
+
+      try {
+        const res = await fetch(endpoint, {
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status} ${res.statusText}`);
+        }
+
+        const data: any = await res.json();
+        currentJsonText = JSON.stringify(data, null, 2);
+        if (jsonPreview) jsonPreview.textContent = currentJsonText;
+
+        const allowsNostr = Boolean(data.allowsNostr || data.nostrPubkey);
+        const nostrPubkey = data.nostrPubkey || null;
+        const minSat = data.minSendable ? Math.round(data.minSendable / 1000) : 1;
+        const maxSat = data.maxSendable ? Math.round(data.maxSendable / 1000) : 0;
+        const commentLength = data.commentAllowed || 0;
+
+        if (allowsNostr && nostrPubkey) {
+          let npub = '';
+          try {
+            npub = nip19.npubEncode(nostrPubkey);
+          } catch (e) {}
+
+          if (statusBanner) {
+            statusBanner.className = 'p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-emerald-50 dark:bg-emerald-950/60 border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200';
+          }
+          if (statusTitle) statusTitle.textContent = '✓ NIP-57 Zap Tam Uyumlu!';
+          if (statusDesc) statusDesc.textContent = 'Bu Lightning adresi Nostr protokolü üzerinden anlık Zap ödemesi ve makbuzu alabilir.';
+
+          if (pubkeyVal) {
+            pubkeyVal.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-mono">${nostrPubkey}</span>${npub ? `<br/><span class="text-[10px] text-slate-500">${npub}</span>` : ''}`;
+          }
+        } else {
+          if (statusBanner) {
+            statusBanner.className = 'p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-amber-50 dark:bg-amber-950/60 border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200';
+          }
+          if (statusTitle) statusTitle.textContent = '⚠ Lightning Aktif Ancak Zap (NIP-57) Kapalı';
+          if (statusDesc) statusDesc.textContent = 'Bu adres normal Lightning ödemesi alabilir fakat "nostrPubkey" parametresi eksik olduğundan Nostr Zap makbuzu üretemez.';
+
+          if (pubkeyVal) {
+            pubkeyVal.textContent = 'Tanımlanmamış (allowsNostr: false)';
+          }
+        }
+
+        if (limitsVal) {
+          limitsVal.textContent = `${minSat.toLocaleString('tr-TR')} sat — ${maxSat.toLocaleString('tr-TR')} sat`;
+        }
+
+        if (commentVal) {
+          commentVal.textContent = commentLength > 0 ? `${commentLength} karakter` : 'Yorum izni kapalı';
+        }
+
+      } catch (err: any) {
+        if (statusBanner) {
+          statusBanner.className = 'p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-rose-50 dark:bg-rose-950/60 border-rose-200 dark:border-rose-800 text-rose-900 dark:text-rose-200';
+        }
+        if (statusTitle) statusTitle.textContent = '✕ LNURL-pay Uç Noktasına Erişilemedi';
+        if (statusDesc) statusDesc.textContent = `Hata: ${err.message || 'CORS engeli veya geçersiz Lightning adresi.'}`;
+
+        if (pubkeyVal) pubkeyVal.textContent = '—';
+        if (limitsVal) limitsVal.textContent = '—';
+        if (commentVal) commentVal.textContent = '—';
+        if (jsonPreview) jsonPreview.textContent = '{\n  "error": "Sorgu başarısız"\n}';
+      }
+    };
+
+    testBtn?.addEventListener('click', checkZapSupport);
+    input?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') checkZapSupport();
+    });
+
+    sampleBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const sample = btn.getAttribute('data-sample');
+        if (sample && input) {
+          input.value = sample;
+          checkZapSupport();
+        }
+      });
+    });
+
+    copyJsonBtn?.addEventListener('click', async () => {
+      if (!currentJsonText) return;
+      try {
+        await navigator.clipboard.writeText(currentJsonText);
+        const orig = copyJsonBtn.innerHTML;
+        copyJsonBtn.innerHTML = '<span>✓ Kopyalandı</span>';
+        setTimeout(() => { copyJsonBtn.innerHTML = orig; }, 2000);
+      } catch (e) {}
+    });
+  };
+
+  initZapChecker();
+  document.addEventListener('astro:after-swap', initZapChecker);
+</script>

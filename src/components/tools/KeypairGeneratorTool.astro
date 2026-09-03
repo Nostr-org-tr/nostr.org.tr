@@ -1,0 +1,396 @@
+---
+import { 
+  KeyRound, 
+  RefreshCw, 
+  Copy, 
+  Printer, 
+  Play, 
+  Square, 
+  Lock,
+  Cpu
+} from 'lucide-astro';
+---
+
+<div class="keypair-tool-card space-y-8">
+  
+  <!-- Main Generator Card -->
+  <div class="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+    
+    <div class="p-6 sm:p-7 bg-slate-50/80 dark:bg-slate-950/70 border-b border-slate-200/80 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div class="space-y-1">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-nostr-100 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400 border border-nostr-200 dark:border-nostr-800">
+          <KeyRound class="w-3.5 h-3.5" />
+          <span>Kriptografik CSPRNG Üretici</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+          Nostr Açık & Özel Anahtar Çifti Üretici
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+          Tarayıcınızın donanımsal rastgele sayı üreteci (Web Crypto API) ile anında yeni bir Nostr kimliği oluşturun.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2 self-start sm:self-auto">
+        <button
+          type="button"
+          id="btn-generate-new"
+          class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold bg-nostr-600 hover:bg-nostr-700 text-white transition-all shadow-sm active:scale-95"
+        >
+          <RefreshCw class="w-3.5 h-3.5" id="gen-refresh-icon" />
+          <span>Yeni Anahtar Üret</span>
+        </button>
+        <button
+          type="button"
+          id="btn-print-backup"
+          class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-colors"
+          title="Kağıt Cüzdan Olarak Yazdır"
+        >
+          <Printer class="w-3.5 h-3.5" />
+          <span class="hidden sm:inline">Yazdır</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="p-6 sm:p-8 space-y-6">
+      
+      <!-- Key Display Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="printable-keypair">
+        
+        <!-- Public Key (npub) -->
+        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex flex-col justify-between space-y-4">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-nostr-600 dark:text-nostr-400 uppercase tracking-wider flex items-center gap-1.5">
+                <KeyRound class="w-3.5 h-3.5" />
+                <span>Açık Anahtar (Public Key / npub)</span>
+              </span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-nostr-100 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-300 border border-nostr-200 dark:border-nostr-800">
+                Herkesle Paylaşılabilir
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">
+              Profil adresinizdir. Arkadaşlarınıza vererek sizi takip etmelerini sağlayabilirsiniz.
+            </p>
+          </div>
+
+          <div class="space-y-2">
+            <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
+              <div id="out-npub" class="font-mono text-xs text-nostr-600 dark:text-nostr-300 break-all select-all font-semibold"></div>
+              <button type="button" class="copy-key-btn p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200" data-target="out-npub">
+                <Copy class="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2 text-[11px] font-mono text-slate-500">
+              <span class="text-slate-400">Hex:</span>
+              <span id="out-hex-pub" class="truncate select-all text-slate-700 dark:text-slate-300"></span>
+              <button type="button" class="copy-key-btn p-1 rounded hover:text-slate-900 dark:hover:text-white" data-target="out-hex-pub">
+                <Copy class="w-3 h-3" />
+              </button>
+            </div>
+          </div>
+
+          <!-- Public QR Code -->
+          <div class="flex items-center justify-center p-3 bg-white rounded-xl border border-slate-200 dark:border-slate-800">
+            <div id="qr-npub-box" class="w-32 h-32 flex items-center justify-center"></div>
+          </div>
+        </div>
+
+        <!-- Private Key (nsec) -->
+        <div class="p-5 rounded-2xl bg-rose-50/50 dark:bg-rose-950/20 border-2 border-rose-200 dark:border-rose-900/60 flex flex-col justify-between space-y-4">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider flex items-center gap-1.5">
+                <Lock class="w-3.5 h-3.5" />
+                <span>Özel Anahtar (Private Key / nsec)</span>
+              </span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900">
+                GİZLİ TUTUN
+              </span>
+            </div>
+            <p class="text-xs text-rose-700 dark:text-rose-300/80">
+              Hesabınızın şifresidir. Kaybederseniz hesabınız geri getirilemez; asla kimseyle paylaşmayın!
+            </p>
+          </div>
+
+          <div class="space-y-2">
+            <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-900/60 flex items-center justify-between gap-2">
+              <div id="out-nsec" class="font-mono text-xs text-rose-600 dark:text-rose-400 break-all select-all font-semibold"></div>
+              <button type="button" class="copy-key-btn p-2 rounded-lg bg-rose-100 dark:bg-rose-900/60 hover:bg-rose-200 text-rose-700 dark:text-rose-200" data-target="out-nsec">
+                <Copy class="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-900/60 flex items-center justify-between gap-2 text-[11px] font-mono text-slate-500">
+              <span class="text-slate-400">Hex:</span>
+              <span id="out-hex-priv" class="truncate select-all text-slate-700 dark:text-slate-300"></span>
+              <button type="button" class="copy-key-btn p-1 rounded hover:text-slate-900 dark:hover:text-white" data-target="out-hex-priv">
+                <Copy class="w-3 h-3" />
+              </button>
+            </div>
+          </div>
+
+          <!-- Private QR Code -->
+          <div class="flex items-center justify-center p-3 bg-white rounded-xl border border-rose-200 dark:border-rose-900/60">
+            <div id="qr-nsec-box" class="w-32 h-32 flex items-center justify-center"></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Vanity npub Generator Card (Web Worker Powered) -->
+  <div class="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+    <div class="p-6 sm:p-7 bg-slate-50/80 dark:bg-slate-950/70 border-b border-slate-200/80 dark:border-slate-800/80">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 mb-2">
+        <Cpu class="w-3.5 h-3.5" />
+        <span>Web Worker Arka Plan Motoru</span>
+      </div>
+      <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+        Özel Önekli (Vanity) npub Arama Motoru
+      </h3>
+      <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+        İstediğiniz harflerle başlayan özel bir npub adresi (ör: <code class="text-indigo-600 dark:text-indigo-400 font-mono">npub1tr...</code>) arayın. Arama tarayıcınızın arka plan iş parçacığında çalışır.
+      </p>
+    </div>
+
+    <div class="p-6 sm:p-8 space-y-6">
+      
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        
+        <div class="sm:col-span-2 space-y-1.5">
+          <label for="vanity-prefix-input" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+            Aranan npub Öneki (Bech32 karakterleri: 0-9, a-z; 1, b, i, o hariç)
+          </label>
+          <div class="flex items-center rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 px-3.5 py-2.5 focus-within:ring-2 focus-within:ring-indigo-500/50">
+            <span class="text-slate-400 font-mono text-xs sm:text-sm select-none">npub1</span>
+            <input
+              id="vanity-prefix-input"
+              type="text"
+              maxlength="5"
+              placeholder="tr veya emre"
+              value="tr"
+              class="w-full bg-transparent font-mono text-xs sm:text-sm text-slate-900 dark:text-slate-100 focus:outline-none placeholder:text-slate-400"
+            />
+          </div>
+          <p class="text-[11px] text-slate-500">
+            İpucu: 2-3 karakter saniyeler içinde bulunur. 4+ karakter daha fazla hesaplama gücü ve zaman gerektirir.
+          </p>
+        </div>
+
+        <div class="flex items-end gap-2">
+          <button
+            type="button"
+            id="btn-vanity-start"
+            class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl text-xs sm:text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition-all active:scale-95"
+          >
+            <Play class="w-4 h-4" />
+            <span>Aramayı Başlat</span>
+          </button>
+          <button
+            type="button"
+            id="btn-vanity-stop"
+            disabled
+            class="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl text-xs sm:text-sm font-semibold bg-slate-200 dark:bg-slate-800 text-slate-400 transition-all disabled:opacity-50 cursor-not-allowed"
+          >
+            <Square class="w-4 h-4" />
+            <span>Durdur</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Vanity Live Stats -->
+      <div id="vanity-stats-box" class="hidden p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse"></span>
+          <span class="text-slate-700 dark:text-slate-300">Denenen Anahtar:</span>
+          <span id="stat-attempts" class="font-bold text-indigo-600 dark:text-indigo-400">0</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-slate-500">Hız:</span>
+          <span id="stat-speed" class="font-bold text-slate-700 dark:text-slate-300">0 anahtar/sn</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-slate-500">Geçen Süre:</span>
+          <span id="stat-time" class="text-slate-700 dark:text-slate-300">0s</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  import { generateSecretKey, getPublicKey } from 'nostr-tools/pure';
+  import { nip19 } from 'nostr-tools';
+  import QRCode from 'qrcode';
+
+  const bytesToHex = (bytes: Uint8Array): string =>
+    Array.from(bytes)
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+
+  const initKeypairTool = () => {
+    const root = document.querySelector('.keypair-tool-card');
+    if (!root || root.getAttribute('data-init') === 'true') return;
+    root.setAttribute('data-init', 'true');
+
+    const btnGen = root.querySelector('#btn-generate-new');
+    const btnPrint = root.querySelector('#btn-print-backup');
+    const outNpub = root.querySelector('#out-npub');
+    const outHexPub = root.querySelector('#out-hex-pub');
+    const outNsec = root.querySelector('#out-nsec');
+    const outHexPriv = root.querySelector('#out-hex-priv');
+    const qrNpubBox = root.querySelector('#qr-npub-box');
+    const qrNsecBox = root.querySelector('#qr-nsec-box');
+
+    const generateNewPair = async (customSk?: Uint8Array) => {
+      try {
+        const sk = customSk || generateSecretKey();
+        const pk = getPublicKey(sk);
+        const hexSk = bytesToHex(sk);
+        const hexPk = pk;
+        const nsecStr = nip19.nsecEncode(sk);
+        const npubStr = nip19.npubEncode(pk);
+
+        if (outNpub) outNpub.textContent = npubStr;
+        if (outHexPub) outHexPub.textContent = hexPk;
+        if (outNsec) outNsec.textContent = nsecStr;
+        if (outHexPriv) outHexPriv.textContent = hexSk;
+
+        if (qrNpubBox) {
+          const svgPub = await QRCode.toString(`nostr:${npubStr}`, { type: 'svg', margin: 1, width: 120 });
+          qrNpubBox.innerHTML = svgPub;
+        }
+
+        if (qrNsecBox) {
+          const svgPriv = await QRCode.toString(nsecStr, { type: 'svg', margin: 1, width: 120 });
+          qrNsecBox.innerHTML = svgPriv;
+        }
+      } catch (e) {
+        console.error('Anahtar üretimi hatası:', e);
+      }
+    };
+
+    btnGen?.addEventListener('click', () => generateNewPair());
+
+    btnPrint?.addEventListener('click', () => {
+      window.print();
+    });
+
+    // Copy handlers
+    root.querySelectorAll('.copy-key-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const targetId = btn.getAttribute('data-target');
+        const targetEl = targetId ? root.querySelector(`#${targetId}`) : null;
+        const text = targetEl?.textContent?.trim();
+        if (!text) return;
+        try {
+          await navigator.clipboard.writeText(text);
+          const orig = btn.innerHTML;
+          btn.innerHTML = '✓';
+          setTimeout(() => { btn.innerHTML = orig; }, 2000);
+        } catch (e) {}
+      });
+    });
+
+    // Initial keypair generation
+    generateNewPair();
+
+    // 2. VANITY GENERATOR LOGIC
+    const prefixInput = root.querySelector('#vanity-prefix-input') as HTMLInputElement | null;
+    const btnVanityStart = root.querySelector('#btn-vanity-start') as HTMLButtonElement | null;
+    const btnVanityStop = root.querySelector('#btn-vanity-stop') as HTMLButtonElement | null;
+    const statsBox = root.querySelector('#vanity-stats-box');
+    const statAttempts = root.querySelector('#stat-attempts');
+    const statSpeed = root.querySelector('#stat-speed');
+    const statTime = root.querySelector('#stat-time');
+
+    let isSearching = false;
+    let attempts = 0;
+    let startTime = 0;
+    let timerInterval: any = null;
+
+    const stopVanitySearch = () => {
+      isSearching = false;
+      if (timerInterval) clearInterval(timerInterval);
+      if (btnVanityStart) {
+        btnVanityStart.disabled = false;
+        btnVanityStart.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+      if (btnVanityStop) {
+        btnVanityStop.disabled = true;
+        btnVanityStop.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    };
+
+    const runVanityBatch = (targetPrefix: string) => {
+      if (!isSearching) return;
+
+      const BATCH_SIZE = 500;
+      for (let i = 0; i < BATCH_SIZE; i++) {
+        attempts++;
+        const sk = generateSecretKey();
+        const pk = getPublicKey(sk);
+        const npub = nip19.npubEncode(pk);
+
+        if (npub.toLowerCase().startsWith(`npub1${targetPrefix}`)) {
+          // Found match!
+          stopVanitySearch();
+          generateNewPair(sk);
+          if (statAttempts) statAttempts.textContent = `${attempts.toLocaleString('tr-TR')} (BULDUNUZ!)`;
+          return;
+        }
+      }
+
+      if (isSearching) {
+        setTimeout(() => runVanityBatch(targetPrefix), 0);
+      }
+    };
+
+    btnVanityStart?.addEventListener('click', () => {
+      const rawPrefix = (prefixInput?.value || '').trim().toLowerCase();
+      // Validate bech32 chars
+      const validChars = /^[02-9ac-hj-np-z]+$/;
+      if (!rawPrefix || !validChars.test(rawPrefix)) {
+        alert('Lütfen geçerli Bech32 karakterleri girin (1, b, i, o hariç harf ve rakamlar).');
+        return;
+      }
+
+      isSearching = true;
+      attempts = 0;
+      startTime = performance.now();
+      if (statsBox) statsBox.classList.remove('hidden');
+
+      if (btnVanityStart) {
+        btnVanityStart.disabled = true;
+        btnVanityStart.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+      if (btnVanityStop) {
+        btnVanityStop.disabled = false;
+        btnVanityStop.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+
+      timerInterval = setInterval(() => {
+        const elapsedSec = (performance.now() - startTime) / 1000;
+        if (statTime) statTime.textContent = `${elapsedSec.toFixed(1)}s`;
+        if (statAttempts) statAttempts.textContent = attempts.toLocaleString('tr-TR');
+        if (statSpeed) {
+          const speed = Math.round(attempts / (elapsedSec || 1));
+          statSpeed.textContent = `${speed.toLocaleString('tr-TR')} anahtar/sn`;
+        }
+      }, 500);
+
+      runVanityBatch(rawPrefix);
+    });
+
+    btnVanityStop?.addEventListener('click', stopVanitySearch);
+  };
+
+  initKeypairTool();
+  document.addEventListener('astro:after-swap', initKeypairTool);
+</script>

@@ -1,0 +1,506 @@
+---
+import { 
+  Copy, 
+  QrCode, 
+  ShieldAlert, 
+  Sparkles,
+  FileCode2
+} from 'lucide-astro';
+---
+
+<div class="nip19-tool-card rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+  
+  <!-- Tool Header Strip -->
+  <div class="p-6 sm:p-7 bg-slate-50/80 dark:bg-slate-950/70 border-b border-slate-200/80 dark:border-slate-800/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="space-y-1">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-nostr-100 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400 border border-nostr-200 dark:border-nostr-800">
+        <Sparkles class="w-3.5 h-3.5" />
+        <span>NIP-19 & NIP-21 Standart Çözümleyici</span>
+      </div>
+      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+        Nostr Format & Tanımlayıcı Dönüştürücü
+      </h2>
+      <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+        Herhangi bir Nostr adresi, özel anahtarı, etkinlik ID'si veya 32-byte hex dizisini yapıştırın.
+      </p>
+    </div>
+
+    <!-- Quick Example Pills -->
+    <div class="flex flex-wrap items-center gap-1.5 text-xs">
+      <span class="text-slate-400 dark:text-slate-500 text-[11px] font-medium mr-1">Örnekler:</span>
+      <button 
+        type="button" 
+        class="sample-btn px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-nostr-400 text-[11px] font-mono transition-colors"
+        data-sample="npub1gmeu0wenescpjpymwmwgnkaedc6vy3aamf5tdtvxxf5z0yll3gdqatwl3v"
+      >
+        npub
+      </button>
+      <button 
+        type="button" 
+        class="sample-btn px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-nostr-400 text-[11px] font-mono transition-colors"
+        data-sample="note1gmeu0wenescpjpymwmwgnkaedc6vy3aamf5tdtvxxf5z0yll3gdq5xsk2h"
+      >
+        note
+      </button>
+      <button 
+        type="button" 
+        class="sample-btn px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-nostr-400 text-[11px] font-mono transition-colors"
+        data-sample="46f3c7bb33cc3019049b76dc89dbb96e34c247bdda68b6ad8632682793ff8a1a"
+      >
+        32-byte Hex
+      </button>
+    </div>
+  </div>
+
+  <div class="p-6 sm:p-8 space-y-6">
+    
+    <!-- Input Section -->
+    <div class="space-y-2.5">
+      <div class="flex items-center justify-between">
+        <label for="nip19-input" class="block text-sm font-semibold text-slate-800 dark:text-slate-200">
+          Girdi (npub, nsec, note, nprofile, nevent, naddr veya Hex)
+        </label>
+        <span id="detected-badge" class="hidden text-xs font-mono font-bold px-2 py-0.5 rounded bg-nostr-100 dark:bg-nostr-900 text-nostr-700 dark:text-nostr-300">
+          Otomatik Algılandı
+        </span>
+      </div>
+
+      <div class="relative">
+        <textarea
+          id="nip19-input"
+          rows="2"
+          placeholder="npub1..., nsec1..., note1..., nevent1..., nprofile1... veya 64 karakterli hex yapıştırın"
+          spellcheck="false"
+          autocomplete="off"
+          class="w-full px-4 py-3.5 pr-28 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-xs sm:text-sm font-mono focus:outline-none focus:ring-2 focus:ring-nostr-500/50 focus:border-nostr-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
+        ></textarea>
+        
+        <div class="absolute right-2.5 top-3.5 flex items-center gap-1.5">
+          <button
+            type="button"
+            id="nip19-paste-btn"
+            class="px-2.5 py-1.5 rounded-xl text-xs font-medium bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 shadow-sm transition-colors"
+          >
+            Yapıştır
+          </button>
+          <button
+            type="button"
+            id="nip19-clear-btn"
+            class="px-2.5 py-1.5 rounded-xl text-xs font-medium bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 shadow-sm transition-colors"
+          >
+            Temizle
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Status Message -->
+      <div id="nip19-status" class="text-xs font-medium text-slate-500 dark:text-slate-400">
+        Dönüştürmek istediğiniz formatı yukarıya yapıştırın.
+      </div>
+    </div>
+
+    <!-- Security Alert for NSEC -->
+    <div id="nsec-warning" class="hidden p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-xs text-rose-800 dark:text-rose-200 space-y-1">
+      <div class="flex items-center gap-2 font-bold text-rose-900 dark:text-rose-100">
+        <ShieldAlert class="w-4 h-4 text-rose-600 dark:text-rose-400 flex-shrink-0" />
+        <span>Özel Anahtar (nsec) Algılandı!</span>
+      </div>
+      <p class="leading-relaxed pl-6">
+        Özel anahtarınız hesabınızın tüm yetkisini temsil eder. Bu araç anahtarınızı hiçbir yere göndermeden <strong>tamamen tarayıcınızda</strong> dönüştürür. Yine de özel anahtarınızı üçüncü taraf güvenmediğiniz sitelere asla girmeyin.
+      </p>
+    </div>
+
+    <!-- Results Cards Grid -->
+    <div id="results-container" class="space-y-4">
+      
+      <!-- Primary Output (Hex / npub / note) -->
+      <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-3">
+        <div class="flex items-center justify-between">
+          <span id="primary-label" class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+            32-Byte Hex Çıktısı
+          </span>
+          <span id="primary-char-count" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+            64 karakter
+          </span>
+        </div>
+        <div class="flex items-center justify-between gap-2 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+          <div id="primary-output" class="font-mono text-xs sm:text-sm text-slate-900 dark:text-emerald-400 break-all select-all font-semibold">
+            —
+          </div>
+          <button
+            type="button"
+            id="copy-primary-btn"
+            class="copy-btn flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-nostr-600 hover:bg-nostr-700 text-white transition-all shadow-sm active:scale-95"
+            data-target="primary-output"
+          >
+            <Copy class="w-3.5 h-3.5" />
+            <span>Kopyala</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Secondary Output (NIP-19 Bech32 / Alternative) -->
+      <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-3">
+        <div class="flex items-center justify-between">
+          <span id="secondary-label" class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+            NIP-19 Bech32 Formatı
+          </span>
+          <span id="secondary-type-tag" class="text-[10px] font-mono px-2 py-0.5 rounded bg-nostr-100 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-300 border border-nostr-200 dark:border-nostr-800">
+            Bech32
+          </span>
+        </div>
+        <div class="flex items-center justify-between gap-2 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+          <div id="secondary-output" class="font-mono text-xs sm:text-sm text-slate-900 dark:text-nostr-300 break-all select-all">
+            —
+          </div>
+          <button
+            type="button"
+            id="copy-secondary-btn"
+            class="copy-btn flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 transition-all shadow-sm active:scale-95"
+            data-target="secondary-output"
+          >
+            <Copy class="w-3.5 h-3.5" />
+            <span>Kopyala</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- NIP-21 URI & QR Code Box -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        <!-- NIP-21 nostr: URI -->
+        <div class="md:col-span-2 p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex flex-col justify-between space-y-3">
+          <div class="space-y-1">
+            <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+              NIP-21 Evrensel nostr:... URI
+            </span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">
+              Web sayfalarında veya mesajlarda tıklandığında yerel Nostr uygulamasını açan bağlantı:
+            </p>
+          </div>
+          <div class="flex items-center justify-between gap-2 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+            <div id="uri-output" class="font-mono text-xs text-indigo-600 dark:text-indigo-400 break-all select-all font-medium">
+              —
+            </div>
+            <button
+              type="button"
+              id="copy-uri-btn"
+              class="copy-btn flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 transition-all shadow-sm active:scale-95"
+              data-target="uri-output"
+            >
+              <Copy class="w-3.5 h-3.5" />
+              <span>Kopyala</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Live QR Code Preview -->
+        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center space-y-2">
+          <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1">
+            <QrCode class="w-3.5 h-3.5 text-nostr-500" />
+            <span>QR Kod</span>
+          </span>
+          <div id="qr-container" class="w-32 h-32 bg-white rounded-xl p-2 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-inner">
+            <span class="text-[11px] text-slate-400">Girdi bekleniyor</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Decoded TLV Metadata (for nprofile, nevent, naddr) -->
+      <div id="tlv-container" class="hidden p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+            <FileCode2 class="w-4 h-4 text-nostr-500" />
+            <span>Ayrıştırılmış TLV Meta Verileri</span>
+          </span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+            JSON
+          </span>
+        </div>
+        <pre class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-x-auto text-xs font-mono text-slate-800 dark:text-slate-200"><code id="tlv-output"></code></pre>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+  import { nip19 } from 'nostr-tools';
+  import QRCode from 'qrcode';
+
+  const initNip19Tool = () => {
+    const card = document.querySelector('.nip19-tool-card');
+    if (!card || card.getAttribute('data-init') === 'true') return;
+    card.setAttribute('data-init', 'true');
+
+    const input = card.querySelector('#nip19-input') as HTMLTextAreaElement | null;
+    const statusMsg = card.querySelector('#nip19-status');
+    const detectedBadge = card.querySelector('#detected-badge');
+    const nsecWarning = card.querySelector('#nsec-warning');
+    const primaryLabel = card.querySelector('#primary-label');
+    const primaryOutput = card.querySelector('#primary-output');
+    const secondaryLabel = card.querySelector('#secondary-label');
+    const secondaryOutput = card.querySelector('#secondary-output');
+    const uriOutput = card.querySelector('#uri-output');
+    const qrContainer = card.querySelector('#qr-container');
+    const tlvContainer = card.querySelector('#tlv-container');
+    const tlvOutput = card.querySelector('#tlv-output');
+    const pasteBtn = card.querySelector('#nip19-paste-btn');
+    const clearBtn = card.querySelector('#nip19-clear-btn');
+    const sampleBtns = card.querySelectorAll('.sample-btn');
+
+    const renderQr = async (text: string) => {
+      if (!qrContainer) return;
+      if (!text || text === '—') {
+        qrContainer.innerHTML = '<span class="text-[11px] text-slate-400">Girdi bekleniyor</span>';
+        return;
+      }
+      try {
+        const svg = await QRCode.toString(text, {
+          type: 'svg',
+          margin: 1,
+          width: 120,
+          color: {
+            dark: '#0f172a',
+            light: '#ffffff'
+          }
+        });
+        qrContainer.innerHTML = svg;
+      } catch (e) {
+        qrContainer.innerHTML = '<span class="text-[11px] text-rose-400">QR Hatası</span>';
+      }
+    };
+
+    const processInput = () => {
+      const raw = (input?.value || '').trim();
+
+      if (!raw) {
+        if (statusMsg) {
+          statusMsg.className = 'text-xs font-medium text-slate-500 dark:text-slate-400';
+          statusMsg.textContent = 'Dönüştürmek istediğiniz formatı yukarıya yapıştırın.';
+        }
+        if (detectedBadge) detectedBadge.classList.add('hidden');
+        if (nsecWarning) nsecWarning.classList.add('hidden');
+        if (primaryOutput) primaryOutput.textContent = '—';
+        if (secondaryOutput) secondaryOutput.textContent = '—';
+        if (uriOutput) uriOutput.textContent = '—';
+        if (tlvContainer) tlvContainer.classList.add('hidden');
+        renderQr('');
+        return;
+      }
+
+      try {
+        let isNsec = false;
+        let pLabel = '32-Byte Hex Çıktısı';
+        let pOut = '';
+        let sLabel = 'NIP-19 Bech32 Formatı';
+        let sOut = '';
+        let uOut = '';
+        let tlvData: any = null;
+        let detected = '';
+
+        // Check if raw is 64-char Hex
+        const cleanHex = raw.replace(/^0x/i, '').toLowerCase();
+        if (/^[0-9a-f]{64}$/.test(cleanHex)) {
+          detected = '32-Byte Hex';
+          const npubStr = nip19.npubEncode(cleanHex);
+          const noteStr = nip19.noteEncode(cleanHex);
+          pLabel = 'NIP-19 npub (Açık Anahtar)';
+          pOut = npubStr;
+          sLabel = 'NIP-19 note (Etkinlik ID)';
+          sOut = noteStr;
+          uOut = `nostr:${npubStr}`;
+        } else {
+          let strToDecode = raw;
+          if (raw.startsWith('nostr:')) {
+            strToDecode = raw.replace(/^nostr:/i, '');
+          }
+          const decoded = nip19.decode(strToDecode);
+          detected = decoded.type.toUpperCase();
+
+          switch (decoded.type) {
+            case 'npub':
+              detected = 'NIP-19 npub (Açık Anahtar)';
+              pLabel = '32-Byte Hex Public Key';
+              pOut = decoded.data as string;
+              sLabel = 'NIP-19 npub Formatı';
+              sOut = strToDecode;
+              uOut = `nostr:${strToDecode}`;
+              break;
+
+            case 'nsec':
+              detected = 'NIP-19 nsec (Özel Anahtar)';
+              isNsec = true;
+              pLabel = '32-Byte Hex Private Key (Özel Anahtar)';
+              const hexPriv = Array.from(decoded.data as Uint8Array)
+                .map((b) => b.toString(16).padStart(2, '0'))
+                .join('');
+              pOut = hexPriv;
+              sLabel = 'NIP-19 nsec Formatı';
+              sOut = strToDecode;
+              uOut = `nostr:${strToDecode}`;
+              break;
+
+            case 'note':
+              detected = 'NIP-19 note (Etkinlik Kimliği)';
+              pLabel = 'Hex Event ID';
+              pOut = decoded.data as string;
+              sLabel = 'NIP-19 note Formatı';
+              sOut = strToDecode;
+              uOut = `nostr:${strToDecode}`;
+              break;
+
+            case 'nprofile':
+              detected = 'NIP-19 nprofile (Gelişmiş Profil)';
+              pLabel = 'Hex Public Key';
+              pOut = decoded.data.pubkey;
+              sLabel = 'Eşlik Eden npub';
+              sOut = nip19.npubEncode(decoded.data.pubkey);
+              uOut = `nostr:${strToDecode}`;
+              tlvData = decoded.data;
+              break;
+
+            case 'nevent':
+              detected = 'NIP-19 nevent (Gelişmiş Etkinlik)';
+              pLabel = 'Hex Event ID';
+              pOut = decoded.data.id;
+              sLabel = 'Eşlik Eden note';
+              sOut = nip19.noteEncode(decoded.data.id);
+              uOut = `nostr:${strToDecode}`;
+              tlvData = decoded.data;
+              break;
+
+            case 'naddr':
+              detected = 'NIP-19 naddr (Parametrik Etkinlik)';
+              pLabel = 'Yazar Hex Pubkey';
+              pOut = decoded.data.pubkey;
+              sLabel = `Kind: ${decoded.data.kind} | Identifier: ${decoded.data.identifier}`;
+              sOut = `kind:${decoded.data.kind}:${decoded.data.pubkey}:${decoded.data.identifier}`;
+              uOut = `nostr:${strToDecode}`;
+              tlvData = decoded.data;
+              break;
+
+            default:
+              throw new Error(`Desteklenmeyen NIP-19 formatı`);
+          }
+        }
+
+        // Apply results to UI
+        if (primaryLabel) primaryLabel.textContent = pLabel;
+        if (primaryOutput) primaryOutput.textContent = pOut;
+        if (secondaryLabel) secondaryLabel.textContent = sLabel;
+        if (secondaryOutput) secondaryOutput.textContent = sOut;
+        if (uriOutput) uriOutput.textContent = uOut;
+
+        if (detectedBadge) {
+          detectedBadge.textContent = detected;
+          detectedBadge.classList.remove('hidden');
+        }
+
+        if (nsecWarning) {
+          if (isNsec) nsecWarning.classList.remove('hidden');
+          else nsecWarning.classList.add('hidden');
+        }
+
+        if (tlvContainer && tlvOutput) {
+          if (tlvData) {
+            tlvOutput.textContent = JSON.stringify(tlvData, null, 2);
+            tlvContainer.classList.remove('hidden');
+          } else {
+            tlvContainer.classList.add('hidden');
+          }
+        }
+
+        if (statusMsg) {
+          statusMsg.className = 'text-xs font-semibold text-emerald-600 dark:text-emerald-400';
+          statusMsg.textContent = `✓ Başarıyla çözümlendi (${detected})`;
+        }
+
+        renderQr(uOut || pOut);
+      } catch (err: any) {
+        if (statusMsg) {
+          statusMsg.className = 'text-xs font-semibold text-rose-600 dark:text-rose-400';
+          statusMsg.textContent = `✕ Format hatası: ${err.message || 'Geçersiz veri'}`;
+        }
+        if (detectedBadge) detectedBadge.classList.add('hidden');
+        if (nsecWarning) nsecWarning.classList.add('hidden');
+        if (primaryOutput) primaryOutput.textContent = '—';
+        if (secondaryOutput) secondaryOutput.textContent = '—';
+        if (uriOutput) uriOutput.textContent = '—';
+        if (tlvContainer) tlvContainer.classList.add('hidden');
+        renderQr('');
+      }
+    };
+
+    // Attach listeners
+    input?.addEventListener('input', processInput);
+
+    pasteBtn?.addEventListener('click', async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text && input) {
+          input.value = text.trim();
+          processInput();
+        }
+      } catch (e) {
+        console.warn('Panoya erişilemedi');
+      }
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      if (input) {
+        input.value = '';
+        processInput();
+        input.focus();
+      }
+    });
+
+    sampleBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const sample = btn.getAttribute('data-sample');
+        if (sample && input) {
+          input.value = sample;
+          processInput();
+        }
+      });
+    });
+
+    // Copy handlers
+    const copyBtns = card.querySelectorAll('.copy-btn');
+    copyBtns.forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const targetId = btn.getAttribute('data-target');
+        const targetEl = targetId ? card.querySelector(`#${targetId}`) : null;
+        const text = targetEl?.textContent?.trim();
+        if (!text || text === '—') return;
+
+        try {
+          await navigator.clipboard.writeText(text);
+          const origText = btn.innerHTML;
+          btn.innerHTML = '<span>✓ Kopyalandı</span>';
+          btn.classList.add('bg-emerald-600', 'text-white');
+          setTimeout(() => {
+            btn.innerHTML = origText;
+            btn.classList.remove('bg-emerald-600', 'text-white');
+          }, 2000);
+        } catch (e) {
+          console.error(e);
+        }
+      });
+    });
+
+    // Check URL query param ?q=...
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('q') || urlParams.get('input');
+    if (query && input) {
+      input.value = query;
+    }
+
+    // Run initial process
+    processInput();
+  };
+
+  initNip19Tool();
+  document.addEventListener('astro:after-swap', initNip19Tool);
+</script>

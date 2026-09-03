@@ -137,6 +137,7 @@ export const guides: GuideSection[] = [
   }
 }`,
         tips: [
+          'Kendi alan adınız yoksa: rehber.dev üzerinden ücretsiz olarak saniyeler içinde adınız@rehber.dev NIP-05 kimliği ve Lightning yönlendiricisi edinebilirsiniz.',
           'KRİTİK: nostr.json dosyasına npub1... formatında anahtar YAZILMAZ. NIP-05 spesifikasyonu tam 64 karakterli (32-byte) hexadecimal açık anahtar gerektirir.',
           'Aşağıdaki interaktif dönüştürücüyü kullanarak npub adresinizi anında 32-byte Hex formatına dönüştürebilir ve hazır nostr.json dosyanızı indirebilirsiniz.',
           'Dosyanın mutlaka HTTPS üzerinden ve `/.well-known/nostr.json` yolunda sunulması gerekir.',
@@ -144,6 +145,7 @@ export const guides: GuideSection[] = [
           'Content-Type başlığı `application/json; charset=utf-8` olmalıdır.',
         ],
         links: [
+          { label: 'rehber.dev - Ücretsiz NIP-05 & Lightning Adres Yönlendirici', url: 'https://rehber.dev' },
           { label: 'NIP-05 Spesifikasyonu (nostr-protocol/nips)', url: 'https://github.com/nostr-protocol/nips/blob/master/05.md' },
           { label: 'NIP-19 Bech32 Spesifikasyonu', url: 'https://github.com/nostr-protocol/nips/blob/master/19.md' },
         ],
@@ -162,9 +164,11 @@ export const guides: GuideSection[] = [
         text: 'Zaps, Nostr protokolünün Bitcoin Lightning Network ile birleştiği yerdir (NIP-57). Bir gönderiyi sadece beğenmek yerine, 21 satoshi veya dilediğiniz miktarda anlık mikro ödeme (Zap) gönderebilirsiniz.',
         tips: [
           'Alby, Wallet of Satoshi veya Phoenix gibi bir Lightning cüzdanı edinin.',
-          'Profilinize Lightning adresinizi (Lud-16 formatında örneğin delirehberi@emre.xyz) ekleyin.',
+          'Profilinize Lightning adresinizi (Lud-16 formatında örneğin delirehberi@emre.xyz veya adiniz@rehber.dev) ekleyin.',
+          'rehber.dev ile Alby / Wallet of Satoshi cüzdanınızı tek bir adrese bağlayıp kolayca zap alabilirsiniz.',
         ],
         links: [
+          { label: 'rehber.dev - Lightning Adres Yönlendirici', url: 'https://rehber.dev' },
           { label: 'Alby Lightning Cüzdanı', url: 'https://getalby.com' },
           { label: 'Wallet of Satoshi', url: 'https://www.walletofsatoshi.com' },
           { label: 'Phoenix Wallet', url: 'https://phoenix.acinq.co' },

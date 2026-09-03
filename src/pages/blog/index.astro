@@ -1,0 +1,560 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { fetchBlogPosts } from '../../utils/nostrBlogFetcher';
+import BlogCard from '../../components/blog/BlogCard.astro';
+import BreadcrumbSchema from '../../components/seo/BreadcrumbSchema.astro';
+import { 
+  BookOpen, 
+  Sparkles, 
+  Search, 
+  Radio, 
+  Feather, 
+  ExternalLink
+} from 'lucide-astro';
+import { BLOG_RELAYS } from '../../data/blogConfig';
+
+const posts = await fetchBlogPosts();
+const featuredPost = posts[0];
+
+// Collect unique tags
+const allTags = Array.from(
+  new Set(posts.flatMap((p) => p.tags.map((t) => t.toLowerCase().replace(/^#/, ''))))
+).filter(Boolean);
+
+const breadcrumbItems = [
+  { name: 'Ana Sayfa', path: '/' },
+  { name: 'Blog', path: '/blog' },
+];
+---
+
+<Layout
+  title="Topluluk Blogu - Nostr Türkiye"
+  description="Nostr Türkiye topluluk üyelerinin merkeziyetsiz röleler üzerinden NIP-23 standardıyla yayınladığı uzun form makaleler, teknik analizler ve rehberler."
+  ogType="website"
+>
+  <BreadcrumbSchema items={breadcrumbItems} slot="head" />
+
+  <div class="relative overflow-hidden pt-10 pb-20 sm:pt-16 sm:pb-28">
+    <!-- Ambient background glow -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-nostr-500/10 via-nostr-500/5 to-transparent blur-3xl pointer-events-none -z-10" />
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      
+      <!-- Hero Header -->
+      <div class="text-center max-w-3xl mx-auto space-y-4">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-nostr-50 dark:bg-nostr-950/70 text-nostr-700 dark:text-nostr-300 border border-nostr-200/80 dark:border-nostr-800/80 shadow-xs">
+          <Sparkles class="w-3.5 h-3.5 text-nostr-500" />
+          <span>Merkeziyetsiz Yayıncılık & NIP-23</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          Nostr Türkiye <span class="text-transparent bg-clip-text bg-gradient-to-r from-nostr-600 via-purple-600 to-pink-600">Blogu</span>
+        </h1>
+
+        <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+          Topluluk üyelerimiz tarafından Nostr rölelerine doğrudan kaydedilen uzun metinler, teknik rehberler ve düşünce yazıları. Merkezi bir veritabanı yok; tamamen açık protokol gücüyle derlendi.
+        </p>
+      </div>
+
+      <!-- Search & Tag Filter Toolbar -->
+      <div class="bg-white dark:bg-slate-900/90 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+        <!-- Search Input -->
+        <div class="relative w-full md:w-80">
+          <Search class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <input
+            type="search"
+            id="blog-search-input"
+            placeholder="Yazılarda veya başlıklarda ara..."
+            class="w-full pl-10 pr-4 py-2 text-sm rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-nostr-500 focus:border-transparent transition-all"
+          />
+        </div>
+
+        <!-- Tag Filters -->
+        <div id="tag-filters-container" class="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 scrollbar-none">
+          <button
+            type="button"
+            class="tag-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-nostr-600 text-white shadow-xs transition-all active:scale-95"
+            data-tag="all"
+          >
+            Tümü (<span id="total-posts-tag-count">{posts.length}</span>)
+          </button>
+          {allTags.map((tag) => (
+            <button
+              type="button"
+              class="tag-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all whitespace-nowrap active:scale-95"
+              data-tag={tag}
+            >
+              #{tag}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <!-- Featured Post (if available) -->
+      {featuredPost && (
+        <section 
+          id="featured-section" 
+          class="post-item" 
+          data-id={featuredPost.id}
+          data-dtag={featuredPost.dTag}
+          data-tags={featuredPost.tags.join(',')} 
+          data-title={featuredPost.title.toLowerCase()} 
+          data-summary={featuredPost.summary.toLowerCase()}
+        >
+          <BlogCard post={featuredPost} featured={true} />
+        </section>
+      )}
+
+      <!-- Articles Grid -->
+      <section class="space-y-6">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+            <BookOpen class="w-5 h-5 text-nostr-500" />
+            <span>Tüm Makaleler</span>
+          </h2>
+          <span id="posts-count-indicator" class="text-xs text-slate-500 font-mono">
+            {posts.length} içerik listeleniyor
+          </span>
+        </div>
+
+        <div id="posts-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {posts.map((post) => (
+            <div 
+              class="post-item h-full" 
+              data-id={post.id}
+              data-dtag={post.dTag}
+              data-tags={post.tags.join(',')} 
+              data-title={post.title.toLowerCase()} 
+              data-summary={post.summary.toLowerCase()}
+            >
+              <BlogCard post={post} />
+            </div>
+          ))}
+        </div>
+
+        <!-- No Results Fallback -->
+        <div id="no-results" class="hidden text-center py-16 bg-white dark:bg-slate-900/60 rounded-3xl border border-slate-200/80 dark:border-slate-800">
+          <BookOpen class="w-10 h-10 mx-auto text-slate-300 dark:text-slate-600 mb-3" />
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white">Aradığınız kriterlere uygun yazı bulunamadı</h3>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Lütfen farklı bir arama terimi veya etiket seçin.</p>
+        </div>
+      </section>
+
+      <!-- How to Publish Callout Box -->
+      <section class="relative bg-gradient-to-br from-nostr-900 via-slate-900 to-purple-950 text-white rounded-3xl p-8 sm:p-12 overflow-hidden shadow-xl border border-nostr-800/60">
+        <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none transform translate-x-12 translate-y-12">
+          <Feather class="w-96 h-96 text-white" />
+        </div>
+
+        <div class="relative z-10 max-w-2xl space-y-4">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-nostr-200 backdrop-blur-sm border border-white/10">
+            <Radio class="w-3.5 h-3.5 text-nostr-400" />
+            <span>Nostr ile Yazı Yayınlayın</span>
+          </div>
+
+          <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+            Topluluk Blogunda Nasıl Yazı Paylaşabilirsiniz?
+          </h2>
+
+          <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+            Bu blog bağımsız bir Nostr görüntüleyicisidir. Herhangi bir merkezi panele giriş yapmanıza gerek yoktur. Topluluk listesinde yer alan açık anahtarınızla herhangi bir Nostr istemcisinden (Habla, Yakihonne vb.) <strong>#nostrorgtr</strong> etiketiyle yayınladığınız NIP-23 uzun metinler otomatik olarak bu alanda yer alır.
+          </p>
+
+          <div class="pt-2 flex flex-wrap items-center gap-3">
+            <a
+              href="https://habla.news"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white text-slate-900 hover:bg-slate-100 transition-all shadow-md"
+            >
+              <span>Habla.news ile Yazı Yaz</span>
+              <ExternalLink class="w-3.5 h-3.5" />
+            </a>
+            <a
+              href="https://yakihonne.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm border border-white/20 transition-all"
+            >
+              <span>Yakihonne ile Yayınla</span>
+              <ExternalLink class="w-3.5 h-3.5" />
+            </a>
+            <a
+              href="/topluluk"
+              class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-nostr-200 hover:text-white transition-colors"
+            >
+              <span>Topluluğa Katılın &rarr;</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</Layout>
+
+<script is:inline define:vars={{ clientRelays: BLOG_RELAYS }}>
+  (function () {
+    const searchInput = document.getElementById('blog-search-input');
+    const postsGrid = document.getElementById('posts-grid');
+    const noResults = document.getElementById('no-results');
+    const countIndicator = document.getElementById('posts-count-indicator');
+    const totalCountSpan = document.getElementById('total-posts-tag-count');
+
+    let currentTag = 'all';
+    let searchQuery = '';
+
+    // Track existing items to prevent duplicates
+    const existingIds = new Set();
+    const existingDTags = new Set();
+
+    function scanExisting() {
+      document.querySelectorAll('.post-item').forEach((item) => {
+        const id = item.getAttribute('data-id');
+        const dtag = item.getAttribute('data-dtag');
+        if (id) existingIds.add(id);
+        if (dtag) existingDTags.add(dtag);
+      });
+    }
+    scanExisting();
+
+    function filterPosts() {
+      let visibleCount = 0;
+      const allItems = document.querySelectorAll('.post-item');
+
+      allItems.forEach((item) => {
+        const itemTags = (item.getAttribute('data-tags') || '').toLowerCase();
+        const itemTitle = (item.getAttribute('data-title') || '').toLowerCase();
+        const itemSummary = (item.getAttribute('data-summary') || '').toLowerCase();
+
+        const matchesTag = currentTag === 'all' || itemTags.includes(currentTag.toLowerCase());
+        const matchesSearch =
+          !searchQuery ||
+          itemTitle.includes(searchQuery) ||
+          itemSummary.includes(searchQuery) ||
+          itemTags.includes(searchQuery);
+
+        if (matchesTag && matchesSearch) {
+          item.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+
+      if (noResults) {
+        if (visibleCount === 0) {
+          noResults.classList.remove('hidden');
+        } else {
+          noResults.classList.add('hidden');
+        }
+      }
+
+      if (countIndicator) {
+        const total = document.querySelectorAll('#posts-grid .post-item').length;
+        countIndicator.textContent = `${total} içerik listeleniyor`;
+      }
+      if (totalCountSpan) {
+        const total = document.querySelectorAll('#posts-grid .post-item').length;
+        totalCountSpan.textContent = total;
+      }
+    }
+
+    function setupTagListeners() {
+      const tagButtons = document.querySelectorAll('.tag-filter-btn');
+      tagButtons.forEach((btn) => {
+        btn.onclick = () => {
+          tagButtons.forEach((b) => {
+            b.className = 'tag-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all whitespace-nowrap active:scale-95';
+          });
+          btn.className = 'tag-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-nostr-600 text-white shadow-xs transition-all active:scale-95';
+          currentTag = btn.getAttribute('data-tag') || 'all';
+          filterPosts();
+        };
+      });
+    }
+
+    searchInput?.addEventListener('input', (e) => {
+      searchQuery = e.target.value.trim().toLowerCase();
+      filterPosts();
+    });
+
+    setupTagListeners();
+
+    // Bech32 helper for client-side naddr computation
+    const ALPHABET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
+    const ALPHABET_MAP = {};
+    for (let i = 0; i < ALPHABET.length; i++) ALPHABET_MAP[ALPHABET[i]] = i;
+    const GENERATOR = [0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3];
+    function polymod(v) {
+      let chk = 1;
+      for (let p = 0; p < v.length; ++p) {
+        const top = chk >> 25; chk = ((chk & 0x1ffffff) << 5) ^ v[p];
+        for (let i = 0; i < 5; ++i) if ((top >> i) & 1) chk ^= GENERATOR[i];
+      }
+      return chk;
+    }
+    function hrpExpand(h) {
+      const ret = [];
+      for (let p = 0; p < h.length; ++p) ret.push(h.charCodeAt(p) >> 5);
+      ret.push(0);
+      for (let p = 0; p < h.length; ++p) ret.push(h.charCodeAt(p) & 31);
+      return ret;
+    }
+    function convertBits(data, fromBits, toBits, pad) {
+      let acc = 0, bits = 0; const ret = [];
+      const maxv = (1 << toBits) - 1, maxAcc = (1 << (fromBits + toBits - 1)) - 1;
+      for (let p = 0; p < data.length; ++p) {
+        acc = ((acc << fromBits) | data[p]) & maxAcc; bits += fromBits;
+        while (bits >= toBits) { bits -= toBits; ret.push((acc >> bits) & maxv); }
+      }
+      if (pad && bits > 0) ret.push((acc << (toBits - bits)) & maxv);
+      return ret;
+    }
+    function encodeBech32(hrp, data) {
+      const words = convertBits(data, 8, 5, true);
+      const values = hrpExpand(hrp).concat(words).concat([0,0,0,0,0,0]);
+      const mod = polymod(values) ^ 1;
+      const ret = [];
+      for (let p = 0; p < 6; ++p) ret.push((mod >> (5 * (5 - p))) & 31);
+      let result = hrp + '1';
+      for (let i = 0; i < words.length; ++i) result += ALPHABET.charAt(words[i]);
+      for (let i = 0; i < 6; ++i) result += ALPHABET.charAt(ret[i]);
+      return result;
+    }
+    function hexToBytes(hex) {
+      const clean = hex.trim().toLowerCase();
+      const bytes = new Uint8Array(clean.length / 2);
+      for (let i = 0; i < clean.length; i += 2) bytes[i / 2] = parseInt(clean.substring(i, i + 2), 16);
+      return bytes;
+    }
+    function encodeNaddrClient(kind, pubkeyHex, dTag) {
+      try {
+        const tlv = [];
+        const dBytes = new TextEncoder().encode(dTag);
+        tlv.push(0, dBytes.length, ...Array.from(dBytes));
+        const rBytes = new TextEncoder().encode('wss://relay.nostr.org.tr');
+        tlv.push(1, rBytes.length, ...Array.from(rBytes));
+        const aBytes = hexToBytes(pubkeyHex);
+        tlv.push(2, aBytes.length, ...Array.from(aBytes));
+        const kBytes = new Uint8Array(4);
+        new DataView(kBytes.buffer).setUint32(0, kind, false);
+        tlv.push(3, kBytes.length, ...Array.from(kBytes));
+        return encodeBech32('naddr', new Uint8Array(tlv));
+      } catch {
+        return '';
+      }
+    }
+    function slugifyClient(text) {
+      const trMap = { ç:'c', Ç:'c', ğ:'g', Ğ:'g', ı:'i', İ:'i', ö:'o', Ö:'o', ş:'s', Ş:'s', ü:'u', Ü:'u' };
+      return text.split('').map(c => trMap[c] || c).join('').toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '') || 'makale';
+    }
+    function escapeHtml(s) {
+      const d = document.createElement('div');
+      d.textContent = s || '';
+      return d.innerHTML;
+    }
+
+    // Client-side live check: Query relays for new #nostrorgtr long-form events
+    async function checkNewArticlesOnRelays() {
+      const subId = 'live_blog_' + Math.random().toString(36).slice(2, 7);
+      const profileCache = new Map();
+      const newArticles = [];
+
+      const targetRelays = clientRelays || ['wss://relay.nostr.org.tr', 'wss://nos.lol'];
+
+      const queryPromises = targetRelays.map((relayUrl) => {
+        return new Promise((resolve) => {
+          let ws = null;
+          let isDone = false;
+          const cleanup = () => {
+            if (isDone) return;
+            isDone = true;
+            if (ws) {
+              try {
+                ws.onclose = null;
+                ws.onerror = null;
+                ws.onmessage = null;
+                if (ws.readyState === WebSocket.OPEN) {
+                  ws.send(JSON.stringify(['CLOSE', subId]));
+                }
+                ws.close();
+              } catch {}
+            }
+            resolve();
+          };
+
+          const timeout = setTimeout(cleanup, 4000);
+
+          try {
+            ws = new WebSocket(relayUrl);
+            ws.onopen = () => {
+              ws.send(JSON.stringify(['REQ', subId, { kinds: [30023], '#t': ['nostrorgtr', 'nostrturkiye'] }]));
+            };
+            ws.onmessage = (msg) => {
+              try {
+                const data = JSON.parse(msg.data);
+                if (!Array.isArray(data)) return;
+                const [type, reqSubId, event] = data;
+                if (type === 'EVENT' && reqSubId === subId && event && event.kind === 30023) {
+                  const dTag = (event.tags || []).find(t => t[0] === 'd')?.[1] || '';
+                  if (!existingIds.has(event.id) && (!dTag || !existingDTags.has(dTag))) {
+                    existingIds.add(event.id);
+                    if (dTag) existingDTags.add(dTag);
+                    newArticles.push(event);
+                  }
+                } else if (type === 'EOSE' && reqSubId === subId) {
+                  clearTimeout(timeout);
+                  cleanup();
+                }
+              } catch {}
+            };
+            ws.onerror = () => { clearTimeout(timeout); cleanup(); };
+            ws.onclose = () => { clearTimeout(timeout); cleanup(); };
+          } catch {
+            clearTimeout(timeout);
+            cleanup();
+          }
+        });
+      });
+
+      await Promise.all(queryPromises);
+
+      if (newArticles.length === 0) return;
+
+      // Fetch profiles for authors of new articles
+      const authorPubkeys = Array.from(new Set(newArticles.map(a => a.pubkey)));
+      const profSubId = 'live_prof_' + Math.random().toString(36).slice(2, 7);
+
+      await new Promise((resolve) => {
+        try {
+          const ws = new WebSocket(targetRelays[0] || 'wss://relay.nostr.org.tr');
+          const cleanup = () => {
+            try {
+              ws.onclose = null;
+              ws.onerror = null;
+              ws.onmessage = null;
+              if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(['CLOSE', profSubId]));
+              ws.close();
+            } catch {}
+            resolve();
+          };
+          const timeout = setTimeout(cleanup, 3000);
+
+          ws.onopen = () => {
+            ws.send(JSON.stringify(['REQ', profSubId, { kinds: [0], authors: authorPubkeys }]));
+          };
+          ws.onmessage = (msg) => {
+            try {
+              const data = JSON.parse(msg.data);
+              if (data[0] === 'EVENT' && data[1] === profSubId && data[2]?.kind === 0) {
+                profileCache.set(data[2].pubkey, JSON.parse(data[2].content));
+              } else if (data[0] === 'EOSE' && data[1] === profSubId) {
+                clearTimeout(timeout);
+                cleanup();
+              }
+            } catch {}
+          };
+          ws.onerror = () => { clearTimeout(timeout); cleanup(); };
+          ws.onclose = () => { clearTimeout(timeout); cleanup(); };
+        } catch {
+          resolve();
+        }
+      });
+
+      // Insert new cards into DOM
+      newArticles.forEach((event) => {
+        const dTag = (event.tags || []).find(t => t[0] === 'd')?.[1] || event.id;
+        const title = (event.tags || []).find(t => t[0] === 'title')?.[1] || 'Yeni Nostr Yazısı';
+        const summary = (event.tags || []).find(t => t[0] === 'summary')?.[1] || (event.content.slice(0, 150) + '...');
+        const image = (event.tags || []).find(t => t[0] === 'image')?.[1] || '/og-image.png';
+        const tags = (event.tags || []).filter(t => t[0] === 't').map(t => t[1]);
+        const slug = slugifyClient(dTag || title);
+        const profile = profileCache.get(event.pubkey) || {};
+        const authorName = profile.display_name || profile.name || `${event.pubkey.slice(0, 8)}...`;
+        const authorAvatar = profile.picture || profile.image || '';
+        const words = (event.content || '').trim().split(/\s+/).length;
+        const readingTime = `${Math.max(1, Math.ceil(words / 200))} dk`;
+        const naddr = encodeNaddrClient(30023, event.pubkey, dTag);
+        const readLink = `/blog/${slug}`;
+
+        const cardWrapper = document.createElement('div');
+        cardWrapper.className = 'post-item h-full animate-fadeIn';
+        cardWrapper.setAttribute('data-id', event.id);
+        cardWrapper.setAttribute('data-dtag', dTag);
+        cardWrapper.setAttribute('data-naddr', naddr);
+        cardWrapper.setAttribute('data-tags', tags.join(','));
+        cardWrapper.setAttribute('data-title', title.toLowerCase());
+        cardWrapper.setAttribute('data-summary', summary.toLowerCase());
+
+        cardWrapper.innerHTML = `
+          <article class="group bg-white dark:bg-slate-900/90 rounded-2xl border border-nostr-200 dark:border-nostr-800 shadow-md hover:shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden relative">
+            <div class="absolute top-3 right-3 z-10">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500 text-white shadow-sm animate-pulse">
+                Canlı / Yeni
+              </span>
+            </div>
+            <div class="relative aspect-[16/9] bg-slate-100 dark:bg-slate-800 overflow-hidden">
+              <img
+                src="${escapeHtml(image)}"
+                alt="${escapeHtml(title)}"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+              <div class="absolute bottom-2 left-2 flex items-center gap-1.5 px-2 py-1 rounded-md bg-black/60 backdrop-blur-sm text-[11px] text-white font-medium">
+                <span>${readingTime}</span>
+              </div>
+            </div>
+
+            <div class="p-5 sm:p-6 flex-grow flex flex-col justify-between">
+              <div>
+                <div class="flex flex-wrap items-center gap-1.5 mb-2.5">
+                  ${tags.slice(0, 2).map(t => `<span class="text-[11px] font-medium px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">#${escapeHtml(t)}</span>`).join('')}
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-nostr-600 dark:group-hover:text-nostr-400 transition-colors line-clamp-2">
+                  <a href="${readLink}">
+                    ${escapeHtml(title)}
+                  </a>
+                </h3>
+                <p class="mt-2 text-slate-600 dark:text-slate-400 text-xs sm:text-sm line-clamp-3 leading-relaxed">
+                  ${escapeHtml(summary)}
+                </p>
+              </div>
+
+              <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-8 h-8 rounded-full bg-nostr-100 dark:bg-nostr-900/60 text-nostr-600 dark:text-nostr-300 flex items-center justify-center font-bold text-xs overflow-hidden">
+                    ${authorAvatar ? `<img src="${escapeHtml(authorAvatar)}" alt="${escapeHtml(authorName)}" class="w-full h-full object-cover" />` : escapeHtml(authorName.charAt(0))}
+                  </div>
+                  <div>
+                    <div class="font-medium text-xs text-slate-900 dark:text-white leading-tight">
+                      ${escapeHtml(authorName)}
+                    </div>
+                    <div class="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
+                      Yeni Yayınlandı
+                    </div>
+                  </div>
+                </div>
+
+                <a
+                  href="${readLink}"
+                  class="text-xs font-semibold text-nostr-600 dark:text-nostr-400 hover:text-nostr-700 dark:hover:text-nostr-300 inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform"
+                >
+                  <span>Oku</span>
+                  <span>&rarr;</span>
+                </a>
+              </div>
+            </div>
+          </article>
+        `;
+
+        postsGrid?.prepend(cardWrapper);
+      });
+
+      filterPosts();
+    }
+
+    // Trigger live check shortly after page load
+    setTimeout(checkNewArticlesOnRelays, 1500);
+  })();
+</script>

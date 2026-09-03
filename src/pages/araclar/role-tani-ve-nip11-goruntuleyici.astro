@@ -1,0 +1,43 @@
+---
+import ToolLayout from '../../components/tools/ToolLayout.astro';
+import RelayInspectorTool from '../../components/tools/RelayInspectorTool.astro';
+import { nostrTools } from '../../data/tools';
+import { Radio, Server, Layers } from 'lucide-astro';
+
+const tool = nostrTools.find((t) => t.id === 'role-tani-ve-nip11-goruntuleyici')!;
+---
+
+<ToolLayout tool={tool}>
+  <RelayInspectorTool />
+
+  <Fragment slot="guide">
+    <div class="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-6">
+      <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+        <Layers class="w-4 h-4 text-nostr-500" />
+        <span>Nostr Röleleri ve NIP-11 Standardı Hakkında</span>
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-2">
+          <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+            <Server class="w-4 h-4 text-nostr-500" />
+            <span>NIP-11 Röle Bilgi Dokümanı (Relay Information)</span>
+          </span>
+          <p class="leading-relaxed text-slate-500 dark:text-slate-400">
+            Bir Nostr istemcisi röleye bağlanmadan önce HTTP üzerinden NIP-11 dokümanını sorgulayarak rölenin hangi NIP uzantılarını desteklediğini, ücretli olup olmadığını ve mesaj boyutu sınırlarını öğrenir.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-2">
+          <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+            <Radio class="w-4 h-4 text-emerald-500" />
+            <span>WebSocket Ping ve Gecikme Süresi (RTT)</span>
+          </span>
+          <p class="leading-relaxed text-slate-500 dark:text-slate-400">
+            Düşük gecikme süreli röleler (ör: 20-80 ms) gönderilerinizin ve mesajlarınızın anında iletilmesini sağlar. Türkiye'deki kullanıcılar için yerel rölemiz <code class="text-nostr-600 dark:text-nostr-400 font-mono">wss://relay.nostr.org.tr</code> en düşük gecikmeyi sunar.
+          </p>
+        </div>
+      </div>
+    </div>
+  </Fragment>
+</ToolLayout>

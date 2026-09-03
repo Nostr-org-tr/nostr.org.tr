@@ -1,0 +1,112 @@
+---
+import ToolLayout from '../../components/tools/ToolLayout.astro';
+import Nip05Tool from '../../components/tools/Nip05Tool.astro';
+import { nostrTools } from '../../data/tools';
+import { Globe, Sparkles, ExternalLink, Zap, CheckCircle2, ShieldCheck } from 'lucide-astro';
+
+const tool = nostrTools.find((t) => t.id === 'nip05-dogrulayici-ve-nostr-json-ureticisi')!;
+---
+
+<ToolLayout tool={tool}>
+  <Nip05Tool />
+
+  <Fragment slot="guide">
+    <div class="pt-8 border-t border-slate-100 dark:border-slate-800 space-y-8">
+      
+      <!-- DNS Explanation -->
+      <div class="space-y-4">
+        <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <Globe class="w-4 h-4 text-emerald-500" />
+          <span>NIP-05 DNS Tabanlı Kimlik Doğrulama Nasıl Çalışır?</span>
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-2">
+            <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-mono">1</span>
+              <span>Alan Adı Bağlantısı</span>
+            </span>
+            <p class="leading-relaxed text-slate-500 dark:text-slate-400">
+              Kullanıcı profiline <code class="text-emerald-600 dark:text-emerald-400 font-mono">delirehberi@nostr.org.tr</code> veya <code class="text-purple-600 dark:text-purple-400 font-mono">adiniz@rehber.dev</code> yazar.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-2">
+            <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-mono">2</span>
+              <span>İstemci Sorgusu</span>
+            </span>
+            <p class="leading-relaxed text-slate-500 dark:text-slate-400">
+              İstemci <code class="text-slate-700 dark:text-slate-300 font-mono">https://alanadi/.well-known/nostr.json</code> adresine HTTPS GET isteği yapar.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-2">
+            <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-mono">3</span>
+              <span>Doğrulama Rozeti</span>
+            </span>
+            <p class="leading-relaxed text-slate-500 dark:text-slate-400">
+              Dosyadaki hex public key ile kullanıcının profili eşleşirse mavi doğrulama tiki ve doğrulanmış alan adı görünür.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dedicated rehber.dev Showcase Card -->
+      <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-purple-500/10 via-slate-50 to-indigo-500/10 dark:from-purple-950/40 dark:via-slate-900 dark:to-indigo-950/40 border border-purple-200 dark:border-purple-800/60 shadow-sm space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="space-y-1.5">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+              <Sparkles class="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+              <span>Ücretsiz Topluluk Servisi</span>
+            </div>
+            <h4 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+              Alan Adınız veya Sunucunuz Yok mu?
+            </h4>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed">
+              Kendi alan adınızı satın almadan ve sunucu yapılandırmasıyla uğraşmadan <strong>rehber.dev</strong> üzerinden saniyeler içinde <code class="text-purple-700 dark:text-purple-300 font-mono font-semibold">adınız@rehber.dev</code> NIP-05 kimliği alabilirsiniz.
+            </p>
+          </div>
+
+          <a
+            href="https://rehber.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold text-white bg-purple-600 hover:bg-purple-700 shadow-md shadow-purple-500/20 transition-all active:scale-95 flex-shrink-0 self-start sm:self-auto"
+          >
+            <span>rehber.dev'de Kimlik Al</span>
+            <ExternalLink class="w-4 h-4" />
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+          <div class="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-purple-100 dark:border-purple-900/40 flex items-start gap-2.5">
+            <CheckCircle2 class="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+            <div class="space-y-0.5">
+              <span class="text-xs font-bold text-slate-900 dark:text-white">Ücretsiz NIP-05</span>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400">Damus, Amethyst ve Primal'da doğrulanmış hesap rozeti kazanın.</p>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-purple-100 dark:border-purple-900/40 flex items-start gap-2.5">
+            <Zap class="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
+            <div class="space-y-0.5">
+              <span class="text-xs font-bold text-slate-900 dark:text-white">Lightning Yönlendirme</span>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400">Gelen Zap ödemelerini doğrudan Alby veya WalletOfSatoshi cüzdanınıza iletin.</p>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-purple-100 dark:border-purple-900/40 flex items-start gap-2.5">
+            <ShieldCheck class="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
+            <div class="space-y-0.5">
+              <span class="text-xs font-bold text-slate-900 dark:text-white">Sıfır Sunucu Ayarı</span>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400">CORS başlığı, HTTPS veya nostr.json yükleme gerektirmez.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </Fragment>
+</ToolLayout>

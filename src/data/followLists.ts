@@ -77,6 +77,13 @@ export const followCategories: FollowCategory[] = [
     icon: 'GraduationCap',
     profiles: [
       {
+        name: 'Mustafa Akman',
+        npub: 'npub1zyaz5tyawj2k2y7a6wslszy9n329ykkvkz9sfg03czww5dyp8kxqceqj79',
+        nip05: 'mustafaakman@nostr.org.tr',
+        bio: 'Akademik araştırmalar, bilim ve teknoloji.',
+        tags: ['Akademi', 'Research'],
+      },
+      {
         name: 'Nagihan Saka',
         npub: 'npub1trgd8vq9c5dhuzun9f2gha4hcll8dsuhyj873rdp9la0vayqc66sqsqwcj',
         nip05: 'nagihansaka@nostrplebs.com',
@@ -107,6 +114,7 @@ export const followCategories: FollowCategory[] = [
       {
         name: 'Fadime Nur Atsız (delibalized)',
         npub: 'npub1v29jexhde7w6gl6zz2zq9ulasfu8mtr4cdv4mvdueuahh24sg5hsf043ey',
+        nip05: 'fadim@nostr.org.tr',
         bio: 'Nostr Türkiye topluluk üyesi ve öğrenci.',
         tags: ['Community', 'Student'],
       },
@@ -205,6 +213,12 @@ export const followCategories: FollowCategory[] = [
         nip05: 'mimtaner0805@mastodon-com-tr.mostr.pub',
         bio: 'Nostr & Fediverse/Mastodon köprü paylaşımları.',
         tags: ['Fediverse', 'Mostr'],
+      },
+      {
+        name: 'ProfAnarch',
+        npub: 'npub1e7dsdk7muyx80cra5lyxjwjl6nxshal7v46fj0yt4pawf4jqpsrsk7u0wq',
+        bio: 'Propertarianism, Privacy and Freedom Supremacism, Anarchism, Therefore Monero.',
+        tags: ['Privacy', 'Freedom', 'Ecosystem'],
       },
     ],
   },

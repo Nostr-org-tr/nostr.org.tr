@@ -1,0 +1,419 @@
+---
+import { MessageSquare, Send, Sparkles, AlertCircle, ExternalLink, RefreshCw } from 'lucide-astro';
+import { BLOG_COMMENT_RELAYS, NOSTR_CLIENT_BRIDGES } from '../../data/blogConfig';
+
+interface Props {
+  eventId: string;
+  authorPubkey: string;
+  dTag: string;
+  naddr?: string;
+}
+
+const { eventId, authorPubkey, dTag, naddr = '' } = Astro.props;
+const aCoordinate = `30023:${authorPubkey}:${dTag}`;
+---
+
+<section class="mt-12 pt-12 border-t border-slate-200/80 dark:border-slate-800" id="comments">
+  <!-- Section Title -->
+  <div class="flex items-center justify-between gap-4 mb-8">
+    <div class="flex items-center gap-3">
+      <div class="p-2.5 rounded-2xl bg-nostr-100 dark:bg-nostr-900/60 text-nostr-600 dark:text-nostr-300 border border-nostr-200 dark:border-nostr-800">
+        <MessageSquare class="w-5 h-5" />
+      </div>
+      <div>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+          Yorumlar & Tartışma
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+          NIP-22 & NIP-10 protokolü üzerinden rölelerden canlı çekilmektedir.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <span id="comment-count-badge" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+        0 Yorum
+      </span>
+      <button
+        type="button"
+        id="btn-refresh-comments"
+        class="p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+        title="Yorumları Yenile"
+        aria-label="Yorumları Yenile"
+      >
+        <RefreshCw class="w-4 h-4" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Interactive Comment Form (NIP-22 & NIP-07) -->
+  <div class="bg-white dark:bg-slate-900/90 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-8 mb-10">
+    <div class="flex items-center justify-between gap-2 mb-4">
+      <h3 class="text-base font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+        <Sparkles class="w-4 h-4 text-nostr-500" />
+        <span>Nostr ile Yorum Yap (NIP-22)</span>
+      </h3>
+      <span class="text-xs text-slate-400 font-mono hidden sm:inline">
+        kind: 1111
+      </span>
+    </div>
+
+    <form id="nostr-comment-form" class="space-y-4">
+      <textarea
+        id="comment-content"
+        rows="4"
+        required
+        placeholder="Düşüncelerinizi paylaşın... (Nostr anahtarınızla NIP-07 üzerinden imzalanacaktır)"
+        class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-nostr-500 focus:border-transparent transition-all resize-y"
+      ></textarea>
+
+      <!-- Status Banner -->
+      <div id="comment-form-status" class="hidden text-xs p-3 rounded-xl"></div>
+
+      <!-- Action Bar -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div class="text-[11px] text-slate-500 dark:text-slate-400">
+          NIP-07 eklentiniz (Alby, nos2x vb.) ile imzalanarak rölelere dağıtılır.
+        </div>
+
+        <button
+          type="submit"
+          id="btn-submit-comment"
+          class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold bg-nostr-600 hover:bg-nostr-700 text-white shadow-sm hover:shadow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <Send class="w-4 h-4" />
+          <span>İmzala ve Gönder</span>
+        </button>
+      </div>
+    </form>
+
+    <!-- Fallback Notice for Non-Extension Users -->
+    <div id="no-extension-notice" class="hidden mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+      <div class="flex items-start gap-2.5 text-xs text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 p-3.5 rounded-2xl border border-amber-200 dark:border-amber-800/60">
+        <AlertCircle class="w-4 h-4 flex-shrink-0 mt-0.5" />
+        <div class="space-y-1.5">
+          <p>
+            Tarayıcınızda aktif bir Nostr eklentisi (Alby, nos2x) bulunamadı. Doğrudan bu sayfadan yorum yapabilmek için bir Nostr eklentisi kullanabilir veya aşağıdaki istemcilerden yorum yazabilirsiniz:
+          </p>
+          {naddr && (
+            <div class="flex flex-wrap gap-2 pt-1">
+              {NOSTR_CLIENT_BRIDGES.slice(0, 2).map((client) => (
+                <a
+                  href={client.urlTemplate(naddr)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium hover:text-nostr-600 transition-colors shadow-xs"
+                >
+                  <span>{client.name} Üzerinden Yorum Yap</span>
+                  <ExternalLink class="w-3 h-3" />
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Comments Container -->
+  <div id="comments-container" class="space-y-4">
+    <!-- Loading skeleton -->
+    <div id="comments-loading" class="p-8 text-center bg-white dark:bg-slate-900/60 rounded-3xl border border-slate-200/80 dark:border-slate-800">
+      <div class="inline-block animate-spin w-6 h-6 border-2 border-nostr-500 border-t-transparent rounded-full mb-3"></div>
+      <p class="text-sm font-medium text-slate-600 dark:text-slate-400">
+        Rölelerden yorumlar canlı getiriliyor...
+      </p>
+    </div>
+
+    <!-- Empty State -->
+    <div id="comments-empty" class="hidden p-8 text-center bg-white dark:bg-slate-900/60 rounded-3xl border border-slate-200/80 dark:border-slate-800">
+      <MessageSquare class="w-8 h-8 mx-auto text-slate-300 dark:text-slate-600 mb-2" />
+      <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
+        Henüz bu yazıya yorum yapılmamış.
+      </p>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+        İlk yorumu yapan siz olun!
+      </p>
+    </div>
+
+    <!-- Live comments list will be rendered here -->
+    <div id="comments-list" class="space-y-4"></div>
+  </div>
+</section>
+
+<script is:inline define:vars={{ eventId, authorPubkey, dTag, aCoordinate, relays: BLOG_COMMENT_RELAYS }}>
+  (function () {
+    const commentsList = document.getElementById('comments-list');
+    const loadingEl = document.getElementById('comments-loading');
+    const emptyEl = document.getElementById('comments-empty');
+    const countBadge = document.getElementById('comment-count-badge');
+    const refreshBtn = document.getElementById('btn-refresh-comments');
+    const form = document.getElementById('nostr-comment-form');
+    const commentInput = document.getElementById('comment-content');
+    const submitBtn = document.getElementById('btn-submit-comment');
+    const statusEl = document.getElementById('comment-form-status');
+    const noExtNotice = document.getElementById('no-extension-notice');
+
+    const receivedComments = new Map();
+    const profileCache = new Map();
+    let activeSockets = [];
+
+    // Format Relative Time
+    function formatTime(timestamp) {
+      const now = Math.floor(Date.now() / 1000);
+      const diff = Math.max(0, now - timestamp);
+      if (diff < 60) return 'Az önce';
+      if (diff < 3600) return `${Math.floor(diff / 60)} dk önce`;
+      if (diff < 86400) return `${Math.floor(diff / 3600)} saat önce`;
+      const date = new Date(timestamp * 1000);
+      return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    // Escape HTML safely
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str || '';
+      return div.innerHTML;
+    }
+
+    // Render single comment element
+    function renderCommentCard(event) {
+      const pubkey = event.pubkey;
+      const profile = profileCache.get(pubkey) || {};
+      const displayName = profile.display_name || profile.name || `${pubkey.slice(0, 8)}...${pubkey.slice(-4)}`;
+      const avatarUrl = profile.picture || profile.image || '';
+      const nip05 = profile.nip05 || '';
+      const initial = displayName.charAt(0).toUpperCase();
+
+      const card = document.createElement('div');
+      card.id = `comment-${event.id}`;
+      card.className = 'bg-white dark:bg-slate-900/90 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs transition-all';
+      
+      card.innerHTML = `
+        <div class="flex items-start gap-3.5">
+          <div class="w-10 h-10 rounded-xl bg-nostr-100 dark:bg-nostr-900/60 text-nostr-600 dark:text-nostr-300 flex items-center justify-center font-bold text-sm overflow-hidden flex-shrink-0 border border-nostr-200 dark:border-nostr-800">
+            ${avatarUrl ? `<img src="${escapeHtml(avatarUrl)}" alt="${escapeHtml(displayName)}" class="w-full h-full object-cover" onerror="this.remove()" />` : initial}
+          </div>
+          <div class="flex-grow min-w-0">
+            <div class="flex flex-wrap items-center justify-between gap-1 mb-1">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="font-semibold text-sm text-slate-900 dark:text-white truncate">${escapeHtml(displayName)}</span>
+                ${nip05 ? `<span class="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-mono truncate max-w-[150px]">${escapeHtml(nip05)}</span>` : ''}
+              </div>
+              <time class="text-xs text-slate-400 font-mono flex-shrink-0">${formatTime(event.created_at)}</time>
+            </div>
+            <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap break-words mt-2">${escapeHtml(event.content)}</p>
+          </div>
+        </div>
+      `;
+      return card;
+    }
+
+    // Update comments DOM
+    function updateCommentsView() {
+      if (!commentsList) return;
+      loadingEl?.classList.add('hidden');
+
+      const sorted = Array.from(receivedComments.values()).sort((a, b) => b.created_at - a.created_at);
+
+      if (countBadge) {
+        countBadge.textContent = `${sorted.length} Yorum`;
+      }
+
+      if (sorted.length === 0) {
+        emptyEl?.classList.remove('hidden');
+        commentsList.innerHTML = '';
+        return;
+      }
+
+      emptyEl?.classList.add('hidden');
+      commentsList.innerHTML = '';
+      sorted.forEach((event) => {
+        commentsList.appendChild(renderCommentCard(event));
+      });
+    }
+
+    // Fetch commenter profiles (kind 0)
+    function fetchProfiles(pubkeys) {
+      if (!pubkeys || !pubkeys.length) return;
+      const needed = pubkeys.filter((pk) => !profileCache.has(pk));
+      if (!needed.length) return;
+
+      const subId = 'cp_' + Math.random().toString(36).slice(2, 7);
+      const relay = relays[0] || 'wss://relay.nostr.org.tr';
+
+      try {
+        const ws = new WebSocket(relay);
+        ws.onopen = () => {
+          ws.send(JSON.stringify(['REQ', subId, { kinds: [0], authors: needed }]));
+        };
+        ws.onmessage = (msg) => {
+          try {
+            const data = JSON.parse(msg.data);
+            if (Array.isArray(data) && data[0] === 'EVENT' && data[1] === subId && data[2]?.kind === 0) {
+              const meta = JSON.parse(data[2].content);
+              profileCache.set(data[2].pubkey, meta);
+              updateCommentsView();
+            }
+          } catch {}
+        };
+        setTimeout(() => {
+          try {
+            if (ws.readyState === WebSocket.OPEN) {
+              ws.send(JSON.stringify(['CLOSE', subId]));
+            }
+            ws.close();
+          } catch {}
+        }, 4000);
+      } catch {}
+    }
+
+    // Connect & subscribe to relays
+    function subscribeComments() {
+      // Clear sockets
+      activeSockets.forEach((ws) => {
+        try { ws.close(); } catch {}
+      });
+      activeSockets = [];
+
+      loadingEl?.classList.remove('hidden');
+      emptyEl?.classList.add('hidden');
+
+      const subId = 'cm_' + Math.random().toString(36).slice(2, 7);
+      const newPubkeys = new Set();
+
+      const filters = [
+        // NIP-22 Kind 1111 with 'A' and 'E' tags
+        { kinds: [1111], '#A': [aCoordinate] },
+        { kinds: [1111], '#E': [eventId] },
+        // Legacy Kind 1 replies with 'a' and 'e' tags
+        { kinds: [1], '#a': [aCoordinate] },
+        { kinds: [1], '#e': [eventId] },
+      ];
+
+      relays.forEach((relayUrl) => {
+        try {
+          const ws = new WebSocket(relayUrl);
+          activeSockets.push(ws);
+
+          ws.onopen = () => {
+            filters.forEach((filter, idx) => {
+              ws.send(JSON.stringify(['REQ', `${subId}_${idx}`, filter]));
+            });
+          };
+
+          ws.onmessage = (msg) => {
+            try {
+              const data = JSON.parse(msg.data);
+              if (!Array.isArray(data)) return;
+
+              const [type, reqSubId, event] = data;
+              if (type === 'EVENT' && typeof reqSubId === 'string' && reqSubId.startsWith(subId) && event && event.content) {
+                if (!receivedComments.has(event.id)) {
+                  receivedComments.set(event.id, event);
+                  newPubkeys.add(event.pubkey);
+                  updateCommentsView();
+                }
+              }
+            } catch {}
+          };
+        } catch {}
+      });
+
+      // Cleanup subscription after 6s and fetch profiles
+      setTimeout(() => {
+        loadingEl?.classList.add('hidden');
+        if (newPubkeys.size > 0) {
+          fetchProfiles(Array.from(newPubkeys));
+        }
+        updateCommentsView();
+      }, 5000);
+    }
+
+    // Refresh listener
+    refreshBtn?.addEventListener('click', () => {
+      subscribeComments();
+    });
+
+    // Form Submission & NIP-07 Signing
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const content = commentInput?.value.trim();
+      if (!content) return;
+
+      // Check NIP-07 extension
+      if (typeof window.nostr === 'undefined') {
+        noExtNotice?.classList.remove('hidden');
+        if (statusEl) {
+          statusEl.className = 'text-xs p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 block';
+          statusEl.textContent = 'Nostr tarayıcı eklentisi (Alby, nos2x vb.) bulunamadı. Lütfen eklentinizi kontrol edin veya istemcilerden yorum yazın.';
+        }
+        return;
+      }
+
+      submitBtn.disabled = true;
+      if (statusEl) {
+        statusEl.className = 'text-xs p-3 rounded-xl bg-nostr-50 dark:bg-nostr-950/40 text-nostr-700 dark:text-nostr-300 border border-nostr-200 dark:border-nostr-800 block';
+        statusEl.textContent = 'Eklentinizden imza onayı bekleniyor...';
+      }
+
+      try {
+        const userPubkey = await window.nostr.getPublicKey();
+        const now = Math.floor(Date.now() / 1000);
+
+        // NIP-22 Kind 1111 Comment Event Payload
+        const eventTemplate = {
+          kind: 1111,
+          created_at: now,
+          pubkey: userPubkey,
+          tags: [
+            ['A', aCoordinate, 'wss://relay.nostr.org.tr'],
+            ['E', eventId, 'wss://relay.nostr.org.tr', authorPubkey],
+            ['a', aCoordinate, 'wss://relay.nostr.org.tr'],
+            ['e', eventId, 'wss://relay.nostr.org.tr', authorPubkey],
+            ['p', authorPubkey, 'wss://relay.nostr.org.tr'],
+            ['k', '30023'],
+            ['client', 'nostr.org.tr'],
+          ],
+          content: content,
+        };
+
+        const signedEvent = await window.nostr.signEvent(eventTemplate);
+
+        // Broadcast to all relays
+        relays.forEach((rUrl) => {
+          try {
+            const ws = new WebSocket(rUrl);
+            ws.onopen = () => {
+              ws.send(JSON.stringify(['EVENT', signedEvent]));
+              setTimeout(() => { try { ws.close(); } catch {} }, 2000);
+            };
+          } catch {}
+        });
+
+        // Optimistic UI update
+        receivedComments.set(signedEvent.id, signedEvent);
+        updateCommentsView();
+        fetchProfiles([signedEvent.pubkey]);
+
+        // Reset form
+        commentInput.value = '';
+        if (statusEl) {
+          statusEl.className = 'text-xs p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 block';
+          statusEl.textContent = 'Yorumunuz başarıyla imzalandı ve rölelere iletildi!';
+          setTimeout(() => { statusEl.classList.add('hidden'); }, 4000);
+        }
+      } catch (err) {
+        if (statusEl) {
+          statusEl.className = 'text-xs p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800 block';
+          statusEl.textContent = 'İmzalama iptal edildi veya bir hata oluştu: ' + (err?.message || err);
+        }
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+
+    // Initialize on load
+    subscribeComments();
+  })();
+</script>

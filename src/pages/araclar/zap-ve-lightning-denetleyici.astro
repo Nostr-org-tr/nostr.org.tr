@@ -1,0 +1,43 @@
+---
+import ToolLayout from '../../components/tools/ToolLayout.astro';
+import ZapCheckerTool from '../../components/tools/ZapCheckerTool.astro';
+import { nostrTools } from '../../data/tools';
+import { Zap, Coins, CheckCircle2 } from 'lucide-astro';
+
+const tool = nostrTools.find((t) => t.id === 'zap-ve-lightning-denetleyici')!;
+---
+
+<ToolLayout tool={tool}>
+  <ZapCheckerTool />
+
+  <Fragment slot="guide">
+    <div class="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-6">
+      <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+        <Zap class="w-4 h-4 text-amber-500" />
+        <span>NIP-57 Zaps ve LNURL-pay Nasıl Çalışır?</span>
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-2">
+          <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+            <Coins class="w-4 h-4 text-amber-500" />
+            <span>Zap Request (kind:9734)</span>
+          </span>
+          <p class="leading-relaxed text-slate-500 dark:text-slate-400">
+            Kullanıcı bir gönderiyi zaplamak istediğinde, istemci gönderi ID'sini ve miktarını içeren bir <code class="text-amber-600 dark:text-amber-400 font-mono">kind:9734</code> zap isteği oluşturur ve bunu LNURL-pay geri çağırma (callback) adresine iletir.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-2">
+          <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+            <CheckCircle2 class="w-4 h-4 text-emerald-500" />
+            <span>Zap Receipt (kind:9735)</span>
+          </span>
+          <p class="leading-relaxed text-slate-500 dark:text-slate-400">
+            Fatura ödendiğinde Lightning cüzdan sunucusu (nostrPubkey ile yetkili), ödemenin tamamlandığını kanıtlayan <code class="text-emerald-600 dark:text-emerald-400 font-mono">kind:9735</code> makbuzunu Nostr rölelerinde yayınlar.
+          </p>
+        </div>
+      </div>
+    </div>
+  </Fragment>
+</ToolLayout>

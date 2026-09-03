@@ -125,32 +125,40 @@ export function applyProfileToElement(card: HTMLElement, meta: NostrProfileMeta)
 
   // 1. Avatar Picture
   const pictureUrl = (meta.picture || meta.image || '').trim();
-  if (pictureUrl && pictureUrl.startsWith('http')) {
+  if (pictureUrl && (pictureUrl.startsWith('http://') || pictureUrl.startsWith('https://'))) {
     const avatarImg = card.querySelector<HTMLImageElement>('.member-avatar, .profile-avatar');
     const monogram = card.querySelector<HTMLElement>('.member-monogram, .profile-monogram');
 
     if (avatarImg) {
-      avatarImg.onload = () => {
+      avatarImg.referrerPolicy = 'no-referrer';
+
+      const revealAvatar = () => {
         avatarImg.classList.remove('hidden');
         if (monogram) monogram.classList.add('hidden');
       };
-      avatarImg.onerror = () => {
+
+      const hideAvatar = () => {
         avatarImg.classList.add('hidden');
         if (monogram) monogram.classList.remove('hidden');
       };
+
+      avatarImg.onload = () => {
+        if (avatarImg.naturalWidth > 0) {
+          revealAvatar();
+        } else {
+          hideAvatar();
+        }
+      };
+
+      avatarImg.onerror = hideAvatar;
 
       if (avatarImg.src !== pictureUrl) {
         avatarImg.src = pictureUrl;
       }
 
-      if (avatarImg.complete) {
-        if (avatarImg.naturalWidth > 0) {
-          avatarImg.classList.remove('hidden');
-          if (monogram) monogram.classList.add('hidden');
-        } else {
-          avatarImg.classList.add('hidden');
-          if (monogram) monogram.classList.remove('hidden');
-        }
+      // If image is already fully decoded in memory cache
+      if (avatarImg.complete && avatarImg.naturalWidth > 0) {
+        revealAvatar();
       }
     }
   }

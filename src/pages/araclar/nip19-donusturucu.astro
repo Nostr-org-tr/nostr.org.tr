@@ -1,0 +1,43 @@
+---
+import ToolLayout from '../../components/tools/ToolLayout.astro';
+import Nip19Tool from '../../components/tools/Nip19Tool.astro';
+import { nostrTools } from '../../data/tools';
+import { BookOpen, Key, Link2 } from 'lucide-astro';
+
+const tool = nostrTools.find((t) => t.id === 'nip19-donusturucu')!;
+---
+
+<ToolLayout tool={tool}>
+  <Nip19Tool />
+
+  <Fragment slot="guide">
+    <div class="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-6">
+      <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+        <BookOpen class="w-4 h-4 text-nostr-500" />
+        <span>NIP-19 ve NIP-21 Formatları Hakkında Kapsamlı Rehber</span>
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-2">
+          <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+            <Key class="w-4 h-4 text-nostr-500" />
+            <span>NIP-19: Bech32 Kodlama Standardı</span>
+          </span>
+          <p class="leading-relaxed text-slate-500 dark:text-slate-400">
+            Ham 32-byte hex anahtarlar (ör: <code class="text-slate-700 dark:text-slate-300">46f3c7...</code>) kopyalanırken veya okunurken harf hatalarına açıktır. NIP-19 ile anahtarlar <code class="text-nostr-600 dark:text-nostr-400 font-mono">npub1...</code> ve <code class="text-rose-600 dark:text-rose-400 font-mono">nsec1...</code> gibi insan dostu öneklerle kodlanır ve dahili checksum (hata kontrolü) barındırır.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-2">
+          <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+            <Link2 class="w-4 h-4 text-indigo-500" />
+            <span>NIP-21: Evrensel nostr:... URI Protokolü</span>
+          </span>
+          <p class="leading-relaxed text-slate-500 dark:text-slate-400">
+            Web sitelerinde bir Nostr profiline veya gönderisine bağlantı verirken standart web linkleri yerine <code class="text-indigo-600 dark:text-indigo-400 font-mono">nostr:npub1...</code> URI'si kullanılır. Kullanıcı tıkladığında cihazında kurulu olan Nostr istemcisi (Damus, Amethyst, Coracle vb.) doğrudan açılır.
+          </p>
+        </div>
+      </div>
+    </div>
+  </Fragment>
+</ToolLayout>

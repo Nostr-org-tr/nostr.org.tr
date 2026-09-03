@@ -13,6 +13,16 @@ export interface ProjectItem {
 
 export const projects: ProjectItem[] = [
   {
+    name: 'rehber.dev',
+    category: 'Tool',
+    description: 'Nostr hesabınız için ücretsiz adınız@rehber.dev NIP-05 doğrulanmış kimliği ve Alby / WalletOfSatoshi cüzdanınıza anlık Lightning adres yönlendiricisi.',
+    url: 'https://rehber.dev',
+    previewUrl: 'https://rehber.dev',
+    isFeatured: true,
+    author: 'Emre Yılmaz (@delirehberi)',
+    tags: ['NIP-05', 'NIP-57', 'Lightning', 'LUD-16', 'Identity', 'Tool'],
+  },
+  {
     name: 'Snippets',
     category: 'Tool',
     description: 'An open-source, decentralized code snippet sharing platform built on Nostr (NIP-C0: kind:1337), powered by Cloudflare Workers, Hono, React 19, and Tailwind CSS.',

@@ -1,0 +1,425 @@
+---
+import { 
+  Code2
+} from 'lucide-astro';
+---
+
+<div class="event-verifier-card rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+  
+  <!-- Header Strip -->
+  <div class="p-6 sm:p-7 bg-slate-50/80 dark:bg-slate-950/70 border-b border-slate-200/80 dark:border-slate-800/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="space-y-1">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-nostr-100 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400 border border-nostr-200 dark:border-nostr-800">
+        <Code2 class="w-3.5 h-3.5" />
+        <span>NIP-01 Kanonik Hash & BIP-340 İmza Denetleyici</span>
+      </div>
+      <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+        Nostr Event JSON Doğrulayıcı & Detaylı İnceleyici
+      </h2>
+      <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+        Ham Nostr event JSON dizisini yapıştırın; SHA-256 ID bütünlüğünü ve Schnorr imzasını anında doğrulayın.
+      </p>
+    </div>
+
+    <!-- Quick Samples -->
+    <div class="flex flex-wrap items-center gap-1.5 text-xs">
+      <span class="text-slate-400 dark:text-slate-500 text-[11px] font-medium mr-1">Örnekler:</span>
+      <button 
+        type="button" 
+        class="sample-event-btn px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-nostr-400 text-[11px] font-mono transition-colors"
+        data-kind="1"
+      >
+        Kind:1 (Not)
+      </button>
+      <button 
+        type="button" 
+        class="sample-event-btn px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-nostr-400 text-[11px] font-mono transition-colors"
+        data-kind="0"
+      >
+        Kind:0 (Profil)
+      </button>
+      <button 
+        type="button" 
+        class="sample-event-btn px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-nostr-400 text-[11px] font-mono transition-colors"
+        data-kind="30023"
+      >
+        Kind:30023 (Makale)
+      </button>
+    </div>
+  </div>
+
+  <div class="p-6 sm:p-8 space-y-6">
+    
+    <!-- Input Section -->
+    <div class="space-y-2">
+      <div class="flex items-center justify-between">
+        <label for="event-json-input" class="block text-sm font-semibold text-slate-800 dark:text-slate-200">
+          Nostr Event JSON
+        </label>
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            id="btn-event-paste"
+            class="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200"
+          >
+            Yapıştır
+          </button>
+          <button
+            type="button"
+            id="btn-event-clear"
+            class="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-800"
+          >
+            Temizle
+          </button>
+        </div>
+      </div>
+
+      <textarea
+        id="event-json-input"
+        rows="8"
+        placeholder='{\n  "id": "...",\n  "pubkey": "...",\n  "created_at": 1700000000,\n  "kind": 1,\n  "tags": [],\n  "content": "Hello Nostr!",\n  "sig": "..."\n}'
+        spellcheck="false"
+        class="w-full p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-nostr-500/50 focus:border-nostr-500 transition-all placeholder:text-slate-400"
+      ></textarea>
+    </div>
+
+    <!-- Diagnostic & Verification Output -->
+    <div id="event-diag-box" class="space-y-6">
+      
+      <!-- Status Banner -->
+      <div id="event-status-banner" class="p-4 sm:p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm">
+        <div class="flex items-center gap-3">
+          <div id="event-status-icon"></div>
+          <div>
+            <h3 id="event-status-title" class="font-bold">JSON bekleniyor...</h3>
+            <p id="event-status-desc" class="text-xs opacity-90 mt-0.5">Yukarıdaki alana bir Nostr etkinliği yapıştırın.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Verification Checklist -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
+        <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+          <span class="text-slate-600 dark:text-slate-400">1. JSON Sözdizimi:</span>
+          <span id="chk-json" class="font-bold text-slate-400">Bekleniyor</span>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+          <span class="text-slate-600 dark:text-slate-400">2. SHA-256 ID Eşleşmesi:</span>
+          <span id="chk-id" class="font-bold text-slate-400">Bekleniyor</span>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+          <span class="text-slate-600 dark:text-slate-400">3. Schnorr İmzası (sig):</span>
+          <span id="chk-sig" class="font-bold text-slate-400">Bekleniyor</span>
+        </div>
+      </div>
+
+      <!-- Humanized Event Breakdown -->
+      <div id="event-details-card" class="hidden p-6 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-5">
+        
+        <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+          <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+            Etkinlik Özeti & Anlamsal Analizi
+          </span>
+          <span id="kind-badge" class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-nostr-100 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400 border border-nostr-200 dark:border-nostr-800"></span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
+          <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span class="text-slate-400 text-[11px] block">Yazar (Pubkey / npub)</span>
+            <span id="meta-pubkey" class="text-slate-800 dark:text-slate-200 font-semibold select-all break-all block"></span>
+          </div>
+          <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span class="text-slate-400 text-[11px] block">Oluşturulma Zamanı (created_at)</span>
+            <span id="meta-time" class="text-slate-800 dark:text-slate-200 font-semibold block"></span>
+          </div>
+        </div>
+
+        <!-- Tags Table -->
+        <div id="tags-section" class="space-y-2">
+          <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">
+            Etiketler (Tags Array)
+          </span>
+          <div id="tags-container" class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
+            <table class="w-full text-left text-xs font-mono">
+              <thead class="bg-slate-100 dark:bg-slate-950 text-slate-500 border-b border-slate-200 dark:border-slate-800">
+                <tr>
+                  <th class="p-2.5 w-24">Etiket</th>
+                  <th class="p-2.5">Değer / Hedef</th>
+                  <th class="p-2.5">Açıklama</th>
+                </tr>
+              </thead>
+              <tbody id="tags-tbody" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Content Preview Box -->
+        <div class="space-y-2">
+          <span class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">
+            İçerik Gövdesi (content)
+          </span>
+          <pre class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-x-auto text-xs font-mono text-slate-800 dark:text-slate-200 leading-relaxed"><code id="content-preview"></code></pre>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+  import { verifyEvent, nip19, getEventHash } from 'nostr-tools';
+
+  const SAMPLE_EVENTS: Record<string, any> = {
+    '1': {
+      "id": "e0e8ad8234384b648ff08ddcf68e31dcce411ee6ec2951e70abf55f269a927fa",
+      "pubkey": "46f3c7bb33cc3019049b76dc89dbb96e34c247bdda68b6ad8632682793ff8a1a",
+      "created_at": 1700000000,
+      "kind": 1,
+      "tags": [["t", "nostr"], ["t", "turkiye"]],
+      "content": "Nostr protokolü sansürsüz ve özgür bir iletişim ağıdır. Merhaba Türkiye!",
+      "sig": "1287955c4d0a92718e28f118adbc4436573c734994eeb35444a77ad45e143fa58a47898867a54460f7797b5e408ecbbef31b312384a861ecf2ecfbcdb61fbe29"
+    },
+    '0': {
+      "id": "0000000000000000000000000000000000000000000000000000000000000000",
+      "pubkey": "46f3c7bb33cc3019049b76dc89dbb96e34c247bdda68b6ad8632682793ff8a1a",
+      "created_at": 1700000000,
+      "kind": 0,
+      "tags": [],
+      "content": "{\"name\":\"delirehberi\",\"about\":\"Nostr Türkiye Topluluğu kurucusu\",\"nip05\":\"delirehberi@nostr.org.tr\"}",
+      "sig": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    '30023': {
+      "id": "0000000000000000000000000000000000000000000000000000000000000000",
+      "pubkey": "46f3c7bb33cc3019049b76dc89dbb96e34c247bdda68b6ad8632682793ff8a1a",
+      "created_at": 1700000000,
+      "kind": 30023,
+      "tags": [["d", "nostr-rehberi"], ["title", "Nostr Başlangıç Kılavuzu"]],
+      "content": "# Nostr Nedir?\nNostr, röleler ve açık anahtarlar üzerinden çalışan merkeziyetsiz bir protokoldür.",
+      "sig": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    }
+  };
+
+  const KIND_DESCRIPTIONS: Record<number, string> = {
+    0: 'Profil Meta Verisi (Metadata)',
+    1: 'Kısa Metin Notu (Short Text Note)',
+    3: 'Takip & Kişi Listesi (Follow List)',
+    4: 'NIP-04 Şifreli Doğrudan Mesaj (Legacy DM)',
+    6: 'Yeniden Paylaşım (Repost)',
+    7: 'Reaksiyon (Reaction / Like)',
+    8: 'Rozet Ödülü (Badge Award)',
+    1984: 'Raporlama (Reporting)',
+    9734: 'Zap İsteği (Zap Request)',
+    9735: 'Zap Makbuzu (Zap Receipt)',
+    10002: 'Röle Listesi Meta Verisi (NIP-65)',
+    30023: 'Uzun Makale (Long-form Article)',
+  };
+
+  const initEventVerifier = () => {
+    const card = document.querySelector('.event-verifier-card');
+    if (!card || card.getAttribute('data-init') === 'true') return;
+    card.setAttribute('data-init', 'true');
+
+    const textarea = card.querySelector('#event-json-input') as HTMLTextAreaElement | null;
+    const btnPaste = card.querySelector('#btn-event-paste');
+    const btnClear = card.querySelector('#btn-event-clear');
+    const sampleBtns = card.querySelectorAll('.sample-event-btn');
+
+    const statusBanner = card.querySelector('#event-status-banner');
+    const statusTitle = card.querySelector('#event-status-title');
+    const statusDesc = card.querySelector('#event-status-desc');
+    const chkJson = card.querySelector('#chk-json');
+    const chkId = card.querySelector('#chk-id');
+    const chkSig = card.querySelector('#chk-sig');
+    const detailsCard = card.querySelector('#event-details-card');
+    const kindBadge = card.querySelector('#kind-badge');
+    const metaPubkey = card.querySelector('#meta-pubkey');
+    const metaTime = card.querySelector('#meta-time');
+    const tagsTbody = card.querySelector('#tags-tbody');
+    const contentPreview = card.querySelector('#content-preview');
+
+    const processEventJson = () => {
+      const raw = (textarea?.value || '').trim();
+
+      if (!raw) {
+        if (statusBanner) {
+          statusBanner.className = 'p-4 sm:p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300';
+        }
+        if (statusTitle) statusTitle.textContent = 'JSON bekleniyor...';
+        if (statusDesc) statusDesc.textContent = 'Yukarıdaki alana bir Nostr etkinliği yapıştırın.';
+        if (chkJson) { chkJson.className = 'font-bold text-slate-400'; chkJson.textContent = 'Bekleniyor'; }
+        if (chkId) { chkId.className = 'font-bold text-slate-400'; chkId.textContent = 'Bekleniyor'; }
+        if (chkSig) { chkSig.className = 'font-bold text-slate-400'; chkSig.textContent = 'Bekleniyor'; }
+        if (detailsCard) detailsCard.classList.add('hidden');
+        return;
+      }
+
+      try {
+        const ev = JSON.parse(raw);
+        if (chkJson) {
+          chkJson.className = 'font-bold text-emerald-500';
+          chkJson.textContent = '✓ Geçerli JSON';
+        }
+
+        // Validate basic fields
+        if (typeof ev.kind !== 'number' || !ev.pubkey || typeof ev.created_at !== 'number') {
+          throw new Error('NIP-01 zorunlu alanları (kind, pubkey, created_at) eksik');
+        }
+
+        // Calculate event ID
+        let calculatedId = '';
+        try {
+          calculatedId = getEventHash(ev);
+        } catch (e: any) {
+          calculatedId = 'Hesaplanamadı';
+        }
+
+        const isIdValid = calculatedId === ev.id;
+        if (chkId) {
+          if (isIdValid) {
+            chkId.className = 'font-bold text-emerald-500';
+            chkId.textContent = '✓ Eşleşti (SHA-256)';
+          } else {
+            chkId.className = 'font-bold text-rose-500';
+            chkId.textContent = '✕ Uyuşmuyor!';
+          }
+        }
+
+        // Validate Schnorr Signature
+        let isSigValid = false;
+        try {
+          isSigValid = verifyEvent(ev);
+        } catch (e) {
+          isSigValid = false;
+        }
+
+        if (chkSig) {
+          if (isSigValid) {
+            chkSig.className = 'font-bold text-emerald-500';
+            chkSig.textContent = '✓ Geçerli Schnorr';
+          } else {
+            chkSig.className = 'font-bold text-rose-500';
+            chkSig.textContent = '✕ Geçersiz İmza';
+          }
+        }
+
+        if (isIdValid && isSigValid) {
+          if (statusBanner) {
+            statusBanner.className = 'p-4 sm:p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm bg-emerald-50 dark:bg-emerald-950/60 border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200';
+          }
+          if (statusTitle) statusTitle.textContent = '✓ Nostr Etkinliği %100 Doğrulandı';
+          if (statusDesc) statusDesc.textContent = 'Event ID kanonik serileştirmeye ve Schnorr kriptografik imzasına tam uygundur.';
+        } else {
+          if (statusBanner) {
+            statusBanner.className = 'p-4 sm:p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm bg-amber-50 dark:bg-amber-950/60 border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200';
+          }
+          if (statusTitle) statusTitle.textContent = '⚠ Etkinlik Doğrulanamadı';
+          if (statusDesc) statusDesc.textContent = !isIdValid ? 'Event ID formülü eşleşmiyor.' : 'Schnorr imzası (sig) yazar açık anahtarıyla uyuşmuyor.';
+        }
+
+        // Populate details
+        if (detailsCard) detailsCard.classList.remove('hidden');
+        if (kindBadge) {
+          const kName = KIND_DESCRIPTIONS[ev.kind] || 'Özel / Genişletilmiş Tür';
+          kindBadge.textContent = `Kind ${ev.kind}: ${kName}`;
+        }
+
+        if (metaPubkey) {
+          let npub = '';
+          try { npub = nip19.npubEncode(ev.pubkey); } catch (e) {}
+          metaPubkey.innerHTML = `${ev.pubkey}<br/><span class="text-nostr-600 dark:text-nostr-400 text-[11px]">${npub}</span>`;
+        }
+
+        if (metaTime) {
+          const date = new Date(ev.created_at * 1000);
+          metaTime.textContent = `${date.toLocaleString('tr-TR')} (${ev.created_at})`;
+        }
+
+        if (tagsTbody) {
+          tagsTbody.innerHTML = '';
+          const tags: string[][] = Array.isArray(ev.tags) ? ev.tags : [];
+          if (tags.length === 0) {
+            tagsTbody.innerHTML = '<tr><td colspan="3" class="p-3 text-center text-slate-400">Hiç etiket tanımlanmamış.</td></tr>';
+          } else {
+            tags.forEach((t) => {
+              const tagType = t[0] || '';
+              const tagVal = t[1] || '';
+              let tagDesc = 'Özel Parametre';
+              if (tagType === 'p') tagDesc = 'Kullanıcı Bahsetmesi (Pubkey Mention)';
+              else if (tagType === 'e') tagDesc = 'Etkinlik Referansı (Reply / Root Event)';
+              else if (tagType === 't') tagDesc = 'Konu Etiketi (Hashtag)';
+              else if (tagType === 'd') tagDesc = 'Tanımlayıcı (Parameterized ID)';
+              else if (tagType === 'title') tagDesc = 'Başlık';
+
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td class="p-2.5 font-bold text-indigo-600 dark:text-indigo-400">${tagType}</td>
+                <td class="p-2.5 break-all text-slate-800 dark:text-slate-200">${tagVal}</td>
+                <td class="p-2.5 text-slate-500 text-[11px]">${tagDesc}</td>
+              `;
+              tagsTbody.appendChild(tr);
+            });
+          }
+        }
+
+        if (contentPreview) {
+          contentPreview.textContent = ev.content || '(Boş içerik)';
+        }
+
+      } catch (err: any) {
+        if (chkJson) {
+          chkJson.className = 'font-bold text-rose-500';
+          chkJson.textContent = '✕ JSON Hatası';
+        }
+        if (chkId) { chkId.className = 'font-bold text-slate-400'; chkId.textContent = '—'; }
+        if (chkSig) { chkSig.className = 'font-bold text-slate-400'; chkSig.textContent = '—'; }
+        if (statusBanner) {
+          statusBanner.className = 'p-4 sm:p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm bg-rose-50 dark:bg-rose-950/60 border-rose-200 dark:border-rose-800 text-rose-900 dark:text-rose-200';
+        }
+        if (statusTitle) statusTitle.textContent = '✕ Geçersiz JSON Formatı';
+        if (statusDesc) statusDesc.textContent = err.message || 'Sözdizimi hatası.';
+        if (detailsCard) detailsCard.classList.add('hidden');
+      }
+    };
+
+    textarea?.addEventListener('input', processEventJson);
+
+    btnPaste?.addEventListener('click', async () => {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text && textarea) {
+          textarea.value = text.trim();
+          processEventJson();
+        }
+      } catch (e) {}
+    });
+
+    btnClear?.addEventListener('click', () => {
+      if (textarea) {
+        textarea.value = '';
+        processEventJson();
+        textarea.focus();
+      }
+    });
+
+    sampleBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const kind = btn.getAttribute('data-kind');
+        if (kind && SAMPLE_EVENTS[kind] && textarea) {
+          textarea.value = JSON.stringify(SAMPLE_EVENTS[kind], null, 2);
+          processEventJson();
+        }
+      });
+    });
+
+    // Run initial sample if empty
+    if (textarea && !textarea.value) {
+      textarea.value = JSON.stringify(SAMPLE_EVENTS['1'], null, 2);
+      processEventJson();
+    }
+  };
+
+  initEventVerifier();
+  document.addEventListener('astro:after-swap', initEventVerifier);
+</script>
