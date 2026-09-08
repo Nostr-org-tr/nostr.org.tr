@@ -83,6 +83,27 @@ export default {
 
     // Default static asset response with security headers
     const response = await env.ASSETS.fetch(request);
+
+    // If an un-prerendered blog post is requested, fallback to the dynamic real-time Nostr viewer
+    if (response.status === 404 && (normalizedPath.startsWith('/blog/') || normalizedPath.startsWith('/en/blog/'))) {
+      const viewerUrl = new URL('/blog/viewer', request.url);
+      const viewerRequest = new Request(viewerUrl.toString(), request);
+      const viewerResponse = await env.ASSETS.fetch(viewerRequest);
+
+      if (viewerResponse.status === 200) {
+        const viewerHeaders = new Headers(viewerResponse.headers);
+        for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
+          viewerHeaders.set(key, value);
+        }
+        viewerHeaders.set('Cache-Control', 'no-cache');
+        return new Response(viewerResponse.body, {
+          status: 200,
+          statusText: 'OK',
+          headers: viewerHeaders,
+        });
+      }
+    }
+
     const newHeaders = new Headers(response.headers);
 
     for (const [key, value] of Object.entries(SECURITY_HEADERS)) {

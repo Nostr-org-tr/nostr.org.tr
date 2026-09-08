@@ -39,9 +39,11 @@ export const BLOG_AUTHORS: BlogAuthor[] = members.map((m) => {
 // Target hashtags for filtering community long-form articles (NIP-23 kind 30023)
 export const BLOG_TAGS = ['nostrorgtr', 'nostrturkiye', 'nostr-tr'];
 
-// Dedicated relay pool for fetching community blog articles (strictly relay.nostr.org.tr)
+// Dedicated relay pool for fetching community blog articles
 export const BLOG_FETCH_RELAYS = [
   'wss://relay.nostr.org.tr',
+  'wss://relay.damus.io',
+  'wss://nos.lol',
 ];
 
 // Default alias for fetching

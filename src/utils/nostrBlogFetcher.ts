@@ -288,7 +288,7 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
           resolve();
         };
 
-        const timeout = setTimeout(cleanup, 4000);
+        const timeout = setTimeout(cleanup, 8500);
 
         try {
           ws = new WebSocket(relayUrl);
@@ -371,7 +371,7 @@ export async function fetchBlogPosts(): Promise<BlogPost[]> {
             }
             resolve();
           };
-          const timeout = setTimeout(cleanup, 3000);
+          const timeout = setTimeout(cleanup, 6500);
 
           try {
             ws = new WebSocket(relayUrl);

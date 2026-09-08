@@ -16,6 +16,8 @@ const CACHE_FILE_PATH = path.resolve(__dirname, '../src/data/blogCache.json');
 const BLOG_TAGS = ['nostrorgtr', 'nostrturkiye', 'nostr-tr'];
 const BLOG_RELAYS = [
   'wss://relay.nostr.org.tr',
+  'wss://relay.damus.io',
+  'wss://nos.lol',
 ];
 
 const ALPHABET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
@@ -161,7 +163,7 @@ async function syncNostrBlog() {
         resolve();
       };
 
-      const timeout = setTimeout(cleanup, 4500);
+      const timeout = setTimeout(cleanup, 9000);
 
       try {
         ws = new WebSocket(relayUrl);
@@ -251,7 +253,7 @@ async function syncNostrBlog() {
           resolve();
         };
 
-        const timeout = setTimeout(cleanup, 3500);
+        const timeout = setTimeout(cleanup, 6500);
 
         try {
           ws = new WebSocket(relayUrl);
@@ -363,6 +365,18 @@ async function syncNostrBlog() {
 
   // Sort by publishedAt descending
   posts.sort((a, b) => b.publishedAt - a.publishedAt);
+
+  if (posts.length === 0) {
+    if (fs.existsSync(CACHE_FILE_PATH)) {
+      try {
+        const existingData = JSON.parse(fs.readFileSync(CACHE_FILE_PATH, 'utf-8'));
+        if (Array.isArray(existingData) && existingData.length > 0) {
+          console.warn(`⚠️ Warning: No articles fetched from relays, preserving existing cache with ${existingData.length} articles.`);
+          return;
+        }
+      } catch {}
+    }
+  }
 
   // Write to cache file
   fs.writeFileSync(CACHE_FILE_PATH, JSON.stringify(posts, null, 2) + '\n');

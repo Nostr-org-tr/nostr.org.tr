@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Compass, BookOpen, Home } from 'lucide-astro';
+---
+
+<Layout
+  title="Sayfa Bulunamadı (404) - Nostr Türkiye"
+  description="Aradığınız sayfa taşınmış, silinmiş veya hiç var olmamış olabilir."
+>
+  <div class="relative overflow-hidden min-h-[70vh] flex items-center justify-center px-4 py-20 sm:px-6 lg:px-8">
+    <!-- Ambient background glow -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-nostr-500/10 dark:bg-nostr-500/5 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+    <div class="max-w-lg w-full text-center space-y-8">
+      <!-- 404 Badge & Icon -->
+      <div class="inline-flex flex-col items-center">
+        <div class="w-20 h-20 rounded-3xl bg-nostr-50 dark:bg-nostr-950/70 border border-nostr-200 dark:border-nostr-800 text-nostr-600 dark:text-nostr-400 flex items-center justify-center shadow-sm mb-4">
+          <Compass class="w-10 h-10 animate-spin-slow" />
+        </div>
+        <span class="px-3.5 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+          Hata 404
+        </span>
+      </div>
+
+      <!-- Title & Explanation -->
+      <div class="space-y-3">
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          Aradığınız Sayfa Bulunamadı
+        </h1>
+        <p class="text-base text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+          Ulaşmaya çalıştığınız adres taşınmış, silinmiş veya yanlış yazılmış olabilir. Nostr ağı üzerinde keşfe devam etmek için aşağıdaki bağlantıları kullanabilirsiniz.
+        </p>
+      </div>
+
+      <!-- Navigation Actions -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+        <a
+          href="/"
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-nostr-600 hover:bg-nostr-700 text-white shadow-sm hover:shadow transition-all"
+        >
+          <Home class="w-4 h-4" />
+          <span>Ana Sayfaya Dön</span>
+        </a>
+        <a
+          href="/blog"
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 transition-colors"
+        >
+          <BookOpen class="w-4 h-4" />
+          <span>Topluluk Blogu</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>

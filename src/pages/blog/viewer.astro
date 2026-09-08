@@ -1,0 +1,953 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { 
+  Calendar, 
+  Clock, 
+  ArrowLeft, 
+  MessageSquare, 
+  AlertCircle, 
+  RefreshCw, 
+  Sparkles, 
+  Zap, 
+  Send,
+  Radio
+} from 'lucide-astro';
+---
+
+<Layout
+  title="Nostr Blog Yazısı Yükleniyor... - Nostr Türkiye"
+  description="Nostr rölelerinden canlı olarak getirilen NIP-23 blog yazısı."
+>
+  <article class="relative overflow-hidden pt-8 pb-20 sm:pt-12 sm:pb-28 min-h-[75vh]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Back Navigation -->
+      <div class="mb-8">
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors group"
+        >
+          <ArrowLeft class="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+          <span>Tüm Blog Yazılarına Dön</span>
+        </a>
+      </div>
+
+      <!-- State 1: Loading Skeleton -->
+      <div id="viewer-loading" class="space-y-8 py-12">
+        <div class="flex items-center gap-3 p-4 rounded-2xl bg-nostr-50/80 dark:bg-nostr-950/40 border border-nostr-200/80 dark:border-nostr-800/80 text-nostr-700 dark:text-nostr-300 animate-pulse">
+          <Radio class="w-5 h-5 text-nostr-500 animate-spin" />
+          <div class="text-sm font-medium">
+            <span id="loading-status-text">Nostr rölelerine bağlanılıyor ve makale aranıyor...</span>
+            <span class="block text-xs text-slate-500 dark:text-slate-400 mt-0.5">Röle: wss://relay.nostr.org.tr</span>
+          </div>
+        </div>
+
+        <div class="space-y-4 animate-pulse">
+          <div class="h-6 bg-slate-200 dark:bg-slate-800 rounded-lg w-1/4"></div>
+          <div class="h-12 bg-slate-200 dark:bg-slate-800 rounded-2xl w-3/4"></div>
+          <div class="h-6 bg-slate-200 dark:bg-slate-800 rounded-lg w-1/2"></div>
+        </div>
+
+        <div class="h-72 bg-slate-100 dark:bg-slate-800/60 rounded-3xl animate-pulse"></div>
+
+        <div class="space-y-3 pt-6 animate-pulse">
+          <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-full"></div>
+          <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-5/6"></div>
+          <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-4/6"></div>
+        </div>
+      </div>
+
+      <!-- State 2: 404 Error State -->
+      <div id="viewer-error" class="hidden py-16 text-center space-y-6">
+        <div class="inline-flex p-4 rounded-3xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800/60 shadow-sm">
+          <AlertCircle class="w-12 h-12" />
+        </div>
+
+        <div class="space-y-2 max-w-md mx-auto">
+          <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+            Yazı Bulunamadı (404)
+          </h1>
+          <p id="error-message" class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            Aradığınız Nostr yazısı rölelerde bulunamadı veya henüz ağa iletilmedi.
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
+          <button
+            type="button"
+            id="btn-retry-fetch"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold bg-nostr-600 hover:bg-nostr-700 text-white shadow-sm transition-all"
+          >
+            <RefreshCw class="w-4 h-4" />
+            <span>Tekrar Dene</span>
+          </button>
+          <a
+            href="/blog"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 transition-colors"
+          >
+            <ArrowLeft class="w-4 h-4" />
+            <span>Tüm Blog Yazılarına Dön</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- State 3: Rendered Article Content -->
+      <div id="viewer-content" class="hidden">
+        <!-- Article Header -->
+        <header class="space-y-6 pb-8 border-b border-slate-200/80 dark:border-slate-800">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500 text-white shadow-xs">
+              Canlı Röle
+            </span>
+            <div id="article-tags" class="flex flex-wrap items-center gap-2"></div>
+            <span class="text-slate-300 dark:text-slate-700">•</span>
+            <span class="inline-flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
+              <Clock class="w-3.5 h-3.5" />
+              <span id="article-reading-time">1 dk okuma</span>
+            </span>
+            <span class="text-slate-300 dark:text-slate-700">•</span>
+            <span class="inline-flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
+              <Calendar class="w-3.5 h-3.5" />
+              <time id="article-date">-</time>
+            </span>
+          </div>
+
+          <h1 id="article-title" class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
+            -
+          </h1>
+
+          <p id="article-summary" class="text-lg sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+            -
+          </p>
+
+          <!-- Author Bar -->
+          <div class="flex items-center justify-between pt-2">
+            <div class="flex items-center gap-3">
+              <div id="author-avatar-wrap" class="w-10 h-10 rounded-full bg-nostr-100 dark:bg-nostr-900/60 text-nostr-600 dark:text-nostr-300 flex items-center justify-center font-bold text-sm overflow-hidden border border-nostr-200 dark:border-nostr-800">
+                <span id="author-avatar-fallback">?</span>
+              </div>
+              <div>
+                <div id="author-name" class="font-bold text-sm text-slate-900 dark:text-white">
+                  -
+                </div>
+                <div id="author-role" class="text-xs text-slate-500 dark:text-slate-400">
+                  -
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <a
+                href="#viewer-comments"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+              >
+                <MessageSquare class="w-3.5 h-3.5 text-nostr-500" />
+                <span>Yorumlar</span>
+              </a>
+              <button
+                type="button"
+                id="btn-copy-article-link"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                title="Bağlantıyı Kopyala"
+              >
+                <span>Bağlantı</span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <!-- Featured Image -->
+        <div id="article-image-wrap" class="hidden my-8 rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-800 shadow-md">
+          <img
+            id="article-image"
+            src=""
+            alt=""
+            class="w-full max-h-[480px] object-cover"
+          />
+        </div>
+
+        <!-- Main Body Markdown -->
+        <div 
+          id="article-body"
+          class="prose prose-slate dark:prose-invert lg:prose-lg max-w-none my-10 
+                 prose-headings:font-bold prose-headings:tracking-tight 
+                 prose-h2:text-2xl sm:prose-h2:text-3xl prose-h2:mt-10 prose-h2:mb-4
+                 prose-h3:text-xl sm:prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-3
+                 prose-p:leading-relaxed prose-p:text-slate-700 dark:prose-p:text-slate-300
+                 prose-a:text-nostr-600 dark:prose-a:text-nostr-400 prose-a:no-underline hover:prose-a:underline
+                 prose-blockquote:border-l-4 prose-blockquote:border-nostr-500 prose-blockquote:bg-nostr-50/50 dark:prose-blockquote:bg-nostr-950/30 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded-r-xl
+                 prose-code:text-nostr-700 dark:prose-code:text-nostr-300 prose-code:bg-slate-100 dark:prose-code:bg-slate-800/80 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
+                 prose-pre:bg-slate-950 prose-pre:border prose-pre:border-slate-800 prose-pre:rounded-2xl"
+        ></div>
+
+        <!-- Author Footer Card -->
+        <div class="my-12 bg-slate-50 dark:bg-slate-900/60 rounded-3xl border border-slate-200/80 dark:border-slate-800 p-6 sm:p-8">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+            <div class="flex items-start gap-4">
+              <div id="footer-author-avatar-wrap" class="w-14 h-14 rounded-2xl bg-nostr-100 dark:bg-nostr-900/80 text-nostr-600 dark:text-nostr-300 flex items-center justify-center font-bold text-xl overflow-hidden border-2 border-nostr-200 dark:border-nostr-800 flex-shrink-0">
+                <span id="footer-author-fallback">?</span>
+              </div>
+
+              <div>
+                <h3 id="footer-author-name" class="text-lg font-bold text-slate-900 dark:text-white">
+                  -
+                </h3>
+                <p id="footer-author-role" class="text-xs text-nostr-600 dark:text-nostr-400 font-medium mt-0.5">
+                  -
+                </p>
+                <p id="footer-author-bio" class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2 max-w-xl leading-relaxed">
+                  -
+                </p>
+
+                <div class="flex flex-wrap items-center gap-2 mt-3">
+                  <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 text-xs font-mono text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                    <span class="text-[11px] opacity-70">npub:</span>
+                    <span id="footer-author-npub">-</span>
+                  </div>
+
+                  <a
+                    id="footer-author-zap"
+                    href="#"
+                    class="hidden inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60 text-xs font-medium hover:bg-amber-100 transition-colors"
+                  >
+                    <Zap class="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                    <span>Zap Gönder</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Nostr Client Bridges -->
+            <div class="w-full sm:w-auto flex-shrink-0 pt-4 sm:pt-0 border-t sm:border-t-0 border-slate-200 dark:border-slate-800">
+              <div class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                Nostr İstemcisinde Aç
+              </div>
+              <div id="client-bridges-container" class="flex flex-wrap sm:flex-col gap-1.5">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Comments Section -->
+        <section class="mt-12 pt-12 border-t border-slate-200/80 dark:border-slate-800" id="viewer-comments">
+          <div class="flex items-center justify-between gap-4 mb-8">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 rounded-2xl bg-nostr-100 dark:bg-nostr-900/60 text-nostr-600 dark:text-nostr-300 border border-nostr-200 dark:border-nostr-800">
+                <MessageSquare class="w-5 h-5" />
+              </div>
+              <div>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+                  Yorumlar & Tartışma
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                  NIP-22 standardı ile Nostr rölelerinden canlı getirilmektedir.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <span id="viewer-comment-count" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                0 Yorum
+              </span>
+              <button
+                type="button"
+                id="btn-refresh-viewer-comments"
+                class="p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                title="Yorumları Yenile"
+              >
+                <RefreshCw class="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          <!-- Comment input form -->
+          <div class="bg-white dark:bg-slate-900/90 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-6 sm:p-8 mb-10">
+            <div class="flex items-center justify-between gap-2 mb-4">
+              <h3 class="text-base font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                <Sparkles class="w-4 h-4 text-nostr-500" />
+                <span>Nostr ile Yorum Yap (NIP-22)</span>
+              </h3>
+            </div>
+            <form id="viewer-comment-form" class="space-y-4">
+              <textarea
+                id="viewer-comment-input"
+                rows="3"
+                required
+                placeholder="Düşüncelerinizi paylaşın... (Nostr anahtarınızla imzalanacaktır)"
+                class="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-nostr-500 transition-all resize-y"
+              ></textarea>
+              <div id="viewer-comment-status" class="hidden text-xs p-3 rounded-xl"></div>
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-[11px] text-slate-500 dark:text-slate-400">
+                  NIP-07 tarayıcı eklentiniz (Alby, nos2x) üzerinden imzalanır.
+                </span>
+                <button
+                  type="submit"
+                  id="btn-submit-viewer-comment"
+                  class="inline-flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold bg-nostr-600 hover:bg-nostr-700 text-white shadow-xs transition-all"
+                >
+                  <Send class="w-4 h-4" />
+                  <span>Gönder</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Comments List -->
+          <div id="viewer-comments-loading" class="text-center py-6 text-xs text-slate-500">
+            Yorumlar yükleniyor...
+          </div>
+          <div id="viewer-comments-empty" class="hidden text-center py-8 text-sm text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-900/30 rounded-2xl border border-slate-200/60 dark:border-slate-800/60">
+            Henüz yorum yapılmamış. İlk yorumu siz yazın!
+          </div>
+          <div id="viewer-comments-list" class="space-y-4"></div>
+        </section>
+
+      </div>
+
+    </div>
+  </article>
+</Layout>
+
+<script>
+  import { marked } from 'marked';
+
+  (function initViewer() {
+    const BLOG_RELAYS = [
+      'wss://relay.nostr.org.tr',
+      'wss://relay.damus.io',
+      'wss://nos.lol',
+      'wss://relay.primal.net',
+    ];
+
+    const ALPHABET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
+    const ALPHABET_MAP: Record<string, number> = {};
+    for (let i = 0; i < ALPHABET.length; i++) ALPHABET_MAP[ALPHABET[i]] = i;
+    const GENERATOR = [0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3];
+
+    function polymod(values: number[]) {
+      let chk = 1;
+      for (let p = 0; p < values.length; ++p) {
+        const top = chk >> 25;
+        chk = ((chk & 0x1ffffff) << 5) ^ values[p];
+        for (let i = 0; i < 5; ++i) {
+          if ((top >> i) & 1) chk ^= GENERATOR[i];
+        }
+      }
+      return chk;
+    }
+
+    function hrpExpand(hrp: string) {
+      const ret = [];
+      for (let p = 0; p < hrp.length; ++p) ret.push(hrp.charCodeAt(p) >> 5);
+      ret.push(0);
+      for (let p = 0; p < hrp.length; ++p) ret.push(hrp.charCodeAt(p) & 31);
+      return ret;
+    }
+
+    function createChecksum(hrp: string, data: number[]) {
+      const values = hrpExpand(hrp).concat(data).concat([0, 0, 0, 0, 0, 0]);
+      const mod = polymod(values) ^ 1;
+      const ret = [];
+      for (let p = 0; p < 6; ++p) ret.push((mod >> (5 * (5 - p))) & 31);
+      return ret;
+    }
+
+    function convertBits(data: Uint8Array | number[], fromBits: number, toBits: number, pad: boolean) {
+      let acc = 0;
+      let bits = 0;
+      const ret = [];
+      const maxv = (1 << toBits) - 1;
+      const maxAcc = (1 << (fromBits + toBits - 1)) - 1;
+      for (let p = 0; p < data.length; ++p) {
+        acc = ((acc << fromBits) | data[p]) & maxAcc;
+        bits += fromBits;
+        while (bits >= toBits) {
+          bits -= toBits;
+          ret.push((acc >> bits) & maxv);
+        }
+      }
+      if (pad && bits > 0) ret.push((acc << (toBits - bits)) & maxv);
+      return ret;
+    }
+
+    function encodeBech32(hrp: string, data: Uint8Array) {
+      const words = convertBits(data, 8, 5, true);
+      const checksum = createChecksum(hrp.toLowerCase(), words);
+      const combined = words.concat(checksum);
+      let result = hrp.toLowerCase() + '1';
+      for (let i = 0; i < combined.length; ++i) result += ALPHABET.charAt(combined[i]);
+      return result;
+    }
+
+    function hexToBytes(hex: string) {
+      const clean = hex.trim().toLowerCase();
+      const bytes = new Uint8Array(clean.length / 2);
+      for (let i = 0; i < clean.length; i += 2) {
+        bytes[i / 2] = parseInt(clean.substring(i, i + 2), 16);
+      }
+      return bytes;
+    }
+
+    function hexToNpub(hex: string) {
+      try {
+        return encodeBech32('npub', hexToBytes(hex));
+      } catch {
+        return hex;
+      }
+    }
+
+    function encodeNaddrClient(kind: number, pubkeyHex: string, dTag: string) {
+      try {
+        const tlv: number[] = [];
+        const dBytes = new TextEncoder().encode(dTag);
+        tlv.push(0, dBytes.length, ...Array.from(dBytes));
+        const rBytes = new TextEncoder().encode('wss://relay.nostr.org.tr');
+        tlv.push(1, rBytes.length, ...Array.from(rBytes));
+        const aBytes = hexToBytes(pubkeyHex);
+        tlv.push(2, aBytes.length, ...Array.from(aBytes));
+        const kBytes = new Uint8Array(4);
+        new DataView(kBytes.buffer).setUint32(0, kind, false);
+        tlv.push(3, kBytes.length, ...Array.from(kBytes));
+        return encodeBech32('naddr', new Uint8Array(tlv));
+      } catch {
+        return '';
+      }
+    }
+
+    function slugify(text: string): string {
+      const trMap: Record<string, string> = {
+        ç: 'c', Ç: 'c', ğ: 'g', Ğ: 'g', ı: 'i', İ: 'i',
+        ö: 'o', Ö: 'o', ş: 's', Ş: 's', ü: 'u', Ü: 'u',
+      };
+      return text
+        .split('')
+        .map((c) => trMap[c] || c)
+        .join('')
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/[\s_-]+/g, '-')
+        .replace(/^-+|-+$/g, '') || 'makale';
+    }
+
+    function escapeHtml(s: string): string {
+      const d = document.createElement('div');
+      d.textContent = s || '';
+      return d.innerHTML;
+    }
+
+    // Determine target slug from pathname or search params
+    const pathname = window.location.pathname;
+    const pathParts = pathname.split('/').filter(Boolean);
+    let targetSlug = '';
+
+    // Handle /blog/:slug, /en/blog/:slug, /blog/viewer?slug=:slug
+    const blogIdx = pathParts.indexOf('blog');
+    if (blogIdx !== -1 && pathParts[blogIdx + 1] && pathParts[blogIdx + 1] !== 'viewer') {
+      targetSlug = decodeURIComponent(pathParts[blogIdx + 1]);
+    } else {
+      const params = new URLSearchParams(window.location.search);
+      targetSlug = params.get('slug') || params.get('d') || '';
+    }
+
+    const loadingEl = document.getElementById('viewer-loading');
+    const errorEl = document.getElementById('viewer-error');
+    const contentEl = document.getElementById('viewer-content');
+    const errorMessageEl = document.getElementById('error-message');
+    const retryBtn = document.getElementById('btn-retry-fetch');
+
+    if (!targetSlug) {
+      if (loadingEl) loadingEl.classList.add('hidden');
+      if (errorEl) errorEl.classList.remove('hidden');
+      if (errorMessageEl) errorMessageEl.textContent = 'Görüntülenecek makale adresi belirtilmedi.';
+      return;
+    }
+
+    let activeSockets: WebSocket[] = [];
+    let authorProfile: any = null;
+
+    async function fetchArticleFromRelays() {
+      if (loadingEl) loadingEl.classList.remove('hidden');
+      if (errorEl) errorEl.classList.add('hidden');
+      if (contentEl) contentEl.classList.add('hidden');
+
+      // Close previous sockets
+      activeSockets.forEach((ws) => { try { ws.close(); } catch {} });
+      activeSockets = [];
+
+      let foundEvent: any = null;
+      const subId = 'v_' + Math.random().toString(36).slice(2, 7);
+
+      const fetchPromises = BLOG_RELAYS.map((relayUrl) => {
+        return new Promise<void>((resolve) => {
+          let ws: WebSocket | null = null;
+          let isDone = false;
+
+          const cleanup = () => {
+            if (isDone) return;
+            isDone = true;
+            if (ws) {
+              try {
+                ws.onclose = null;
+                ws.onerror = null;
+                ws.onmessage = null;
+                if (ws.readyState === WebSocket.OPEN) {
+                  ws.send(JSON.stringify(['CLOSE', subId]));
+                }
+                ws.close();
+              } catch {}
+            }
+            resolve();
+          };
+
+          const timeout = setTimeout(cleanup, 8000);
+
+          try {
+            ws = new WebSocket(relayUrl);
+            activeSockets.push(ws);
+
+            ws.onopen = () => {
+              try {
+                // Request kind 30023 articles
+                ws?.send(JSON.stringify(['REQ', subId, { kinds: [30023], limit: 50 }]));
+              } catch {
+                clearTimeout(timeout);
+                cleanup();
+              }
+            };
+
+            ws.onmessage = (msg) => {
+              try {
+                const data = JSON.parse(msg.data);
+                if (!Array.isArray(data)) return;
+
+                const [type, reqSubId, ev] = data;
+                if (type === 'EVENT' && reqSubId === subId && ev && ev.kind === 30023) {
+                  const dTag = (ev.tags as string[][]).find((t) => t[0] === 'd')?.[1] || '';
+                  const title = (ev.tags as string[][]).find((t) => t[0] === 'title')?.[1] || '';
+                  const dSlug = slugify(dTag);
+                  const titleSlug = slugify(title);
+
+                  // Match slug against dTag, slugified dTag, title slug, or raw event id
+                  if (
+                    dSlug === targetSlug.toLowerCase() ||
+                    dTag.toLowerCase() === targetSlug.toLowerCase() ||
+                    titleSlug === targetSlug.toLowerCase() ||
+                    ev.id === targetSlug
+                  ) {
+                    if (!foundEvent || ev.created_at > foundEvent.created_at) {
+                      foundEvent = ev;
+                    }
+                  }
+                } else if (type === 'EOSE' && reqSubId === subId) {
+                  clearTimeout(timeout);
+                  cleanup();
+                }
+              } catch {}
+            };
+
+            ws.onerror = () => { clearTimeout(timeout); cleanup(); };
+            ws.onclose = () => { clearTimeout(timeout); cleanup(); };
+          } catch {
+            clearTimeout(timeout);
+            cleanup();
+          }
+        });
+      });
+
+      await Promise.all(fetchPromises);
+
+      if (!foundEvent) {
+        if (loadingEl) loadingEl.classList.add('hidden');
+        if (errorEl) errorEl.classList.remove('hidden');
+        if (errorMessageEl) {
+          errorMessageEl.textContent = `Aradığınız "${targetSlug}" başlıklı Nostr yazısı rölelerde bulunamadı veya henüz ağa iletilmedi.`;
+        }
+        document.title = 'Yazı Bulunamadı (404) - Nostr Türkiye';
+        return;
+      }
+
+      // Fetch Kind 0 Profile for Author
+      await fetchAuthorProfile(foundEvent.pubkey);
+
+      // Render Article Content
+      await renderArticle(foundEvent, authorProfile);
+    }
+
+    async function fetchAuthorProfile(pubkey: string) {
+      const profSubId = 'vp_' + Math.random().toString(36).slice(2, 7);
+      await new Promise<void>((resolve) => {
+        try {
+          const ws = new WebSocket(BLOG_RELAYS[0] || 'wss://relay.nostr.org.tr');
+          const cleanup = () => {
+            try {
+              if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(['CLOSE', profSubId]));
+              ws.close();
+            } catch {}
+            resolve();
+          };
+          const timeout = setTimeout(cleanup, 4000);
+
+          ws.onopen = () => {
+            ws.send(JSON.stringify(['REQ', profSubId, { kinds: [0], authors: [pubkey] }]));
+          };
+          ws.onmessage = (msg) => {
+            try {
+              const data = JSON.parse(msg.data);
+              if (data[0] === 'EVENT' && data[1] === profSubId && data[2]?.kind === 0) {
+                authorProfile = JSON.parse(data[2].content);
+                clearTimeout(timeout);
+                cleanup();
+              } else if (data[0] === 'EOSE' && data[1] === profSubId) {
+                clearTimeout(timeout);
+                cleanup();
+              }
+            } catch {}
+          };
+          ws.onerror = () => { clearTimeout(timeout); cleanup(); };
+          ws.onclose = () => { clearTimeout(timeout); cleanup(); };
+        } catch {
+          resolve();
+        }
+      });
+    }
+
+    async function renderArticle(event: any, profile: any) {
+      const dTag = (event.tags || []).find((t: string[]) => t[0] === 'd')?.[1] || event.id;
+      const rawTitle = (event.tags || []).find((t: string[]) => t[0] === 'title')?.[1] || '';
+      const summary = (event.tags || []).find((t: string[]) => t[0] === 'summary')?.[1] || '';
+      const image = (event.tags || []).find((t: string[]) => t[0] === 'image')?.[1] || '';
+      const publishedAtStr = (event.tags || []).find((t: string[]) => t[0] === 'published_at')?.[1];
+      const publishedAt = publishedAtStr ? parseInt(publishedAtStr, 10) : event.created_at;
+      const tags = (event.tags || []).filter((t: string[]) => t[0] === 't').map((t: string[]) => t[1]);
+
+      let title = rawTitle;
+      if (!title) {
+        const h1 = (event.content || '').match(/^#\s+(.+)$/m);
+        title = h1 ? h1[1].trim() : 'İsimsiz Nostr Yazısı';
+      }
+
+      const npub = hexToNpub(event.pubkey);
+      const authorName = profile?.display_name || profile?.displayName || profile?.name || `${npub.slice(0, 10)}...${npub.slice(-4)}`;
+      const authorAvatar = profile?.picture || profile?.image || '';
+      const authorBio = profile?.about || profile?.bio || '';
+      const authorNip05 = profile?.nip05 || '';
+      const authorLud = profile?.lud16 || profile?.lud06 || '';
+
+      const words = (event.content || '').trim().split(/\s+/).filter(Boolean).length;
+      const readingTime = `${Math.max(1, Math.ceil(words / 200))} dk okuma`;
+      const dateFormatted = new Intl.DateTimeFormat('tr-TR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }).format(new Date(publishedAt * 1000));
+
+      const naddr = encodeNaddrClient(30023, event.pubkey, dTag);
+
+      // Populate DOM elements
+      document.title = `${title} - Nostr Türkiye Blog`;
+
+      const titleEl = document.getElementById('article-title');
+      if (titleEl) titleEl.textContent = title;
+
+      const summaryEl = document.getElementById('article-summary');
+      if (summaryEl) summaryEl.textContent = summary || (event.content.slice(0, 160).replace(/[#*`_]/g, '') + '...');
+
+      const dateEl = document.getElementById('article-date');
+      if (dateEl) {
+        dateEl.textContent = dateFormatted;
+        dateEl.setAttribute('datetime', new Date(publishedAt * 1000).toISOString());
+      }
+
+      const readTimeEl = document.getElementById('article-reading-time');
+      if (readTimeEl) readTimeEl.textContent = readingTime;
+
+      // Tags
+      const tagsContainer = document.getElementById('article-tags');
+      if (tagsContainer) {
+        tagsContainer.innerHTML = tags.map((t: string) => `
+          <span class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg bg-nostr-50 dark:bg-nostr-950/60 text-nostr-700 dark:text-nostr-300 border border-nostr-200/70 dark:border-nostr-800/70">
+            #${escapeHtml(t.replace(/^#/, ''))}
+          </span>
+        `).join('');
+      }
+
+      // Author Header Bar
+      const authorNameEl = document.getElementById('author-name');
+      if (authorNameEl) authorNameEl.textContent = authorName;
+
+      const authorRoleEl = document.getElementById('author-role');
+      if (authorRoleEl) authorRoleEl.textContent = authorNip05 || 'Topluluk Yazarı';
+
+      const avatarWrap = document.getElementById('author-avatar-wrap');
+      if (avatarWrap) {
+        if (authorAvatar) {
+          avatarWrap.innerHTML = `<img src="${escapeHtml(authorAvatar)}" alt="${escapeHtml(authorName)}" class="w-full h-full object-cover" />`;
+        } else {
+          avatarWrap.textContent = authorName.charAt(0);
+        }
+      }
+
+      // Featured Image
+      const imgWrap = document.getElementById('article-image-wrap');
+      const imgEl = document.getElementById('article-image') as HTMLImageElement | null;
+      if (imgWrap && imgEl) {
+        if (image) {
+          imgEl.src = image;
+          imgEl.alt = title;
+          imgWrap.classList.remove('hidden');
+        } else {
+          imgWrap.classList.add('hidden');
+        }
+      }
+
+      // Render Markdown Body
+      const bodyEl = document.getElementById('article-body');
+      if (bodyEl) {
+        bodyEl.innerHTML = await marked.parse(event.content || '');
+      }
+
+      // Author Footer Card
+      const footerAvatarWrap = document.getElementById('footer-author-avatar-wrap');
+      if (footerAvatarWrap) {
+        if (authorAvatar) {
+          footerAvatarWrap.innerHTML = `<img src="${escapeHtml(authorAvatar)}" alt="${escapeHtml(authorName)}" class="w-full h-full object-cover" />`;
+        } else {
+          footerAvatarWrap.textContent = authorName.charAt(0);
+        }
+      }
+
+      const footerNameEl = document.getElementById('footer-author-name');
+      if (footerNameEl) footerNameEl.textContent = authorName;
+
+      const footerRoleEl = document.getElementById('footer-author-role');
+      if (footerRoleEl) footerRoleEl.textContent = authorNip05 || 'Topluluk Yazarı';
+
+      const footerBioEl = document.getElementById('footer-author-bio');
+      if (footerBioEl) footerBioEl.textContent = authorBio || 'Nostr ağında açık kaynak içerik üreticisi.';
+
+      const footerNpubEl = document.getElementById('footer-author-npub');
+      if (footerNpubEl) footerNpubEl.textContent = `${npub.slice(0, 10)}...${npub.slice(-4)}`;
+
+      const zapLink = document.getElementById('footer-author-zap') as HTMLAnchorElement | null;
+      if (zapLink) {
+        if (authorLud) {
+          zapLink.href = `lightning:${authorLud}`;
+          zapLink.classList.remove('hidden');
+        } else {
+          zapLink.classList.add('hidden');
+        }
+      }
+
+      // Client Bridges
+      const bridgesContainer = document.getElementById('client-bridges-container');
+      if (bridgesContainer && naddr) {
+        const bridges = [
+          { name: 'Habla', url: `https://habla.news/a/${naddr}` },
+          { name: 'Yakihonne', url: `https://yakihonne.com/article/${naddr}` },
+          { name: 'Primal', url: `https://primal.net/e/${naddr}` },
+        ];
+        bridgesContainer.innerHTML = bridges.map((b) => `
+          <a
+            href="${b.url}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-between gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 hover:text-nostr-600 dark:hover:text-nostr-400 border border-slate-200 dark:border-slate-700 shadow-xs transition-all"
+          >
+            <span>${b.name}</span>
+            <span class="opacity-60 text-[10px]">↗</span>
+          </a>
+        `).join('');
+      }
+
+      // Copy Button
+      const copyBtn = document.getElementById('btn-copy-article-link');
+      if (copyBtn) {
+        copyBtn.onclick = () => {
+          navigator.clipboard.writeText(window.location.href);
+          const orig = copyBtn.textContent;
+          copyBtn.textContent = 'Kopyalandı!';
+          setTimeout(() => { copyBtn.textContent = orig; }, 2000);
+        };
+      }
+
+      // Show content
+      if (loadingEl) loadingEl.classList.add('hidden');
+      if (contentEl) contentEl.classList.remove('hidden');
+
+      // Initialize live comments
+      initViewerComments(event, dTag);
+    }
+
+    // Live Comments for Viewer
+    function initViewerComments(articleEvent: any, dTag: string) {
+      const commentsList = document.getElementById('viewer-comments-list');
+      const commentsLoading = document.getElementById('viewer-comments-loading');
+      const commentsEmpty = document.getElementById('viewer-comments-empty');
+      const commentCountBadge = document.getElementById('viewer-comment-count');
+      const commentForm = document.getElementById('viewer-comment-form') as HTMLFormElement | null;
+      const commentInput = document.getElementById('viewer-comment-input') as HTMLTextAreaElement | null;
+      const commentStatus = document.getElementById('viewer-comment-status');
+      const btnRefresh = document.getElementById('btn-refresh-viewer-comments');
+
+      const aCoordinate = `30023:${articleEvent.pubkey}:${dTag}`;
+      const receivedComments = new Map<string, any>();
+      const commenterProfiles = new Map<string, any>();
+
+      function updateCommentsUI() {
+        if (commentsLoading) commentsLoading.classList.add('hidden');
+        const sorted = Array.from(receivedComments.values()).sort((a, b) => b.created_at - a.created_at);
+
+        if (commentCountBadge) commentCountBadge.textContent = `${sorted.length} Yorum`;
+
+        if (sorted.length === 0) {
+          if (commentsEmpty) commentsEmpty.classList.remove('hidden');
+          if (commentsList) commentsList.innerHTML = '';
+          return;
+        }
+
+        if (commentsEmpty) commentsEmpty.classList.add('hidden');
+        if (commentsList) {
+          commentsList.innerHTML = sorted.map((c) => {
+            const prof = commenterProfiles.get(c.pubkey) || {};
+            const name = prof.display_name || prof.name || `${c.pubkey.slice(0, 8)}...`;
+            const avatar = prof.picture || prof.image || '';
+            const nip05 = prof.nip05 || '';
+            const timeAgo = new Date(c.created_at * 1000).toLocaleDateString('tr-TR', {
+              day: 'numeric',
+              month: 'short',
+              hour: '2-digit',
+              minute: '2-digit',
+            });
+
+            return `
+              <div class="bg-white dark:bg-slate-900/90 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-4 sm:p-5 flex items-start gap-3.5">
+                <div class="w-9 h-9 rounded-full bg-nostr-100 dark:bg-nostr-900/60 text-nostr-600 dark:text-nostr-300 flex items-center justify-center font-bold text-xs overflow-hidden flex-shrink-0">
+                  ${avatar ? `<img src="${escapeHtml(avatar)}" alt="${escapeHtml(name)}" class="w-full h-full object-cover" />` : escapeHtml(name.charAt(0))}
+                </div>
+                <div class="flex-grow min-w-0">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="font-semibold text-sm text-slate-900 dark:text-white truncate">${escapeHtml(name)}</span>
+                    <time class="text-xs text-slate-400 font-mono flex-shrink-0">${timeAgo}</time>
+                  </div>
+                  ${nip05 ? `<div class="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">${escapeHtml(nip05)}</div>` : ''}
+                  <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap break-words mt-1.5">${escapeHtml(c.content)}</p>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      function loadComments() {
+        if (commentsLoading) commentsLoading.classList.remove('hidden');
+        if (commentsEmpty) commentsEmpty.classList.add('hidden');
+
+        const cmSubId = 'vcm_' + Math.random().toString(36).slice(2, 7);
+        const filters = [
+          { kinds: [1111], '#A': [aCoordinate] },
+          { kinds: [1111], '#E': [articleEvent.id] },
+          { kinds: [1], '#a': [aCoordinate] },
+          { kinds: [1], '#e': [articleEvent.id] },
+        ];
+
+        BLOG_RELAYS.forEach((relayUrl) => {
+          try {
+            const ws = new WebSocket(relayUrl);
+            ws.onopen = () => {
+              filters.forEach((f) => ws.send(JSON.stringify(['REQ', cmSubId, f])));
+            };
+            ws.onmessage = (msg) => {
+              try {
+                const data = JSON.parse(msg.data);
+                if (data[0] === 'EVENT' && data[1] === cmSubId && data[2]) {
+                  const ev = data[2];
+                  if (!receivedComments.has(ev.id)) {
+                    receivedComments.set(ev.id, ev);
+                    updateCommentsUI();
+                  }
+                }
+              } catch {}
+            };
+            setTimeout(() => { try { ws.close(); } catch {} }, 5000);
+          } catch {}
+        });
+      }
+
+      if (btnRefresh) btnRefresh.onclick = () => loadComments();
+      loadComments();
+
+      // Comment submission
+      if (commentForm && commentInput) {
+        commentForm.onsubmit = async (e) => {
+          e.preventDefault();
+          const content = commentInput.value.trim();
+          if (!content) return;
+
+          const nostr = (window as any).nostr;
+          if (!nostr) {
+            if (commentStatus) {
+              commentStatus.className = 'text-xs p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-200 border border-amber-200 dark:border-amber-800/60';
+              commentStatus.textContent = 'Yorum gönderebilmek için tarayıcınızda aktif bir Nostr eklentisi (Alby, nos2x) bulunmalıdır.';
+              commentStatus.classList.remove('hidden');
+            }
+            return;
+          }
+
+          try {
+            if (commentStatus) {
+              commentStatus.className = 'text-xs p-3 rounded-xl bg-nostr-50 dark:bg-nostr-950/40 text-nostr-800 dark:text-nostr-200 border border-nostr-200 dark:border-nostr-800';
+              commentStatus.textContent = 'NIP-07 eklentiniz ile imzalanıyor...';
+              commentStatus.classList.remove('hidden');
+            }
+
+            const unsignedEvent = {
+              kind: 1111,
+              created_at: Math.floor(Date.now() / 1000),
+              tags: [
+                ['A', aCoordinate, 'wss://relay.nostr.org.tr', 'root'],
+                ['E', articleEvent.id, 'wss://relay.nostr.org.tr', 'root'],
+                ['p', articleEvent.pubkey],
+                ['k', '30023'],
+              ],
+              content,
+            };
+
+            const signedEvent = await nostr.signEvent(unsignedEvent);
+
+            // Broadcast to relays
+            BLOG_RELAYS.forEach((relayUrl) => {
+              try {
+                const ws = new WebSocket(relayUrl);
+                ws.onopen = () => {
+                  ws.send(JSON.stringify(['EVENT', signedEvent]));
+                  setTimeout(() => { try { ws.close(); } catch {} }, 3000);
+                };
+              } catch {}
+            });
+
+            receivedComments.set(signedEvent.id, signedEvent);
+            updateCommentsUI();
+
+            commentInput.value = '';
+            if (commentStatus) {
+              commentStatus.className = 'text-xs p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-800';
+              commentStatus.textContent = 'Yorumunuz imzalandı ve Nostr rölelerine başarıyla iletildi!';
+            }
+          } catch (err: any) {
+            if (commentStatus) {
+              commentStatus.className = 'text-xs p-3 rounded-xl bg-red-50 dark:bg-red-950/40 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800';
+              commentStatus.textContent = `İmzalama başarısız oldu: ${err?.message || err}`;
+            }
+          }
+        };
+      }
+    }
+
+    if (retryBtn) retryBtn.onclick = () => fetchArticleFromRelays();
+
+    // Start fetch
+    fetchArticleFromRelays();
+  })();
+</script>
