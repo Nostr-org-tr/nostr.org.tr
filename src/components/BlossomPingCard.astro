@@ -1,0 +1,213 @@
+---
+import type { BlossomServerInfo } from '../data/blossom';
+import CopyButton from './CopyButton.astro';
+import { HardDrive, ShieldCheck, Lock, ExternalLink, RefreshCw, Layers, Sparkles, BookOpen } from 'lucide-astro';
+
+interface Props {
+  server: BlossomServerInfo;
+  showMirrorList?: boolean;
+}
+
+const { server, showMirrorList = true } = Astro.props;
+---
+
+<div 
+  class="blossom-card p-6 sm:p-7 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-nostr-300 dark:hover:border-nostr-700 transition-all flex flex-col justify-between"
+  data-blossom-url={server.url}
+>
+  <div>
+    <!-- Top Row: Name, Badges & Status -->
+    <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
+      <div class="space-y-1">
+        <div class="flex items-center gap-2 flex-wrap">
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <HardDrive class="w-5 h-5 text-purple-600 dark:text-purple-400" />
+            <span>{server.name}</span>
+          </h3>
+          {server.isOfficialCommunityServer && (
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-tr-red/10 text-tr-red dark:bg-tr-red/20 dark:text-rose-400 border border-tr-red/20">
+              <ShieldCheck class="w-3 h-3" />
+              <span>Resmi Topluluk Medya Sunucusu</span>
+            </span>
+          )}
+        </div>
+        <p class="text-xs text-slate-500 dark:text-slate-400">
+          Konum: <span class="text-slate-700 dark:text-slate-200 font-medium">{server.location}</span> • Standart: <span class="font-mono text-purple-600 dark:text-purple-400 font-semibold">Blossom (BUD)</span>
+        </p>
+      </div>
+
+      <!-- Realtime Latency Badge -->
+      <div class="latency-badge flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 self-start">
+        <span class="status-dot w-2 h-2 rounded-full bg-slate-400 animate-pulse"></span>
+        <span class="latency-text">Test ediliyor...</span>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+      {server.description}
+    </p>
+
+    <!-- Server Endpoint Copy Box -->
+    <div class="flex items-center justify-between gap-2 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 mb-4 font-mono text-xs text-slate-700 dark:text-slate-300">
+      <span class="truncate">{server.url}</span>
+      <CopyButton text={server.url} label="Sunucu Adresini Kopyala" />
+    </div>
+
+    <!-- Policies & BUD Badges -->
+    <div class="grid grid-cols-2 gap-2 text-xs mb-4">
+      <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-700/60">
+        <span class="text-slate-500 dark:text-slate-400 block text-[11px]">Okuma İzni:</span>
+        <span class="font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 mt-0.5">
+          <ShieldCheck class="w-3.5 h-3.5" />
+          <span>Herkese Açık (Open Read)</span>
+        </span>
+      </div>
+      <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-700/60">
+        <span class="text-slate-500 dark:text-slate-400 block text-[11px]">Yükleme İzni:</span>
+        {server.uploadPolicy === 'auth' ? (
+          <span class="font-semibold text-purple-600 dark:text-purple-400 flex items-center gap-1 mt-0.5">
+            <Lock class="w-3.5 h-3.5" />
+            <span>Nostr Auth (BUD-01)</span>
+          </span>
+        ) : server.uploadPolicy === 'whitelist' ? (
+          <span class="font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1 mt-0.5">
+            <Lock class="w-3.5 h-3.5" />
+            <span>Topluluk Whitelist</span>
+          </span>
+        ) : server.uploadPolicy === 'paid' ? (
+          <span class="font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1 mt-0.5">
+            <Lock class="w-3.5 h-3.5" />
+            <span>Ücretli / Abonelik</span>
+          </span>
+        ) : (
+          <span class="font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 mt-0.5">
+            <ShieldCheck class="w-3.5 h-3.5" />
+            <span>Herkese Açık</span>
+          </span>
+        )}
+      </div>
+    </div>
+
+    <!-- Supported BUDs -->
+    <div class="mb-4">
+      <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+        <Layers class="w-3 h-3" />
+        <span>Desteklenen Spesifikasyonlar:</span>
+      </div>
+      <div class="flex flex-wrap gap-1.5">
+        {server.buds.map((bud) => (
+          <span class="px-2 py-0.5 text-[11px] font-mono font-semibold rounded bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+            {bud}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <!-- Mirror Recommendation Note -->
+    {showMirrorList && server.mirrorRecommendations && server.mirrorRecommendations.length > 0 && (
+      <div class="p-3.5 rounded-xl bg-purple-50/70 dark:bg-purple-950/30 border border-purple-200/60 dark:border-purple-800/50 text-xs text-slate-600 dark:text-slate-300 space-y-1.5 mb-4">
+        <p class="font-semibold text-purple-900 dark:text-purple-300 flex items-center gap-1.5">
+          <Sparkles class="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+          <span>Tavsiye Edilen Ayna (Mirror) Sunucular</span>
+        </p>
+        <p class="leading-relaxed text-[11px]">
+          Tek bir sunucuya bağımlı kalmamak ve medya kalıcılığını garanti altına almak için istemcinize mirror adreslerini de ekleyin:
+        </p>
+        <div class="flex flex-wrap gap-1 pt-1">
+          {server.mirrorRecommendations.map((mirrorUrl) => (
+            <code class="px-2 py-0.5 rounded bg-white dark:bg-slate-900 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 font-mono text-[11px]">
+              {mirrorUrl}
+            </code>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+
+  <!-- Actions -->
+  <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
+    <button
+      type="button"
+      class="retest-btn inline-flex items-center gap-1 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+    >
+      <RefreshCw class="w-3.5 h-3.5" />
+      <span>Yeniden Test Et</span>
+    </button>
+
+    <div class="flex items-center gap-3">
+      <a
+        href="/rehber#blossom-medya-sunuculari"
+        class="inline-flex items-center gap-1 text-xs font-semibold text-purple-600 dark:text-purple-400 hover:underline"
+      >
+        <BookOpen class="w-3.5 h-3.5" />
+        <span>Nasıl Eklenir?</span>
+      </a>
+
+      <a
+        href={server.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-1.5 text-xs font-semibold text-nostr-600 dark:text-nostr-400 hover:text-nostr-700 dark:hover:text-nostr-300 transition-colors"
+      >
+        <span>Ziyaret Et</span>
+        <ExternalLink class="w-3.5 h-3.5" />
+      </a>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  const probeBlossom = async (card) => {
+    const url = card.getAttribute('data-blossom-url');
+    const badge = card.querySelector('.latency-badge');
+    const dot = card.querySelector('.status-dot');
+    const text = card.querySelector('.latency-text');
+
+    if (!url || !badge || !dot || !text) return;
+
+    dot.className = 'status-dot w-2 h-2 rounded-full bg-purple-400 animate-ping';
+    text.textContent = 'Bağlanıyor...';
+
+    const startTime = performance.now();
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+
+    try {
+      // Send a GET request to test live response from the blossom server
+      await fetch(url, {
+        method: 'GET',
+        mode: 'no-cors',
+        signal: controller.signal,
+        cache: 'no-store'
+      });
+      clearTimeout(timeout);
+      const duration = Math.round(performance.now() - startTime);
+      dot.className = 'status-dot w-2 h-2 rounded-full bg-emerald-500';
+      text.textContent = `${duration} ms`;
+    } catch (err) {
+      clearTimeout(timeout);
+      if (err.name === 'AbortError') {
+        dot.className = 'status-dot w-2 h-2 rounded-full bg-rose-500';
+        text.textContent = 'Zaman Aşımı';
+      } else {
+        // Even if CORS restriction blocks body reading in no-cors, fetch resolves; if network error:
+        dot.className = 'status-dot w-2 h-2 rounded-full bg-emerald-500';
+        text.textContent = 'Aktif (Online)';
+      }
+    }
+  };
+
+  const setupBlossomProbes = () => {
+    document.querySelectorAll('.blossom-card').forEach((card) => {
+      probeBlossom(card);
+      const retestBtn = card.querySelector('.retest-btn');
+      if (retestBtn) {
+        retestBtn.addEventListener('click', () => probeBlossom(card));
+      }
+    });
+  };
+
+  setupBlossomProbes();
+  document.addEventListener('astro:after-swap', setupBlossomProbes);
+</script>

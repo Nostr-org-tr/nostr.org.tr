@@ -2,9 +2,11 @@
 import Layout from '../layouts/Layout.astro';
 import HeroGraphCanvas from '../components/HeroGraphCanvas.astro';
 import RelayPingCard from '../components/RelayPingCard.astro';
+import BlossomPingCard from '../components/BlossomPingCard.astro';
 import ServerSupportCard from '../components/ServerSupportCard.astro';
 import WhatWeNeedSection from '../components/WhatWeNeedSection.astro';
 import { communityRelay } from '../data/relays';
+import { communityBlossomServer } from '../data/blossom';
 import { talks } from '../data/talks';
 import { 
   ScrollText, 
@@ -150,31 +152,36 @@ const latestTalk = talks[0];
     </div>
   </section>
 
-  <!-- Official Relay Showcase -->
+  <!-- Official Infrastructure Showcase (Relay + Blossom Media Server) -->
   <section class="py-16 bg-slate-50 dark:bg-slate-900/30 border-t border-slate-200/80 dark:border-slate-800/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
       
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
             <Radio class="w-6 h-6 text-nostr-500" />
-            <span>Türkiye Resmi Topluluk Rölesi</span>
+            <span>Türkiye Resmi Topluluk Altyapısı</span>
           </h2>
           <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
-            Türkiye topluluğu için kurulan <span class="font-mono text-nostr-600 dark:text-nostr-400">relay.nostr.org.tr</span> aktif olarak yayındadır.
+            Topluluğumuz için bağımsız olarak barındırılan resmi iletişim rölesi ve merkeziyetsiz Blossom medya depolama sunucusu.
           </p>
         </div>
 
-        <a
-          href="/roleler"
-          class="inline-flex items-center gap-1.5 text-xs font-semibold text-nostr-600 dark:text-nostr-400 hover:underline"
-        >
-          <span>Tüm Röleleri İncele</span>
-          <ArrowRight class="w-3.5 h-3.5" />
-        </a>
+        <div class="flex items-center gap-3">
+          <a
+            href="/roleler"
+            class="inline-flex items-center gap-1.5 text-xs font-semibold text-nostr-600 dark:text-nostr-400 hover:underline"
+          >
+            <span>Tüm Altyapıyı Gör</span>
+            <ArrowRight class="w-3.5 h-3.5" />
+          </a>
+        </div>
       </div>
 
-      <RelayPingCard relay={communityRelay} />
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <RelayPingCard relay={communityRelay} />
+        <BlossomPingCard server={communityBlossomServer} showMirrorList={false} />
+      </div>
 
     </div>
   </section>

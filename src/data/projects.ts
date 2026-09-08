@@ -13,6 +13,17 @@ export interface ProjectItem {
 
 export const projects: ProjectItem[] = [
   {
+    name: 'Phoem',
+    category: 'Client',
+    description: 'Topluluklar, etkinlikler ve organizasyonlar için Nostr ve Blossom tabanlı egemen fotoğraf albümü platformu. Katılımcıların kriptografik imzalarıyla doğrudan katkı sağlayabildiği, sıfır veritabanı (Zero-DB) mimarili sansürsüz fotoğraf galerisi.',
+    url: 'https://photo.emre.xyz',
+    previewUrl: 'https://photo.emre.xyz',
+    github: 'https://github.com/delirehberi/photo.emre.xyz',
+    isFeatured: true,
+    author: 'Emre Yılmaz (@delirehberi)',
+    tags: ['Nostr', 'Blossom', 'NIP-52', 'NIP-94', 'NIP-98', 'NIP-57', 'Photos', 'Zero-DB'],
+  },
+  {
     name: 'rehber.dev',
     category: 'Tool',
     description: 'Nostr hesabınız için ücretsiz adınız@rehber.dev NIP-05 doğrulanmış kimliği ve Alby / WalletOfSatoshi cüzdanınıza anlık Lightning adres yönlendiricisi.',
@@ -21,6 +32,16 @@ export const projects: ProjectItem[] = [
     isFeatured: true,
     author: 'Emre Yılmaz (@delirehberi)',
     tags: ['NIP-05', 'NIP-57', 'Lightning', 'LUD-16', 'Identity', 'Tool'],
+  },
+  {
+    name: 'media.nostr.org.tr',
+    category: 'Protocol',
+    description: 'Nostr Türkiye resmi Blossom medya ve blob depolama sunucusu (BUD-01). Resim, video ve dosyalar için SHA-256 hash tabanlı, Nostr anahtarlarıyla kriptografik imzalı ve sansüre dirençli merkeziyetsiz depolama altyapısı.',
+    url: 'https://media.nostr.org.tr',
+    previewUrl: 'https://media.nostr.org.tr',
+    isFeatured: true,
+    author: 'Nostr Türkiye Topluluğu',
+    tags: ['Blossom', 'BUD-01', 'BUD-02', 'BUD-04', 'Media', 'Blob Storage'],
   },
   {
     name: 'Snippets',

@@ -1,20 +1,22 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import RelayPingCard from '../components/RelayPingCard.astro';
+import BlossomPingCard from '../components/BlossomPingCard.astro';
 import ServerSupportCard from '../components/ServerSupportCard.astro';
 import { communityRelay, recommendedRelays } from '../data/relays';
-import { Radio, HelpCircle, CheckCircle2 } from 'lucide-astro';
+import { communityBlossomServer, recommendedBlossomServers } from '../data/blossom';
+import { Radio, HardDrive, HelpCircle, CheckCircle2, ArrowRight } from 'lucide-astro';
 import BreadcrumbSchema from '../components/seo/BreadcrumbSchema.astro';
 
 const breadcrumbs = [
   { name: 'Ana Sayfa', path: '/' },
-  { name: 'Röleler', path: '/roleler' },
+  { name: 'Röleler & Medya Sunucuları', path: '/roleler' },
 ];
 ---
 
 <Layout 
-  title="Röleler - Nostr Türkiye Topluluğu"
-  description="Nostr Türkiye resmi rölesi (relay.nostr.org.tr), küresel tavsiye edilen röleler, whitelist yazma politikası ve röle ekleme rehberi."
+  title="Röleler & Blossom Medya Sunucuları - Nostr Türkiye Topluluğu"
+  description="Nostr Türkiye resmi rölesi (relay.nostr.org.tr), Blossom medya sunucusu (media.nostr.org.tr), küresel açık mirrorlar ve istemci kurulum rehberi."
 >
   <BreadcrumbSchema slot="head" items={breadcrumbs} />
   
@@ -23,47 +25,49 @@ const breadcrumbs = [
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-nostr-100 dark:bg-nostr-950 text-nostr-700 dark:text-nostr-300 border border-nostr-200 dark:border-nostr-800 mb-6 shadow-sm">
         <Radio class="w-3.5 h-3.5 text-nostr-500" />
-        <span>Merkeziyetsiz Röle Ağı</span>
+        <span>Merkeziyetsiz Altyapı & Medya Ağı</span>
       </div>
 
       <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.2]">
-        Türkiye & Küresel Röleler
+        Türkiye & Küresel Altyapı
       </h1>
       <p class="mt-4 text-base sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-        Nostr'da mesajlar şirket sunucularında değil; bağımsız rölelerde taşınır. Röle adreslerini inceleyin ve istemcinize ekleyin.
+        Nostr'da metin mesajları bağımsız rölelerde, medya dosyaları ise Blossom blob sunucularında taşınır. Altyapı adreslerini inceleyin ve istemcinize ekleyin.
       </p>
     </div>
   </section>
 
-  <!-- Official Relay Spotlight & Details Section -->
+  <!-- Main Infrastructure Grid -->
   <section class="py-16 bg-white dark:bg-slate-950">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
       
-      <!-- Community Relay Section -->
+      <!-- Section 1: Official Community Infrastructure Spotlight -->
       <div>
         <div class="flex items-center justify-between gap-4 mb-6">
           <div>
             <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <span>Resmi Topluluk Rölesi</span>
+              <span>Resmi Topluluk Altyapısı</span>
               <span class="w-2.5 h-2.5 rounded-full bg-tr-red"></span>
             </h2>
             <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
-              Türkiye topluluğu için kurulan <span class="font-mono text-nostr-600 dark:text-nostr-400">relay.nostr.org.tr</span> aktif olarak yayındadır.
+              Türkiye topluluğu için düşük gecikmeyle barındırılan resmi iletişim rölesi ve Blossom medya sunucusu.
             </p>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <RelayPingCard relay={communityRelay} />
+          <BlossomPingCard server={communityBlossomServer} />
         </div>
       </div>
 
-      <!-- Other Recommended Relays -->
+      <!-- Section 2: Recommended Relays -->
       <div>
         <div class="flex items-center justify-between gap-4 mb-6">
           <div>
-            <h2 class="text-2xl font-bold text-slate-900 dark:text-white">
-              Tavsiye Edilen Küresel Röleler
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <Radio class="w-6 h-6 text-nostr-500" />
+              <span>Tavsiye Edilen Küresel Röleler</span>
             </h2>
             <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
               Ağ dayanıklılığını artırmak için istemcinize birden fazla açık röle ekleyebilirsiniz.
@@ -78,53 +82,133 @@ const breadcrumbs = [
         </div>
       </div>
 
+      <!-- Section 3: Recommended Blossom & Mirror Servers -->
+      <div>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <HardDrive class="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              <span>Açık Blossom Medya & Mirror Sunucuları</span>
+            </h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+              Medya içeriklerinizin kaybolmaması için tek bir sunucu yerine ayna (mirror) sunucuları da yapılandırmanız önerilir.
+            </p>
+          </div>
+
+          <a
+            href="/rehber#blossom-medya-sunuculari"
+            class="inline-flex items-center gap-1.5 text-xs font-semibold text-purple-600 dark:text-purple-400 hover:underline"
+          >
+            <span>Blossom & Mirror Kılavuzunu Oku</span>
+            <ArrowRight class="w-3.5 h-3.5" />
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {recommendedBlossomServers.filter(s => !s.isOfficialCommunityServer).map((server) => (
+            <BlossomPingCard server={server} showMirrorList={false} />
+          ))}
+        </div>
+      </div>
+
       <!-- Server Costs & Support Card -->
       <div>
         <ServerSupportCard />
       </div>
 
-      <!-- How to add relays guide -->
-      <div class="p-8 sm:p-10 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-6">
+      <!-- How to add relays & blossom servers guide -->
+      <div class="p-8 sm:p-10 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-8">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl bg-nostr-100 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400 flex items-center justify-center">
             <HelpCircle class="w-5 h-5" />
           </div>
-          <h3 class="text-xl font-bold text-slate-900 dark:text-white">
-            İstemcinize Röle Nasıl Eklenir?
-          </h3>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-600 dark:text-slate-300">
-          <div class="space-y-2 p-4 rounded-2xl bg-white dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60">
-            <h4 class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-              <CheckCircle2 class="w-4 h-4 text-nostr-500" />
-              <span>Damus (iOS / macOS)</span>
-            </h4>
-            <p class="text-xs leading-relaxed">
-              Ayarlar > Röleler (Relays) bölümüne gidin. <code class="font-mono text-nostr-600 dark:text-nostr-400">wss://relay.nostr.org.tr</code> adresini yapıştırıp Ekle'ye dokunun.
-            </p>
-          </div>
-
-          <div class="space-y-2 p-4 rounded-2xl bg-white dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60">
-            <h4 class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-              <CheckCircle2 class="w-4 h-4 text-nostr-500" />
-              <span>Amethyst (Android)</span>
-            </h4>
-            <p class="text-xs leading-relaxed">
-              Sol menüden Ayarlar > Röleler sekmesini açın. "+" butonuna basarak röle URL'sini ekleyin.
-            </p>
-          </div>
-
-          <div class="space-y-2 p-4 rounded-2xl bg-white dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60">
-            <h4 class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-              <CheckCircle2 class="w-4 h-4 text-nostr-500" />
-              <span>Primal (Web / Mobil)</span>
-            </h4>
-            <p class="text-xs leading-relaxed">
-              Settings > Network / Relays bölümüne gidin ve özel röle listesine ekleyin.
+          <div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white">
+              İstemcinize Röle ve Medya Sunucusu Nasıl Eklenir?
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+              İstemcilerinizde hem metin rölelerini hem de Blossom medya sunucularını tanımlayarak tam merkeziyetsizlik sağlayın.
             </p>
           </div>
         </div>
+
+        <!-- Relay Configuration Cards -->
+        <div class="space-y-3">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+            1. Röle Ekleme (relay.nostr.org.tr)
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-slate-600 dark:text-slate-300">
+            <div class="space-y-2 p-4 rounded-2xl bg-white dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60">
+              <h5 class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <CheckCircle2 class="w-4 h-4 text-nostr-500" />
+                <span>Damus (iOS / macOS)</span>
+              </h5>
+              <p class="text-xs leading-relaxed">
+                Ayarlar > Röleler (Relays) bölümüne gidin. <code class="font-mono text-nostr-600 dark:text-nostr-400">wss://relay.nostr.org.tr</code> adresini yapıştırıp Ekle'ye dokunun.
+              </p>
+            </div>
+
+            <div class="space-y-2 p-4 rounded-2xl bg-white dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60">
+              <h5 class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <CheckCircle2 class="w-4 h-4 text-nostr-500" />
+                <span>Amethyst (Android)</span>
+              </h5>
+              <p class="text-xs leading-relaxed">
+                Sol menüden Ayarlar > Röleler sekmesini açın. "+" butonuna basarak röle URL'sini ekleyin.
+              </p>
+            </div>
+
+            <div class="space-y-2 p-4 rounded-2xl bg-white dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60">
+              <h5 class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <CheckCircle2 class="w-4 h-4 text-nostr-500" />
+                <span>Primal (Web / Mobil)</span>
+              </h5>
+              <p class="text-xs leading-relaxed">
+                Settings > Network / Relays bölümüne gidin ve özel röle listesine ekleyin.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blossom Configuration Cards -->
+        <div class="space-y-3 pt-2">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400 flex items-center gap-1.5">
+            <HardDrive class="w-3.5 h-3.5" />
+            <span>2. Blossom Medya Sunucusu Ekleme (media.nostr.org.tr)</span>
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-slate-600 dark:text-slate-300">
+            <div class="space-y-2 p-4 rounded-2xl bg-white dark:bg-slate-800/60 border border-purple-200/80 dark:border-purple-900/50">
+              <h5 class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <CheckCircle2 class="w-4 h-4 text-purple-500" />
+                <span>Amethyst (Android)</span>
+              </h5>
+              <p class="text-xs leading-relaxed">
+                Ayarlar > Medya Yüklemeleri (Media Uploads) > Medya Sunucuları bölümüne <code class="font-mono text-purple-600 dark:text-purple-400">https://media.nostr.org.tr</code> adresini ve yedek mirrorları ekleyin.
+              </p>
+            </div>
+
+            <div class="space-y-2 p-4 rounded-2xl bg-white dark:bg-slate-800/60 border border-purple-200/80 dark:border-purple-900/50">
+              <h5 class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <CheckCircle2 class="w-4 h-4 text-purple-500" />
+                <span>Coracle & Web İstemcileri</span>
+              </h5>
+              <p class="text-xs leading-relaxed">
+                Settings > Media Servers / Blossom bölümünden <code class="font-mono text-purple-600 dark:text-purple-400">https://media.nostr.org.tr</code> sunucusunu birincil veya ayna olarak kaydedin.
+              </p>
+            </div>
+
+            <div class="space-y-2 p-4 rounded-2xl bg-white dark:bg-slate-800/60 border border-purple-200/80 dark:border-purple-900/50">
+              <h5 class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <CheckCircle2 class="w-4 h-4 text-purple-500" />
+                <span>Nostrudel & Diğerleri</span>
+              </h5>
+              <p class="text-xs leading-relaxed">
+                Medya Tercihleri altında Blossom Media Server (BUD-01/02) seçeneğini işaretleyip sunucu URL'nizi girin.
+              </p>
+            </div>
+          </div>
+        </div>
+
       </div>
 
     </div>

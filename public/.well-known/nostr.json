@@ -5,28 +5,39 @@
     "delirehberi": "46f3c7bb33cc3019049b76dc89dbb96e34c247bdda68b6ad8632682793ff8a1a",
     "emre": "46f3c7bb33cc3019049b76dc89dbb96e34c247bdda68b6ad8632682793ff8a1a",
     "mustafaakman": "113a2a2c9d74956513ddd3a1f808859c54525accb08b04a1f1c09cea34813d8c",
-    "fadim": "628b2c9aedcf9da47f42128402f3fd82787dac75c3595db1bccf3b7baab0452f"
+    "fadim": "628b2c9aedcf9da47f42128402f3fd82787dac75c3595db1bccf3b7baab0452f",
+    "endy": "3e33d31bec8aefa78e642ab1b90dde7430e351df7c6da47e0fc160e267a58cde"
   },
   "relays": {
     "ed15e54b8d525b7faa43aa142221f838c415aac699bbb4e74a1004e4b7e7adf8": [
       "wss://relay.nostr.org.tr",
       "wss://relay.damus.io",
-      "wss://nos.lol"
+      "wss://nos.lol",
+      "wss://relay.primal.net"
     ],
     "46f3c7bb33cc3019049b76dc89dbb96e34c247bdda68b6ad8632682793ff8a1a": [
       "wss://relay.nostr.org.tr",
       "wss://relay.damus.io",
-      "wss://nos.lol"
+      "wss://nos.lol",
+      "wss://relay.primal.net"
     ],
     "113a2a2c9d74956513ddd3a1f808859c54525accb08b04a1f1c09cea34813d8c": [
       "wss://relay.nostr.org.tr",
       "wss://relay.damus.io",
-      "wss://nos.lol"
+      "wss://nos.lol",
+      "wss://relay.primal.net"
     ],
     "628b2c9aedcf9da47f42128402f3fd82787dac75c3595db1bccf3b7baab0452f": [
       "wss://relay.nostr.org.tr",
       "wss://relay.damus.io",
-      "wss://nos.lol"
+      "wss://nos.lol",
+      "wss://relay.primal.net"
+    ],
+    "3e33d31bec8aefa78e642ab1b90dde7430e351df7c6da47e0fc160e267a58cde": [
+      "wss://relay.nostr.org.tr",
+      "wss://relay.damus.io",
+      "wss://nos.lol",
+      "wss://relay.primal.net"
     ]
   }
 }

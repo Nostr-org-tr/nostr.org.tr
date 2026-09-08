@@ -177,4 +177,76 @@ export const guides: GuideSection[] = [
       },
     ],
   },
+  {
+    id: 'blossom-medya-sunuculari',
+    title: '7. Blossom Medya Sunucuları & Merkeziyetsiz Depolama',
+    summary: 'Nostr üzerinde resim, video ve dosya paylaşımının yeni açık standardı Blossom (BUD-01/02), SHA-256 tabanlı içerik adresleme, istemcilere medya sunucusu ekleme ve mirror (ayna) yedeklilik mimarisi.',
+    icon: 'HardDrive',
+    readTime: '7 dk',
+    content: [
+      {
+        heading: 'Blossom Nedir ve Geleneksel İmaj Hostlarından Farkı Nedir?',
+        text: 'Geleneksel web platformlarında ve eski Nostr paylaşımlarında kullanılan merkezi imaj yükleyicilerin (Imgur, Cloudinary vb.) en büyük sorunu; dosyaların silinmesi, platformun sansür uygulaması veya dosya üzerinde sıkıştırma/EXIF manipülasyonu yapmasıdır. Blossom (Blob Storage for Nostr - BUD spesifikasyonları), dosyaları SHA-256 hash özetleriyle isimlendiren (Content-Addressed Storage) merkeziyetsiz bir medya depolama standardıdır. Bir dosyanın adresi dosyanın matematiksel özetidir (örn: https://media.nostr.org.tr/<sha256>). Dosya içeriği değişmedikçe hash asla değişmez.',
+        tips: [
+          'SHA-256 hash tabanlı mimari sayesinde aynı dosya dünyanın farklı yerlerindeki binlerce Blossom sunucusunda birebir aynı adresle bulunabilir.',
+          'Nostr Türkiye resmi Blossom sunucusu https://media.nostr.org.tr üzerinden topluluğumuza yüksek hızlı ve bağımsız medya depolama imkanı sunulmaktadır.',
+        ],
+        links: [
+          { label: 'Blossom Protokol Spesifikasyonu (hzrd149/blossom)', url: 'https://github.com/hzrd149/blossom' },
+          { label: 'BUD-01 Temel Blossom Standardı', url: 'https://github.com/hzrd149/blossom/blob/master/buds/01.md' },
+          { label: 'BUD-02 Sunucu Listeleme Standardı', url: 'https://github.com/hzrd149/blossom/blob/master/buds/02.md' },
+        ],
+      },
+      {
+        heading: 'Kriptografik Kimlik Doğrulama (BUD-01 / kind: 24242)',
+        text: 'Blossom sunucularına dosya yüklerken geleneksel API anahtarları veya şifreler yerine Nostr özel anahtarınızla imzalanmış kind: 24242 yetkilendirme olayı (auth event) kullanılır. Bu olayda yüklenen dosyanın SHA-256 hash değeri ve yükleme zamanı mühürlenir. Böylece sunucu, yükleme yapanın gerçek Nostr hesabınız olduğunu kriptografik olarak teyit eder.',
+        codeTitle: 'Blossom Upload & Auth İsteği (BUD-01)',
+        codeLang: 'bash',
+        code: `# Blossom sunucusuna SHA-256 tabanlı dosya yükleme (Nostr Auth kind:24242 ile)
+curl -X PUT "https://media.nostr.org.tr/upload" \\
+  -H "Authorization: Nostr <base64_encoded_kind_24242_event>" \\
+  -H "Content-Type: image/jpeg" \\
+  --data-binary @fotograf.jpg
+
+# Yüklenen dosya anında SHA-256 hash ile servis edilir:
+# https://media.nostr.org.tr/4a5b...3c2e.jpg`,
+        tips: [
+          'İstemciler (Amethyst, Coracle vb.) bu yetkilendirme ve imzalama adımlarını arka planda otomatik olarak yürütür; ek bir şifre girmeniz gerekmez.',
+        ],
+      },
+      {
+        heading: 'İstemcilere Medya Sunucusu Nasıl Eklenir?',
+        text: 'Nostr istemcinizde fotoğraf veya video yüklemek istediğinizde istemcinizin hangi sunucuya dosya göndereceğini yapılandırabilirsiniz. Amethyst, Coracle, Primal, Nostrudel ve diğer modern istemcilerde Ayarlar > Medya / Blossom Sunucuları bölümüne giderek https://media.nostr.org.tr adresini eklemeniz yeterlidir.',
+        tips: [
+          'Amethyst: Ayarlar > Medya Yüklemeleri > Medya Sunucuları > "+" butonuna basarak https://media.nostr.org.tr ekleyin.',
+          'Coracle & Web İstemcileri: Settings > Media Servers bölümünden https://media.nostr.org.tr sunucusunu birincil sağlayıcı yapın.',
+        ],
+        links: [
+          { label: 'media.nostr.org.tr Canlı Sunucu Durumu', url: 'https://media.nostr.org.tr' },
+        ],
+      },
+      {
+        heading: 'Mirrorlar (Ayna Sunucular) Nasıl Çalışır ve Neden Tek Bir Sunucuya Güvenilmemeli?',
+        text: 'Merkeziyetsizliğin altın kuralı: Tek bir sunucuya asla tamamen güvenmeyin (Single Point of Failure). Herhangi bir medya sunucusu internet kesintisi yaşayabilir, disk doluluğu nedeniyle eski dosyaları temizleyebilir veya bakım moduna geçebilir. İçerik adreslemenin en büyük gücü tam burada devreye girer: Dosyalar dosya adıyla değil SHA-256 hash ile tanımlandığı için, dosyanız media.nostr.org.tr üzerinde silinse dahi aynı SHA-256 hash değerine sahip dosya cdn.satellite.earth, nostr.download veya primal.net üzerinde mevcutsa hiçbir veri kaybı yaşanmaz.',
+        codeTitle: 'BUD-04 Mirror (Aynalama) API Mantığı',
+        codeLang: 'bash',
+        code: `# Bir dosyayı başka bir Blossom sunucusundan media.nostr.org.tr üzerine aynalama:
+curl -X PUT "https://media.nostr.org.tr/mirror" \\
+  -H "Authorization: Nostr <base64_encoded_kind_24242_event>" \\
+  -H "Content-Type: application/json" \\
+  -d '{"url": "https://cdn.satellite.earth/<sha256_hash>"}'`,
+        tips: [
+          'KRİTİK TAVSİYE: İstemcinize tek bir medya sunucusu yerine hem https://media.nostr.org.tr hem de küresel açık ayna (mirror) sunucuları (örn: https://cdn.satellite.earth, https://nostr.download) ekleyin.',
+          'BUD-04 Mirror standardı sayesinde Blossom istemcileri yüklediğiniz bir fotoğrafı arka planda birden fazla sunucuya aynı anda yansıtabilir.',
+          'Böylece medya dosyalarınız sansürlenemez, kapatılamaz ve sonsuza kadar Nostr ağında kalıcı hale gelir.',
+        ],
+        links: [
+          { label: 'BUD-04 Mirror Spesifikasyonu', url: 'https://github.com/hzrd149/blossom/blob/master/buds/04.md' },
+          { label: 'Satellite CDN Blossom', url: 'https://cdn.satellite.earth' },
+          { label: 'Nostr Download Blossom', url: 'https://nostr.download' },
+        ],
+      },
+    ],
+  },
 ];
+

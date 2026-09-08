@@ -2,7 +2,9 @@
 import GuideLayout from '../layouts/GuideLayout.astro';
 import CopyButton from '../components/CopyButton.astro';
 import Nip05KeyConverter from '../components/Nip05KeyConverter.astro';
+import BlossomPingCard from '../components/BlossomPingCard.astro';
 import { guides } from '../data/guides';
+import { communityBlossomServer } from '../data/blossom';
 import { 
   Radio, 
   Key, 
@@ -10,6 +12,7 @@ import {
   ArrowRightLeft, 
   BadgeCheck, 
   Zap, 
+  HardDrive,
   ExternalLink, 
   CheckCircle2, 
   ShieldAlert,
@@ -31,6 +34,7 @@ const iconsMap: Record<string, any> = {
   ArrowRightLeft,
   BadgeCheck,
   Zap,
+  HardDrive,
 };
 
 const breadcrumbs = [
@@ -229,6 +233,16 @@ const breadcrumbs = [
         {guide.id === 'nip-05' && (
           <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
             <Nip05KeyConverter />
+          </div>
+        )}
+
+        {guide.id === 'blossom-medya-sunuculari' && (
+          <div class="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-4">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+              <h4 class="text-sm font-bold text-slate-900 dark:text-white">Canlı Resmi Medya Sunucusu Durumu & Testi</h4>
+            </div>
+            <BlossomPingCard server={communityBlossomServer} />
           </div>
         )}
 
