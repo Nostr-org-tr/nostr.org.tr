@@ -311,109 +311,15 @@ import {
 
 <script>
   import { marked } from 'marked';
+  import { nip19 } from 'nostr-tools';
 
   (function initViewer() {
-    const BLOG_RELAYS = [
+    const DEFAULT_RELAYS = [
       'wss://relay.nostr.org.tr',
       'wss://relay.damus.io',
       'wss://nos.lol',
       'wss://relay.primal.net',
     ];
-
-    const ALPHABET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
-    const ALPHABET_MAP: Record<string, number> = {};
-    for (let i = 0; i < ALPHABET.length; i++) ALPHABET_MAP[ALPHABET[i]] = i;
-    const GENERATOR = [0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3];
-
-    function polymod(values: number[]) {
-      let chk = 1;
-      for (let p = 0; p < values.length; ++p) {
-        const top = chk >> 25;
-        chk = ((chk & 0x1ffffff) << 5) ^ values[p];
-        for (let i = 0; i < 5; ++i) {
-          if ((top >> i) & 1) chk ^= GENERATOR[i];
-        }
-      }
-      return chk;
-    }
-
-    function hrpExpand(hrp: string) {
-      const ret = [];
-      for (let p = 0; p < hrp.length; ++p) ret.push(hrp.charCodeAt(p) >> 5);
-      ret.push(0);
-      for (let p = 0; p < hrp.length; ++p) ret.push(hrp.charCodeAt(p) & 31);
-      return ret;
-    }
-
-    function createChecksum(hrp: string, data: number[]) {
-      const values = hrpExpand(hrp).concat(data).concat([0, 0, 0, 0, 0, 0]);
-      const mod = polymod(values) ^ 1;
-      const ret = [];
-      for (let p = 0; p < 6; ++p) ret.push((mod >> (5 * (5 - p))) & 31);
-      return ret;
-    }
-
-    function convertBits(data: Uint8Array | number[], fromBits: number, toBits: number, pad: boolean) {
-      let acc = 0;
-      let bits = 0;
-      const ret = [];
-      const maxv = (1 << toBits) - 1;
-      const maxAcc = (1 << (fromBits + toBits - 1)) - 1;
-      for (let p = 0; p < data.length; ++p) {
-        acc = ((acc << fromBits) | data[p]) & maxAcc;
-        bits += fromBits;
-        while (bits >= toBits) {
-          bits -= toBits;
-          ret.push((acc >> bits) & maxv);
-        }
-      }
-      if (pad && bits > 0) ret.push((acc << (toBits - bits)) & maxv);
-      return ret;
-    }
-
-    function encodeBech32(hrp: string, data: Uint8Array) {
-      const words = convertBits(data, 8, 5, true);
-      const checksum = createChecksum(hrp.toLowerCase(), words);
-      const combined = words.concat(checksum);
-      let result = hrp.toLowerCase() + '1';
-      for (let i = 0; i < combined.length; ++i) result += ALPHABET.charAt(combined[i]);
-      return result;
-    }
-
-    function hexToBytes(hex: string) {
-      const clean = hex.trim().toLowerCase();
-      const bytes = new Uint8Array(clean.length / 2);
-      for (let i = 0; i < clean.length; i += 2) {
-        bytes[i / 2] = parseInt(clean.substring(i, i + 2), 16);
-      }
-      return bytes;
-    }
-
-    function hexToNpub(hex: string) {
-      try {
-        return encodeBech32('npub', hexToBytes(hex));
-      } catch {
-        return hex;
-      }
-    }
-
-    function encodeNaddrClient(kind: number, pubkeyHex: string, dTag: string) {
-      try {
-        const tlv: number[] = [];
-        const dBytes = new TextEncoder().encode(dTag);
-        tlv.push(0, dBytes.length, ...Array.from(dBytes));
-        const rBytes = new TextEncoder().encode('wss://relay.nostr.org.tr');
-        tlv.push(1, rBytes.length, ...Array.from(rBytes));
-        const aBytes = hexToBytes(pubkeyHex);
-        tlv.push(2, aBytes.length, ...Array.from(aBytes));
-        const kBytes = new Uint8Array(4);
-        new DataView(kBytes.buffer).setUint32(0, kind, false);
-        tlv.push(3, kBytes.length, ...Array.from(kBytes));
-        return encodeBech32('naddr', new Uint8Array(tlv));
-      } catch {
-        return '';
-      }
-    }
 
     function slugify(text: string): string {
       const trMap: Record<string, string> = {
@@ -437,125 +343,97 @@ import {
       return d.innerHTML;
     }
 
-    /**
-     * Decode a bech32-encoded string into its human-readable prefix and raw data bytes.
-     * Returns null on any failure so callers can gracefully fall back.
-     */
-    function decodeBech32(bechStr: string): { hrp: string; data: Uint8Array } | null {
-      try {
-        const lower = bechStr.toLowerCase();
-        const sepIdx = lower.lastIndexOf('1');
-        if (sepIdx < 1 || sepIdx + 7 > lower.length) return null;
-        const hrp = lower.slice(0, sepIdx);
-        const dataStr = lower.slice(sepIdx + 1);
-        const values: number[] = [];
-        for (const ch of dataStr) {
-          const v = ALPHABET_MAP[ch];
-          if (v === undefined) return null;
-          values.push(v);
-        }
-        // Verify checksum
-        const expand = hrpExpand(hrp);
-        const combined = expand.concat(values);
-        if (polymod(combined) !== 1) return null;
-        const data5 = values.slice(0, values.length - 6);
-        // Convert 5-bit groups back to 8-bit bytes
-        let acc = 0;
-        let bits = 0;
-        const bytes: number[] = [];
-        for (const v of data5) {
-          acc = (acc << 5) | v;
-          bits += 5;
-          if (bits >= 8) {
-            bits -= 8;
-            bytes.push((acc >> bits) & 0xff);
-          }
-        }
-        return { hrp, data: new Uint8Array(bytes) };
-      } catch {
-        return null;
-      }
-    }
-
-    interface NaddrData {
-      dTag: string;
-      pubkey: string;
-      kind: number;
+    interface ResolvedTarget {
+      type: 'naddr' | 'nevent' | 'note' | 'hex' | 'slug';
+      raw: string;
+      id?: string;
+      dTag?: string;
+      pubkey?: string;
+      kind?: number;
       relays: string[];
     }
 
-    /**
-     * Decode a NIP-19 naddr string into its component fields.
-     * Returns null if the input is not a valid naddr.
-     */
-    function decodeNaddr(naddrStr: string): NaddrData | null {
-      const decoded = decodeBech32(naddrStr);
-      if (!decoded || decoded.hrp !== 'naddr') return null;
+    function resolveTargetFromUrl(): ResolvedTarget | null {
+      const pathname = window.location.pathname;
+      const pathParts = pathname.split('/').filter(Boolean);
+      let raw = '';
 
-      const data = decoded.data;
-      let i = 0;
-      let dTag = '';
-      let pubkey = '';
-      let kind = 0;
-      const relays: string[] = [];
-      const td = new TextDecoder();
+      // Check /blog/:id or /en/blog/:id
+      const blogIdx = pathParts.indexOf('blog');
+      if (blogIdx !== -1 && pathParts[blogIdx + 1] && pathParts[blogIdx + 1] !== 'viewer') {
+        raw = decodeURIComponent(pathParts[blogIdx + 1]);
+      }
 
-      while (i < data.length) {
-        const type = data[i++];
-        if (i >= data.length) break;
-        const len = data[i++];
-        if (i + len > data.length) break;
-        const value = data.slice(i, i + len);
-        i += len;
+      // Check query params: ?id=, ?nevent=, ?naddr=, ?slug=, ?d=, ?post=
+      if (!raw) {
+        const params = new URLSearchParams(window.location.search);
+        raw = params.get('id') || params.get('nevent') || params.get('naddr') || params.get('slug') || params.get('d') || params.get('post') || '';
+      }
 
-        switch (type) {
-          case 0: // d-tag (special identifier)
-            dTag = td.decode(value);
-            break;
-          case 1: // relay URL
-            relays.push(td.decode(value));
-            break;
-          case 2: // pubkey (32 bytes)
-            pubkey = Array.from(value).map(b => b.toString(16).padStart(2, '0')).join('');
-            break;
-          case 3: // kind (4-byte big-endian uint32)
-            if (value.length === 4) {
-              kind = new DataView(value.buffer, value.byteOffset, 4).getUint32(0, false);
-            }
-            break;
+      // Check hash: #nevent1... or #naddr1...
+      if (!raw && window.location.hash) {
+        raw = window.location.hash.replace(/^#/, '').trim();
+      }
+
+      raw = raw.trim();
+      if (!raw) return null;
+
+      // Try NIP-19 decode
+      if (raw.startsWith('naddr1') || raw.startsWith('nevent1') || raw.startsWith('note1')) {
+        try {
+          const decoded = nip19.decode(raw);
+          if (decoded.type === 'naddr') {
+            const data = decoded.data as { kind: number; pubkey: string; identifier: string; relays?: string[] };
+            return {
+              type: 'naddr',
+              raw,
+              dTag: data.identifier,
+              pubkey: data.pubkey,
+              kind: data.kind || 30023,
+              relays: data.relays || [],
+            };
+          }
+          if (decoded.type === 'nevent') {
+            const data = decoded.data as { id: string; relays?: string[]; author?: string; kind?: number };
+            return {
+              type: 'nevent',
+              raw,
+              id: data.id,
+              pubkey: data.author,
+              kind: data.kind,
+              relays: data.relays || [],
+            };
+          }
+          if (decoded.type === 'note') {
+            const id = decoded.data as string;
+            return {
+              type: 'note',
+              raw,
+              id,
+              relays: [],
+            };
+          }
+        } catch {
+          // Fall through to plain string handling
         }
       }
 
-      if (!dTag || !pubkey) return null;
-      return { dTag, pubkey, kind: kind || 30023, relays };
-    }
+      // Check 64-character hex ID
+      if (/^[0-9a-f]{64}$/i.test(raw)) {
+        return {
+          type: 'hex',
+          raw,
+          id: raw.toLowerCase(),
+          relays: [],
+        };
+      }
 
-    // --- URL Parsing: resolve target from pathname ---
-    const pathname = window.location.pathname;
-    const pathParts = pathname.split('/').filter(Boolean);
-    let targetSlug = '';
-    let naddrData: NaddrData | null = null;
-
-    // Handle /blog/:id, /en/blog/:id, or ?slug= / ?d= query params
-    const blogIdx = pathParts.indexOf('blog');
-    if (blogIdx !== -1 && pathParts[blogIdx + 1] && pathParts[blogIdx + 1] !== 'viewer') {
-      const raw = decodeURIComponent(pathParts[blogIdx + 1]);
-      // Try to decode as naddr first; fall back to treating it as a plain slug
-      if (raw.startsWith('naddr1')) {
-        naddrData = decodeNaddr(raw);
-      }
-      if (!naddrData) {
-        targetSlug = raw;
-      }
-    } else {
-      const params = new URLSearchParams(window.location.search);
-      const raw = params.get('slug') || params.get('d') || '';
-      if (raw.startsWith('naddr1')) {
-        naddrData = decodeNaddr(raw);
-      }
-      if (!naddrData) {
-        targetSlug = raw;
-      }
+      // Plain slug or d-tag
+      return {
+        type: 'slug',
+        raw,
+        relays: [],
+      };
     }
 
     const loadingEl = document.getElementById('viewer-loading');
@@ -564,17 +442,56 @@ import {
     const errorMessageEl = document.getElementById('error-message');
     const retryBtn = document.getElementById('btn-retry-fetch');
 
-    if (!naddrData && !targetSlug) {
+    const target = resolveTargetFromUrl();
+
+    if (!target) {
       if (loadingEl) loadingEl.classList.add('hidden');
       if (errorEl) errorEl.classList.remove('hidden');
-      if (errorMessageEl) errorMessageEl.textContent = 'Görüntülenecek makale adresi belirtilmedi.';
+      if (errorMessageEl) errorMessageEl.textContent = 'Görüntülenecek geçerli bir Nostr makale adresi (nevent veya naddr) belirtilmedi.';
       return;
     }
 
     let activeSockets: WebSocket[] = [];
     let authorProfile: any = null;
 
+    function buildRelayList(hintRelays: string[] = []): string[] {
+      const combined = [...hintRelays, ...DEFAULT_RELAYS];
+      const valid = combined
+        .map((r) => r.trim().replace(/\/+$/, ''))
+        .filter((r) => r.startsWith('ws://') || r.startsWith('wss://'));
+      return Array.from(new Set(valid));
+    }
+
+    function checkEventMatch(ev: any, tgt: ResolvedTarget): boolean {
+      if (tgt.id) {
+        return ev.id.toLowerCase() === tgt.id.toLowerCase();
+      }
+      if (tgt.type === 'naddr') {
+        const dTag = (ev.tags as string[][]).find((t) => t[0] === 'd')?.[1] || '';
+        const matchAuthor = !tgt.pubkey || ev.pubkey.toLowerCase() === tgt.pubkey.toLowerCase();
+        const matchDTag = dTag === tgt.dTag || dTag.toLowerCase() === (tgt.dTag || '').toLowerCase();
+        return matchAuthor && matchDTag && ev.kind === (tgt.kind || 30023);
+      }
+      if (tgt.type === 'slug') {
+        const dTag = (ev.tags as string[][]).find((t) => t[0] === 'd')?.[1] || '';
+        const title = (ev.tags as string[][]).find((t) => t[0] === 'title')?.[1] || '';
+        const dSlug = slugify(dTag);
+        const titleSlug = slugify(title);
+        const targetSlug = tgt.raw.toLowerCase();
+
+        return (
+          dSlug === targetSlug ||
+          dTag.toLowerCase() === targetSlug ||
+          titleSlug === targetSlug ||
+          ev.id.toLowerCase() === targetSlug
+        );
+      }
+      return false;
+    }
+
     async function fetchArticleFromRelays() {
+      if (!target) return;
+      const validTarget: ResolvedTarget = target;
       if (loadingEl) loadingEl.classList.remove('hidden');
       if (errorEl) errorEl.classList.add('hidden');
       if (contentEl) contentEl.classList.add('hidden');
@@ -584,16 +501,23 @@ import {
       activeSockets = [];
 
       let foundEvent: any = null;
+      const targetRelays = buildRelayList(validTarget.relays);
       const subId = 'v_' + Math.random().toString(36).slice(2, 7);
 
-      /**
-       * Attempt to find the target article from a relay using the given filter.
-       * Returns early once a matching event is found.
-       */
-      async function fetchFromRelays(filter: Record<string, unknown>, relayList: string[] = BLOG_RELAYS): Promise<void> {
-        const targetRelays = Array.from(new Set([...relayList, ...BLOG_RELAYS]));
-        const promises = targetRelays.map((relayUrl) => {
-          return new Promise<void>((resolve) => {
+      function fetchFromRelays(filter: Record<string, unknown>, relays: string[], tgt: ResolvedTarget): Promise<void> {
+        return new Promise<void>((resolve) => {
+          let resolvedCount = 0;
+          const total = relays.length;
+          if (total === 0) { resolve(); return; }
+
+          const onRelayDone = () => {
+            resolvedCount++;
+            if (resolvedCount >= total || foundEvent) {
+              resolve();
+            }
+          };
+
+          relays.forEach((relayUrl) => {
             let ws: WebSocket | null = null;
             let isDone = false;
 
@@ -611,7 +535,7 @@ import {
                   ws.close();
                 } catch {}
               }
-              resolve();
+              onRelayDone();
             };
 
             const timeout = setTimeout(cleanup, 8000);
@@ -635,35 +559,9 @@ import {
                   if (!Array.isArray(data)) return;
 
                   const [type, reqSubId, ev] = data;
-                  if (type === 'EVENT' && reqSubId === subId && ev && ev.kind === 30023) {
-                    const dTag = (ev.tags as string[][]).find((t) => t[0] === 'd')?.[1] || '';
-                    const title = (ev.tags as string[][]).find((t) => t[0] === 'title')?.[1] || '';
-                    const dSlug = slugify(dTag);
-                    const titleSlug = slugify(title);
-
-                    // Check match via naddr data or targetSlug
-                    let isMatch = false;
-                    if (naddrData) {
-                      const matchAuthor = !naddrData.pubkey || ev.pubkey.toLowerCase() === naddrData.pubkey.toLowerCase();
-                      const matchDTag = dTag === naddrData.dTag || dTag.toLowerCase() === naddrData.dTag.toLowerCase();
-                      if (matchAuthor && matchDTag) {
-                        isMatch = true;
-                      }
-                    }
-
-                    if (!isMatch && targetSlug) {
-                      if (
-                        dSlug === targetSlug.toLowerCase() ||
-                        dTag.toLowerCase() === targetSlug.toLowerCase() ||
-                        titleSlug === targetSlug.toLowerCase() ||
-                        ev.id === targetSlug
-                      ) {
-                        isMatch = true;
-                      }
-                    }
-
-                    if (isMatch) {
-                      if (!foundEvent || ev.created_at > foundEvent.created_at) {
+                  if (type === 'EVENT' && reqSubId === subId && ev) {
+                    if (checkEventMatch(ev, tgt)) {
+                      if (!foundEvent || (ev.created_at || 0) > (foundEvent.created_at || 0)) {
                         foundEvent = ev;
                       }
                     }
@@ -682,27 +580,29 @@ import {
             }
           });
         });
-
-        await Promise.all(promises);
       }
 
-      if (naddrData) {
-        // --- NIP-19 naddr targeted query ---
-        const naddrFilter: Record<string, unknown> = {
-          kinds: [naddrData.kind || 30023],
-          '#d': [naddrData.dTag],
+      // Query strategy based on target type
+      if (validTarget.id) {
+        // Direct event ID query (from nevent, note, or hex)
+        await fetchFromRelays({ ids: [validTarget.id] }, targetRelays, validTarget);
+      } else if (validTarget.type === 'naddr') {
+        // Targeted coordinate query
+        const filter: Record<string, unknown> = {
+          kinds: [validTarget.kind || 30023],
+          '#d': [validTarget.dTag],
         };
-        if (naddrData.pubkey) {
-          naddrFilter.authors = [naddrData.pubkey];
+        if (validTarget.pubkey) {
+          filter.authors = [validTarget.pubkey];
         }
-        await fetchFromRelays(naddrFilter, naddrData.relays);
-      } else if (targetSlug) {
-        // --- Phase 1: Targeted d-tag query (slug matching d-tag) ---
-        await fetchFromRelays({ kinds: [30023], '#d': [targetSlug] });
+        await fetchFromRelays(filter, targetRelays, validTarget);
+      } else if (validTarget.type === 'slug') {
+        // Phase 1: d-tag query
+        await fetchFromRelays({ kinds: [30023], '#d': [validTarget.raw] }, targetRelays, validTarget);
 
-        // --- Phase 2: Broader fallback if d-tag query returned nothing ---
+        // Phase 2: broader fallback search if d-tag didn't match
         if (!foundEvent) {
-          await fetchFromRelays({ kinds: [30023], limit: 200 });
+          await fetchFromRelays({ kinds: [30023], limit: 150 }, targetRelays, validTarget);
         }
       }
 
@@ -710,26 +610,30 @@ import {
         if (loadingEl) loadingEl.classList.add('hidden');
         if (errorEl) errorEl.classList.remove('hidden');
         if (errorMessageEl) {
-          const displayTarget = naddrData ? naddrData.dTag : targetSlug;
-          errorMessageEl.textContent = `Aradığınız "${displayTarget}" içerikli Nostr yazısı rölelerde bulunamadı veya henüz ağa iletilmedi.`;
+          errorMessageEl.textContent = `Aradığınız "${validTarget.raw}" içerikli Nostr yazısı rölelerde bulunamadı veya henüz ağa iletilmedi.`;
         }
         document.title = 'Yazı Bulunamadı (404) - Nostr Türkiye';
         return;
       }
 
-      // Fetch Kind 0 Profile for Author
-      await fetchAuthorProfile(foundEvent.pubkey);
+      // Fetch Author Metadata (Kind 0)
+      await fetchAuthorProfile(foundEvent.pubkey, targetRelays);
 
       // Render Article Content
       await renderArticle(foundEvent, authorProfile);
     }
 
-    async function fetchAuthorProfile(pubkey: string) {
+    async function fetchAuthorProfile(pubkey: string, relays: string[]) {
       const profSubId = 'vp_' + Math.random().toString(36).slice(2, 7);
       await new Promise<void>((resolve) => {
+        let isDone = false;
+        const primaryRelay = relays[0] || DEFAULT_RELAYS[0];
+
         try {
-          const ws = new WebSocket(BLOG_RELAYS[0] || 'wss://relay.nostr.org.tr');
+          const ws = new WebSocket(primaryRelay);
           const cleanup = () => {
+            if (isDone) return;
+            isDone = true;
             try {
               if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(['CLOSE', profSubId]));
               ws.close();
@@ -763,7 +667,7 @@ import {
     }
 
     async function renderArticle(event: any, profile: any) {
-      const dTag = (event.tags || []).find((t: string[]) => t[0] === 'd')?.[1] || event.id;
+      const dTag = (event.tags || []).find((t: string[]) => t[0] === 'd')?.[1] || '';
       const rawTitle = (event.tags || []).find((t: string[]) => t[0] === 'title')?.[1] || '';
       const summary = (event.tags || []).find((t: string[]) => t[0] === 'summary')?.[1] || '';
       const image = (event.tags || []).find((t: string[]) => t[0] === 'image')?.[1] || '';
@@ -777,7 +681,13 @@ import {
         title = h1 ? h1[1].trim() : 'İsimsiz Nostr Yazısı';
       }
 
-      const npub = hexToNpub(event.pubkey);
+      let npub = '';
+      try {
+        npub = nip19.npubEncode(event.pubkey);
+      } catch {
+        npub = event.pubkey;
+      }
+
       const authorName = profile?.display_name || profile?.displayName || profile?.name || `${npub.slice(0, 10)}...${npub.slice(-4)}`;
       const authorAvatar = profile?.picture || profile?.image || '';
       const authorBio = profile?.about || profile?.bio || '';
@@ -792,9 +702,30 @@ import {
         day: 'numeric',
       }).format(new Date(publishedAt * 1000));
 
-      const naddr = encodeNaddrClient(30023, event.pubkey, dTag);
+      let canonicalNaddr = '';
+      let canonicalNevent = '';
 
-      // Populate DOM elements
+      if (dTag && event.kind === 30023) {
+        try {
+          canonicalNaddr = nip19.naddrEncode({
+            kind: 30023,
+            pubkey: event.pubkey,
+            identifier: dTag,
+            relays: ['wss://relay.nostr.org.tr'],
+          });
+        } catch {}
+      }
+
+      try {
+        canonicalNevent = nip19.neventEncode({
+          id: event.id,
+          author: event.pubkey,
+          kind: event.kind,
+          relays: ['wss://relay.nostr.org.tr'],
+        });
+      } catch {}
+
+      // Update document title and metadata
       document.title = `${title} - Nostr Türkiye Blog`;
 
       const titleEl = document.getElementById('article-title');
@@ -822,7 +753,7 @@ import {
         `).join('');
       }
 
-      // Author Header Bar
+      // Author Bar
       const authorNameEl = document.getElementById('author-name');
       if (authorNameEl) authorNameEl.textContent = authorName;
 
@@ -851,7 +782,7 @@ import {
         }
       }
 
-      // Render Markdown Body
+      // Render Markdown Body safely
       const bodyEl = document.getElementById('article-body');
       if (bodyEl) {
         bodyEl.innerHTML = await marked.parse(event.content || '');
@@ -891,11 +822,15 @@ import {
 
       // Client Bridges
       const bridgesContainer = document.getElementById('client-bridges-container');
-      if (bridgesContainer && naddr) {
+      if (bridgesContainer) {
+        const primaryRef = canonicalNaddr || canonicalNevent || event.id;
         const bridges = [
-          { name: 'Habla', url: `https://habla.news/a/${naddr}` },
-          { name: 'Yakihonne', url: `https://yakihonne.com/article/${naddr}` },
-          { name: 'Primal', url: `https://primal.net/e/${naddr}` },
+          ...(canonicalNaddr ? [
+            { name: 'Habla', url: `https://habla.news/a/${canonicalNaddr}` },
+            { name: 'Yakihonne', url: `https://yakihonne.com/article/${canonicalNaddr}` },
+          ] : []),
+          { name: 'Primal', url: `https://primal.net/e/${canonicalNevent || primaryRef}` },
+          { name: 'Coracle', url: `https://coracle.social/${canonicalNevent || primaryRef}` },
         ];
         bridgesContainer.innerHTML = bridges.map((b) => `
           <a
@@ -910,7 +845,7 @@ import {
         `).join('');
       }
 
-      // Copy Button
+      // Copy Article Link
       const copyBtn = document.getElementById('btn-copy-article-link');
       if (copyBtn) {
         copyBtn.onclick = () => {
@@ -921,7 +856,7 @@ import {
         };
       }
 
-      // Show content
+      // Switch to content view
       if (loadingEl) loadingEl.classList.add('hidden');
       if (contentEl) contentEl.classList.remove('hidden');
 
@@ -940,7 +875,7 @@ import {
       const commentStatus = document.getElementById('viewer-comment-status');
       const btnRefresh = document.getElementById('btn-refresh-viewer-comments');
 
-      const aCoordinate = `30023:${articleEvent.pubkey}:${dTag}`;
+      const aCoordinate = dTag ? `30023:${articleEvent.pubkey}:${dTag}` : '';
       const receivedComments = new Map<string, any>();
       const commenterProfiles = new Map<string, any>();
 
@@ -994,14 +929,17 @@ import {
         if (commentsEmpty) commentsEmpty.classList.add('hidden');
 
         const cmSubId = 'vcm_' + Math.random().toString(36).slice(2, 7);
-        const filters = [
-          { kinds: [1111], '#A': [aCoordinate] },
+        const filters: Array<Record<string, unknown>> = [
           { kinds: [1111], '#E': [articleEvent.id] },
-          { kinds: [1], '#a': [aCoordinate] },
           { kinds: [1], '#e': [articleEvent.id] },
         ];
 
-        BLOG_RELAYS.forEach((relayUrl) => {
+        if (aCoordinate) {
+          filters.push({ kinds: [1111], '#A': [aCoordinate] });
+          filters.push({ kinds: [1], '#a': [aCoordinate] });
+        }
+
+        DEFAULT_RELAYS.forEach((relayUrl) => {
           try {
             const ws = new WebSocket(relayUrl);
             ws.onopen = () => {
@@ -1027,7 +965,7 @@ import {
       if (btnRefresh) btnRefresh.onclick = () => loadComments();
       loadComments();
 
-      // Comment submission
+      // Comment submission via NIP-07
       if (commentForm && commentInput) {
         commentForm.onsubmit = async (e) => {
           e.preventDefault();
@@ -1051,22 +989,26 @@ import {
               commentStatus.classList.remove('hidden');
             }
 
+            const tags: string[][] = [
+              ['E', articleEvent.id, 'wss://relay.nostr.org.tr', 'root'],
+              ['p', articleEvent.pubkey],
+              ['k', String(articleEvent.kind || 30023)],
+            ];
+
+            if (aCoordinate) {
+              tags.push(['A', aCoordinate, 'wss://relay.nostr.org.tr', 'root']);
+            }
+
             const unsignedEvent = {
               kind: 1111,
               created_at: Math.floor(Date.now() / 1000),
-              tags: [
-                ['A', aCoordinate, 'wss://relay.nostr.org.tr', 'root'],
-                ['E', articleEvent.id, 'wss://relay.nostr.org.tr', 'root'],
-                ['p', articleEvent.pubkey],
-                ['k', '30023'],
-              ],
+              tags,
               content,
             };
 
             const signedEvent = await nostr.signEvent(unsignedEvent);
 
-            // Broadcast to relays
-            BLOG_RELAYS.forEach((relayUrl) => {
+            DEFAULT_RELAYS.forEach((relayUrl) => {
               try {
                 const ws = new WebSocket(relayUrl);
                 ws.onopen = () => {

@@ -85,10 +85,22 @@ export default {
     const response = await env.ASSETS.fetch(request);
 
     // If an un-prerendered blog post is requested, fallback to the dynamic real-time Nostr viewer
-    if (response.status === 404 && (normalizedPath.startsWith('/blog/') || normalizedPath.startsWith('/en/blog/'))) {
-      const viewerUrl = new URL('/blog/viewer/index.html', request.url);
-      const viewerRequest = new Request(viewerUrl.toString(), request);
-      const viewerResponse = await env.ASSETS.fetch(viewerRequest);
+    if (
+      response.status === 404 &&
+      (normalizedPath.startsWith('/blog/') || normalizedPath.startsWith('/en/blog/')) &&
+      !normalizedPath.startsWith('/blog/viewer') &&
+      !normalizedPath.startsWith('/en/blog/viewer') &&
+      !normalizedPath.includes('.')
+    ) {
+      let viewerUrl = new URL('/blog/viewer/', request.url);
+      let viewerRequest = new Request(viewerUrl.toString(), request);
+      let viewerResponse = await env.ASSETS.fetch(viewerRequest);
+
+      if (viewerResponse.status !== 200) {
+        viewerUrl = new URL('/blog/viewer/index.html', request.url);
+        viewerRequest = new Request(viewerUrl.toString(), request);
+        viewerResponse = await env.ASSETS.fetch(viewerRequest);
+      }
 
       if (viewerResponse.status === 200) {
         const viewerHeaders = new Headers(viewerResponse.headers);

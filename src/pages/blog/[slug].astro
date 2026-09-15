@@ -16,10 +16,25 @@ import {
 
 export async function getStaticPaths() {
   const posts = await fetchBlogPosts();
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: { post },
-  }));
+  const paths: Array<{ params: { slug: string }; props: { post: BlogPost } }> = [];
+
+  for (const post of posts) {
+    // 1. Human-readable slug path (e.g. /blog/nostr-nedir)
+    paths.push({
+      params: { slug: post.slug },
+      props: { post },
+    });
+
+    // 2. Canonical NIP-19 naddr path (e.g. /blog/naddr1qq...)
+    if (post.naddr && post.naddr !== post.slug) {
+      paths.push({
+        params: { slug: post.naddr },
+        props: { post },
+      });
+    }
+  }
+
+  return paths;
 }
 
 interface Props {

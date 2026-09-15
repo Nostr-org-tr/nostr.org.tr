@@ -52,3 +52,41 @@ import { Compass, BookOpen, Home } from 'lucide-astro';
     </div>
   </div>
 </Layout>
+
+<script is:inline>
+  (function () {
+    try {
+      const path = window.location.pathname.replace(/\/+$/, '');
+      const isBlog = (path.startsWith('/blog/') || path.startsWith('/en/blog/')) &&
+                     !path.startsWith('/blog/viewer') &&
+                     !path.startsWith('/en/blog/viewer') &&
+                     !path.includes('.');
+      const hasNostrParam = window.location.search.includes('nevent1') ||
+                            window.location.search.includes('naddr1') ||
+                            window.location.search.includes('note1');
+
+      if (isBlog || hasNostrParam) {
+        const pathParts = path.split('/').filter(Boolean);
+        const blogIdx = pathParts.indexOf('blog');
+        const identifier = blogIdx !== -1 && pathParts[blogIdx + 1] ? pathParts[blogIdx + 1] : '';
+        const search = window.location.search;
+        const hash = window.location.hash;
+
+        let targetUrl = '/blog/viewer/';
+        if (identifier) {
+          targetUrl += '?id=' + encodeURIComponent(identifier);
+          if (search) {
+            targetUrl += '&' + search.slice(1);
+          }
+        } else if (search) {
+          targetUrl += search;
+        }
+        if (hash) {
+          targetUrl += hash;
+        }
+
+        window.location.replace(targetUrl);
+      }
+    } catch {}
+  })();
+</script>

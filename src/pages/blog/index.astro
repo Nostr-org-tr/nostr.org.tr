@@ -345,10 +345,6 @@ const breadcrumbItems = [
         return '';
       }
     }
-    function slugifyClient(text) {
-      const trMap = { ç:'c', Ç:'c', ğ:'g', Ğ:'g', ı:'i', İ:'i', ö:'o', Ö:'o', ş:'s', Ş:'s', ü:'u', Ü:'u' };
-      return text.split('').map(c => trMap[c] || c).join('').toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '') || 'makale';
-    }
     function escapeHtml(s) {
       const d = document.createElement('div');
       d.textContent = s || '';
