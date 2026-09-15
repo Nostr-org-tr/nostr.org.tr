@@ -479,84 +479,102 @@ import {
       let foundEvent: any = null;
       const subId = 'v_' + Math.random().toString(36).slice(2, 7);
 
-      const fetchPromises = BLOG_RELAYS.map((relayUrl) => {
-        return new Promise<void>((resolve) => {
-          let ws: WebSocket | null = null;
-          let isDone = false;
+      /**
+       * Attempt to find the target article from a relay using the given filter.
+       * Returns early once a matching event is found.
+       */
+      async function fetchFromRelays(filter: Record<string, unknown>): Promise<void> {
+        const promises = BLOG_RELAYS.map((relayUrl) => {
+          return new Promise<void>((resolve) => {
+            let ws: WebSocket | null = null;
+            let isDone = false;
 
-          const cleanup = () => {
-            if (isDone) return;
-            isDone = true;
-            if (ws) {
-              try {
-                ws.onclose = null;
-                ws.onerror = null;
-                ws.onmessage = null;
-                if (ws.readyState === WebSocket.OPEN) {
-                  ws.send(JSON.stringify(['CLOSE', subId]));
-                }
-                ws.close();
-              } catch {}
-            }
-            resolve();
-          };
-
-          const timeout = setTimeout(cleanup, 8000);
-
-          try {
-            ws = new WebSocket(relayUrl);
-            activeSockets.push(ws);
-
-            ws.onopen = () => {
-              try {
-                // Request kind 30023 articles
-                ws?.send(JSON.stringify(['REQ', subId, { kinds: [30023], limit: 50 }]));
-              } catch {
-                clearTimeout(timeout);
-                cleanup();
+            const cleanup = () => {
+              if (isDone) return;
+              isDone = true;
+              if (ws) {
+                try {
+                  ws.onclose = null;
+                  ws.onerror = null;
+                  ws.onmessage = null;
+                  if (ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify(['CLOSE', subId]));
+                  }
+                  ws.close();
+                } catch {}
               }
+              resolve();
             };
 
-            ws.onmessage = (msg) => {
-              try {
-                const data = JSON.parse(msg.data);
-                if (!Array.isArray(data)) return;
+            const timeout = setTimeout(cleanup, 8000);
 
-                const [type, reqSubId, ev] = data;
-                if (type === 'EVENT' && reqSubId === subId && ev && ev.kind === 30023) {
-                  const dTag = (ev.tags as string[][]).find((t) => t[0] === 'd')?.[1] || '';
-                  const title = (ev.tags as string[][]).find((t) => t[0] === 'title')?.[1] || '';
-                  const dSlug = slugify(dTag);
-                  const titleSlug = slugify(title);
+            try {
+              ws = new WebSocket(relayUrl);
+              activeSockets.push(ws);
 
-                  // Match slug against dTag, slugified dTag, title slug, or raw event id
-                  if (
-                    dSlug === targetSlug.toLowerCase() ||
-                    dTag.toLowerCase() === targetSlug.toLowerCase() ||
-                    titleSlug === targetSlug.toLowerCase() ||
-                    ev.id === targetSlug
-                  ) {
-                    if (!foundEvent || ev.created_at > foundEvent.created_at) {
-                      foundEvent = ev;
-                    }
-                  }
-                } else if (type === 'EOSE' && reqSubId === subId) {
+              ws.onopen = () => {
+                try {
+                  ws?.send(JSON.stringify(['REQ', subId, filter]));
+                } catch {
                   clearTimeout(timeout);
                   cleanup();
                 }
-              } catch {}
-            };
+              };
 
-            ws.onerror = () => { clearTimeout(timeout); cleanup(); };
-            ws.onclose = () => { clearTimeout(timeout); cleanup(); };
-          } catch {
-            clearTimeout(timeout);
-            cleanup();
-          }
+              ws.onmessage = (msg) => {
+                try {
+                  const data = JSON.parse(msg.data);
+                  if (!Array.isArray(data)) return;
+
+                  const [type, reqSubId, ev] = data;
+                  if (type === 'EVENT' && reqSubId === subId && ev && ev.kind === 30023) {
+                    const dTag = (ev.tags as string[][]).find((t) => t[0] === 'd')?.[1] || '';
+                    const title = (ev.tags as string[][]).find((t) => t[0] === 'title')?.[1] || '';
+                    const dSlug = slugify(dTag);
+                    const titleSlug = slugify(title);
+
+                    // Match slug against dTag, slugified dTag, title slug, or raw event id
+                    if (
+                      dSlug === targetSlug.toLowerCase() ||
+                      dTag.toLowerCase() === targetSlug.toLowerCase() ||
+                      titleSlug === targetSlug.toLowerCase() ||
+                      ev.id === targetSlug
+                    ) {
+                      if (!foundEvent || ev.created_at > foundEvent.created_at) {
+                        foundEvent = ev;
+                      }
+                    }
+                  } else if (type === 'EOSE' && reqSubId === subId) {
+                    clearTimeout(timeout);
+                    cleanup();
+                  }
+                } catch {}
+              };
+
+              ws.onerror = () => { clearTimeout(timeout); cleanup(); };
+              ws.onclose = () => { clearTimeout(timeout); cleanup(); };
+            } catch {
+              clearTimeout(timeout);
+              cleanup();
+            }
+          });
         });
-      });
 
-      await Promise.all(fetchPromises);
+        await Promise.all(promises);
+      }
+
+      // --- Phase 1: Targeted d-tag query (exact match, fastest path) ---
+      // Relay NIP-12 filter: '#d' matches the d-tag identifier directly.
+      // This avoids scanning arbitrary batches of events and works for any
+      // new article that was never included in the static build.
+      await fetchFromRelays({ kinds: [30023], '#d': [targetSlug] });
+
+      // --- Phase 2: Broader fallback if d-tag query returned nothing ---
+      // Some older relays or events may use a different d-tag format than
+      // the URL slug. We widen the query and apply slugify matching locally.
+      if (!foundEvent) {
+        await fetchFromRelays({ kinds: [30023], limit: 200 });
+      }
 
       if (!foundEvent) {
         if (loadingEl) loadingEl.classList.add('hidden');

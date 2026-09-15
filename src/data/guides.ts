@@ -97,10 +97,6 @@ export const guides: GuideSection[] = [
         text: 'x2nostr.emre.xyz; GitHub, Spotify, IMDb, Goodreads ve benzeri platformlardaki içeriklerinizi, aktivitelerinizi, listelerinizi ve profil verilerinizi Nostr protokolüne taşımanıza olanak tanıyan kapsamlı bir göç aracıdır.',
         links: [
           { label: 'x2nostr Göç Aracını Aç', url: 'https://x2nostr.emre.xyz' },
-          { label: 'GitHub', url: 'https://github.com' },
-          { label: 'Spotify', url: 'https://spotify.com' },
-          { label: 'IMDb', url: 'https://www.imdb.com' },
-          { label: 'Goodreads', url: 'https://www.goodreads.com' },
         ],
       },
       {
