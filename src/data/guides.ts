@@ -74,8 +74,9 @@ export const guides: GuideSection[] = [
     content: [
       {
         heading: 'Tavsiye Edilen İstemciler',
-        text: 'Nostr açık bir protokol olduğu için dilediğiniz istemciyi kullanabilirsiniz. Hepsinde aynı anahtarla oturum açtığınızda tüm takipçileriniz ve gönderileriniz otomatik olarak yüklenir.',
+        text: 'Nostr açık bir protokol olduğu için dilediğiniz istemciyi kullanabilirsiniz. Hepsinde aynı anahtarla oturum açtığınızda tüm takipçileriniz ve gönderileriniz otomatik olarak yüklenir. Yerel Türkçe dil desteği ve zengin özellikleri için Nostrich, tüm platformlarda (Web, iOS, Android, macOS) öne çıkan tavsiye edilen seçenektir.',
         links: [
+          { label: 'Nostrich (Web / iOS / Android / macOS - Türkçe Dil Desteği)', url: 'https://nostrich.org' },
           { label: 'Damus (iOS / macOS)', url: 'https://damus.io' },
           { label: 'Amethyst (Android)', url: 'https://github.com/vitorpamplona/amethyst' },
           { label: 'Primal (Web / iOS / Android)', url: 'https://primal.net' },
@@ -216,10 +217,11 @@ curl -X PUT "https://media.nostr.org.tr/upload" \\
       },
       {
         heading: 'İstemcilere Medya Sunucusu Nasıl Eklenir?',
-        text: 'Nostr istemcinizde fotoğraf veya video yüklemek istediğinizde istemcinizin hangi sunucuya dosya göndereceğini yapılandırabilirsiniz. Amethyst, Coracle, Primal, Nostrudel ve diğer modern istemcilerde Ayarlar > Medya / Blossom Sunucuları bölümüne giderek https://media.nostr.org.tr adresini eklemeniz yeterlidir.',
+        text: 'Nostr istemcinizde fotoğraf veya video yüklemek istediğinizde istemcinizin hangi sunucuya dosya göndereceğini yapılandırabilirsiniz. Nostrich, Amethyst, Coracle, Primal, Nostrudel ve diğer modern istemcilerde Ayarlar > Medya / Blossom Sunucuları bölümüne giderek https://media.nostr.org.tr adresini eklemeniz yeterlidir.',
         tips: [
+          'Nostrich & Web İstemcileri: Ayarlar (Settings) > Medya / Blossom bölümünden https://media.nostr.org.tr sunucusunu ekleyin.',
           'Amethyst: Ayarlar > Medya Yüklemeleri > Medya Sunucuları > "+" butonuna basarak https://media.nostr.org.tr ekleyin.',
-          'Coracle & Web İstemcileri: Settings > Media Servers bölümünden https://media.nostr.org.tr sunucusunu birincil sağlayıcı yapın.',
+          'Coracle: Settings > Media Servers bölümünden https://media.nostr.org.tr sunucusunu birincil sağlayıcı yapın.',
         ],
         links: [
           { label: 'media.nostr.org.tr Canlı Sunucu Durumu', url: 'https://media.nostr.org.tr' },

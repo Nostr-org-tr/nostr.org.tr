@@ -86,7 +86,7 @@ export default {
 
     // If an un-prerendered blog post is requested, fallback to the dynamic real-time Nostr viewer
     if (response.status === 404 && (normalizedPath.startsWith('/blog/') || normalizedPath.startsWith('/en/blog/'))) {
-      const viewerUrl = new URL('/blog/viewer', request.url);
+      const viewerUrl = new URL('/blog/viewer/index.html', request.url);
       const viewerRequest = new Request(viewerUrl.toString(), request);
       const viewerResponse = await env.ASSETS.fetch(viewerRequest);
 
@@ -95,7 +95,8 @@ export default {
         for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
           viewerHeaders.set(key, value);
         }
-        viewerHeaders.set('Cache-Control', 'no-cache');
+        viewerHeaders.set('Content-Type', 'text/html; charset=utf-8');
+        viewerHeaders.set('Cache-Control', 'no-cache, no-store, must-revalidate');
         return new Response(viewerResponse.body, {
           status: 200,
           statusText: 'OK',

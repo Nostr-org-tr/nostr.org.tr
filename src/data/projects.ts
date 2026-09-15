@@ -13,6 +13,16 @@ export interface ProjectItem {
 
 export const projects: ProjectItem[] = [
   {
+    name: 'Nostrich',
+    category: 'Client',
+    description: 'Web, iOS, Android, Zapstore ve macOS için yerel Türkçe dil desteğine sahip, tamamen ücretsiz, modern, hızlı ve zengin özellikli açık Nostr istemcisi.',
+    url: 'https://nostrich.org',
+    previewUrl: 'https://nostrich.org',
+    isFeatured: true,
+    author: 'Nostrich',
+    tags: ['Nostr', 'Client', 'Turkish', 'iOS', 'Android', 'Web', 'macOS', 'Open Source'],
+  },
+  {
     name: 'Phoem',
     category: 'Client',
     description: 'Topluluklar, etkinlikler ve organizasyonlar için Nostr ve Blossom tabanlı egemen fotoğraf albümü platformu. Katılımcıların kriptografik imzalarıyla doğrudan katkı sağlayabildiği, sıfır veritabanı (Zero-DB) mimarili sansürsüz fotoğraf galerisi.',
