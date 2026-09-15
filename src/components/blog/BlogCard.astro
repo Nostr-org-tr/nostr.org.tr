@@ -56,7 +56,7 @@ const formattedDate = new Intl.DateTimeFormat('tr-TR', {
 
         <!-- Title -->
         <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white group-hover:text-nostr-600 dark:group-hover:text-nostr-400 transition-colors line-clamp-2">
-          <a href={`/blog/${post.slug}`}>
+          <a href={`/blog/${post.naddr}`}>
             {post.title}
           </a>
         </h2>
@@ -89,7 +89,7 @@ const formattedDate = new Intl.DateTimeFormat('tr-TR', {
         </div>
 
         <a
-          href={`/blog/${post.slug}`}
+          href={`/blog/${post.naddr}`}
           class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold bg-nostr-600 hover:bg-nostr-700 text-white shadow-sm hover:shadow transition-all group-hover:translate-x-0.5"
           aria-label={`${post.title} yazısını oku`}
         >
@@ -129,7 +129,7 @@ const formattedDate = new Intl.DateTimeFormat('tr-TR', {
 
         <!-- Title -->
         <h3 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-nostr-600 dark:group-hover:text-nostr-400 transition-colors line-clamp-2">
-          <a href={`/blog/${post.slug}`}>
+          <a href={`/blog/${post.naddr}`}>
             {post.title}
           </a>
         </h3>
@@ -161,7 +161,7 @@ const formattedDate = new Intl.DateTimeFormat('tr-TR', {
         </div>
 
         <a
-          href={`/blog/${post.slug}`}
+          href={`/blog/${post.naddr}`}
           class="text-xs font-semibold text-nostr-600 dark:text-nostr-400 hover:text-nostr-700 dark:hover:text-nostr-300 inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform"
         >
           <span>Oku</span>

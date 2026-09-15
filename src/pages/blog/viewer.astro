@@ -437,18 +437,125 @@ import {
       return d.innerHTML;
     }
 
-    // Determine target slug from pathname or search params
+    /**
+     * Decode a bech32-encoded string into its human-readable prefix and raw data bytes.
+     * Returns null on any failure so callers can gracefully fall back.
+     */
+    function decodeBech32(bechStr: string): { hrp: string; data: Uint8Array } | null {
+      try {
+        const lower = bechStr.toLowerCase();
+        const sepIdx = lower.lastIndexOf('1');
+        if (sepIdx < 1 || sepIdx + 7 > lower.length) return null;
+        const hrp = lower.slice(0, sepIdx);
+        const dataStr = lower.slice(sepIdx + 1);
+        const values: number[] = [];
+        for (const ch of dataStr) {
+          const v = ALPHABET_MAP[ch];
+          if (v === undefined) return null;
+          values.push(v);
+        }
+        // Verify checksum
+        const expand = hrpExpand(hrp);
+        const combined = expand.concat(values);
+        if (polymod(combined) !== 1) return null;
+        const data5 = values.slice(0, values.length - 6);
+        // Convert 5-bit groups back to 8-bit bytes
+        let acc = 0;
+        let bits = 0;
+        const bytes: number[] = [];
+        for (const v of data5) {
+          acc = (acc << 5) | v;
+          bits += 5;
+          if (bits >= 8) {
+            bits -= 8;
+            bytes.push((acc >> bits) & 0xff);
+          }
+        }
+        return { hrp, data: new Uint8Array(bytes) };
+      } catch {
+        return null;
+      }
+    }
+
+    interface NaddrData {
+      dTag: string;
+      pubkey: string;
+      kind: number;
+      relays: string[];
+    }
+
+    /**
+     * Decode a NIP-19 naddr string into its component fields.
+     * Returns null if the input is not a valid naddr.
+     */
+    function decodeNaddr(naddrStr: string): NaddrData | null {
+      const decoded = decodeBech32(naddrStr);
+      if (!decoded || decoded.hrp !== 'naddr') return null;
+
+      const data = decoded.data;
+      let i = 0;
+      let dTag = '';
+      let pubkey = '';
+      let kind = 0;
+      const relays: string[] = [];
+      const td = new TextDecoder();
+
+      while (i < data.length) {
+        const type = data[i++];
+        if (i >= data.length) break;
+        const len = data[i++];
+        if (i + len > data.length) break;
+        const value = data.slice(i, i + len);
+        i += len;
+
+        switch (type) {
+          case 0: // d-tag (special identifier)
+            dTag = td.decode(value);
+            break;
+          case 1: // relay URL
+            relays.push(td.decode(value));
+            break;
+          case 2: // pubkey (32 bytes)
+            pubkey = Array.from(value).map(b => b.toString(16).padStart(2, '0')).join('');
+            break;
+          case 3: // kind (4-byte big-endian uint32)
+            if (value.length === 4) {
+              kind = new DataView(value.buffer, value.byteOffset, 4).getUint32(0, false);
+            }
+            break;
+        }
+      }
+
+      if (!dTag || !pubkey) return null;
+      return { dTag, pubkey, kind: kind || 30023, relays };
+    }
+
+    // --- URL Parsing: resolve target from pathname ---
     const pathname = window.location.pathname;
     const pathParts = pathname.split('/').filter(Boolean);
     let targetSlug = '';
+    let naddrData: NaddrData | null = null;
 
-    // Handle /blog/:slug, /en/blog/:slug, /blog/viewer?slug=:slug
+    // Handle /blog/:id, /en/blog/:id, or ?slug= / ?d= query params
     const blogIdx = pathParts.indexOf('blog');
     if (blogIdx !== -1 && pathParts[blogIdx + 1] && pathParts[blogIdx + 1] !== 'viewer') {
-      targetSlug = decodeURIComponent(pathParts[blogIdx + 1]);
+      const raw = decodeURIComponent(pathParts[blogIdx + 1]);
+      // Try to decode as naddr first; fall back to treating it as a plain slug
+      if (raw.startsWith('naddr1')) {
+        naddrData = decodeNaddr(raw);
+      }
+      if (!naddrData) {
+        targetSlug = raw;
+      }
     } else {
       const params = new URLSearchParams(window.location.search);
-      targetSlug = params.get('slug') || params.get('d') || '';
+      const raw = params.get('slug') || params.get('d') || '';
+      if (raw.startsWith('naddr1')) {
+        naddrData = decodeNaddr(raw);
+      }
+      if (!naddrData) {
+        targetSlug = raw;
+      }
     }
 
     const loadingEl = document.getElementById('viewer-loading');
@@ -457,7 +564,7 @@ import {
     const errorMessageEl = document.getElementById('error-message');
     const retryBtn = document.getElementById('btn-retry-fetch');
 
-    if (!targetSlug) {
+    if (!naddrData && !targetSlug) {
       if (loadingEl) loadingEl.classList.add('hidden');
       if (errorEl) errorEl.classList.remove('hidden');
       if (errorMessageEl) errorMessageEl.textContent = 'Görüntülenecek makale adresi belirtilmedi.';
@@ -483,8 +590,9 @@ import {
        * Attempt to find the target article from a relay using the given filter.
        * Returns early once a matching event is found.
        */
-      async function fetchFromRelays(filter: Record<string, unknown>): Promise<void> {
-        const promises = BLOG_RELAYS.map((relayUrl) => {
+      async function fetchFromRelays(filter: Record<string, unknown>, relayList: string[] = BLOG_RELAYS): Promise<void> {
+        const targetRelays = Array.from(new Set([...relayList, ...BLOG_RELAYS]));
+        const promises = targetRelays.map((relayUrl) => {
           return new Promise<void>((resolve) => {
             let ws: WebSocket | null = null;
             let isDone = false;
@@ -533,13 +641,28 @@ import {
                     const dSlug = slugify(dTag);
                     const titleSlug = slugify(title);
 
-                    // Match slug against dTag, slugified dTag, title slug, or raw event id
-                    if (
-                      dSlug === targetSlug.toLowerCase() ||
-                      dTag.toLowerCase() === targetSlug.toLowerCase() ||
-                      titleSlug === targetSlug.toLowerCase() ||
-                      ev.id === targetSlug
-                    ) {
+                    // Check match via naddr data or targetSlug
+                    let isMatch = false;
+                    if (naddrData) {
+                      const matchAuthor = !naddrData.pubkey || ev.pubkey.toLowerCase() === naddrData.pubkey.toLowerCase();
+                      const matchDTag = dTag === naddrData.dTag || dTag.toLowerCase() === naddrData.dTag.toLowerCase();
+                      if (matchAuthor && matchDTag) {
+                        isMatch = true;
+                      }
+                    }
+
+                    if (!isMatch && targetSlug) {
+                      if (
+                        dSlug === targetSlug.toLowerCase() ||
+                        dTag.toLowerCase() === targetSlug.toLowerCase() ||
+                        titleSlug === targetSlug.toLowerCase() ||
+                        ev.id === targetSlug
+                      ) {
+                        isMatch = true;
+                      }
+                    }
+
+                    if (isMatch) {
                       if (!foundEvent || ev.created_at > foundEvent.created_at) {
                         foundEvent = ev;
                       }
@@ -563,24 +686,32 @@ import {
         await Promise.all(promises);
       }
 
-      // --- Phase 1: Targeted d-tag query (exact match, fastest path) ---
-      // Relay NIP-12 filter: '#d' matches the d-tag identifier directly.
-      // This avoids scanning arbitrary batches of events and works for any
-      // new article that was never included in the static build.
-      await fetchFromRelays({ kinds: [30023], '#d': [targetSlug] });
+      if (naddrData) {
+        // --- NIP-19 naddr targeted query ---
+        const naddrFilter: Record<string, unknown> = {
+          kinds: [naddrData.kind || 30023],
+          '#d': [naddrData.dTag],
+        };
+        if (naddrData.pubkey) {
+          naddrFilter.authors = [naddrData.pubkey];
+        }
+        await fetchFromRelays(naddrFilter, naddrData.relays);
+      } else if (targetSlug) {
+        // --- Phase 1: Targeted d-tag query (slug matching d-tag) ---
+        await fetchFromRelays({ kinds: [30023], '#d': [targetSlug] });
 
-      // --- Phase 2: Broader fallback if d-tag query returned nothing ---
-      // Some older relays or events may use a different d-tag format than
-      // the URL slug. We widen the query and apply slugify matching locally.
-      if (!foundEvent) {
-        await fetchFromRelays({ kinds: [30023], limit: 200 });
+        // --- Phase 2: Broader fallback if d-tag query returned nothing ---
+        if (!foundEvent) {
+          await fetchFromRelays({ kinds: [30023], limit: 200 });
+        }
       }
 
       if (!foundEvent) {
         if (loadingEl) loadingEl.classList.add('hidden');
         if (errorEl) errorEl.classList.remove('hidden');
         if (errorMessageEl) {
-          errorMessageEl.textContent = `Aradığınız "${targetSlug}" başlıklı Nostr yazısı rölelerde bulunamadı veya henüz ağa iletilmedi.`;
+          const displayTarget = naddrData ? naddrData.dTag : targetSlug;
+          errorMessageEl.textContent = `Aradığınız "${displayTarget}" içerikli Nostr yazısı rölelerde bulunamadı veya henüz ağa iletilmedi.`;
         }
         document.title = 'Yazı Bulunamadı (404) - Nostr Türkiye';
         return;

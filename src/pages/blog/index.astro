@@ -469,14 +469,13 @@ const breadcrumbItems = [
         const summary = (event.tags || []).find(t => t[0] === 'summary')?.[1] || (event.content.slice(0, 150) + '...');
         const image = (event.tags || []).find(t => t[0] === 'image')?.[1] || '/og-image.png';
         const tags = (event.tags || []).filter(t => t[0] === 't').map(t => t[1]);
-        const slug = slugifyClient(dTag || title);
         const profile = profileCache.get(event.pubkey) || {};
         const authorName = profile.display_name || profile.name || `${event.pubkey.slice(0, 8)}...`;
         const authorAvatar = profile.picture || profile.image || '';
         const words = (event.content || '').trim().split(/\s+/).length;
         const readingTime = `${Math.max(1, Math.ceil(words / 200))} dk`;
         const naddr = encodeNaddrClient(30023, event.pubkey, dTag);
-        const readLink = `/blog/${slug}`;
+        const readLink = `/blog/${naddr}`;
 
         const cardWrapper = document.createElement('div');
         cardWrapper.className = 'post-item h-full animate-fadeIn';
