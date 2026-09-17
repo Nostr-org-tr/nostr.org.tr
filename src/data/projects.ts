@@ -13,6 +13,17 @@ export interface ProjectItem {
 
 export const projects: ProjectItem[] = [
   {
+    name: 'nostr-event-dom',
+    category: 'Tool',
+    description: 'Web siteleri ve uygulamalara Nostr gönderilerini (Kind 1), profillerini (Kind 0), uzun makalelerini (NIP-23) ve medya içeriklerini kolayca gömmeyi sağlayan; aşamalı geliştirme (progressive enhancement) ve CSS custom property temalama özellikli açık kaynak Web Component (<nostr-event>).',
+    url: 'https://github.com/nostr-org-tr/nostr-event-dom',
+    previewUrl: 'https://nostr-org-tr.github.io/nostr-event-dom/',
+    github: 'https://github.com/nostr-org-tr/nostr-event-dom',
+    isFeatured: true,
+    author: 'Nostr Türkiye Topluluğu',
+    tags: ['Web Component', 'Nostr', 'Kind 1', 'Kind 0', 'NIP-23', 'NIP-52', 'DOM', 'Open Source'],
+  },
+  {
     name: 'Nostrich',
     category: 'Client',
     description: 'Web, iOS, Android, Zapstore ve macOS için yerel Türkçe dil desteğine sahip, tamamen ücretsiz, modern, hızlı ve zengin özellikli açık Nostr istemcisi.',
