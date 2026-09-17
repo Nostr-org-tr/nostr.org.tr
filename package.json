@@ -16,7 +16,8 @@
     "check": "astro check",
     "fetch:blog": "node scripts/syncBlog.mjs",
     "cf:dev": "wrangler dev",
-    "cf:deploy": "wrangler deploy"
+    "cf:deploy": "wrangler deploy",
+    "deploy": "npm run fetch:blog && npm run build && npm run cf:deploy"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

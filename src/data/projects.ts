@@ -54,6 +54,16 @@ export const projects: ProjectItem[] = [
     tags: ['Blossom', 'BUD-01', 'BUD-02', 'BUD-04', 'Media', 'Blob Storage'],
   },
   {
+    name: 'cache.nostr.org.tr',
+    category: 'Protocol',
+    description: 'Nostr için salt-okunur (read-only) pull-through önbellek rölesi. Upstream rölelerden (ör. relay.damus.io, nos.lol) filtreleri dinamik olarak çeker, edge üzerinde önbelleğe alır ve istemcilere ultra hızlı yanıt verir.',
+    url: 'https://nostr.org.tr/roleler',
+    previewUrl: 'https://cache.nostr.org.tr',
+    isFeatured: true,
+    author: 'Nostr Türkiye Topluluğu',
+    tags: ['Cache', 'Relay', 'Pull-Through', 'Read-Only', 'nak', 'Edge', 'Protocol'],
+  },
+  {
     name: 'Snippets',
     category: 'Tool',
     description: 'An open-source, decentralized code snippet sharing platform built on Nostr (NIP-C0: kind:1337), powered by Cloudflare Workers, Hono, React 19, and Tailwind CSS.',

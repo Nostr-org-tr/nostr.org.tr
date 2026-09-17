@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.PHONY: all install dev build check preview fetch-blog cf-dev cf-deploy clean
+.PHONY: all install dev build check preview fetch-blog cf-dev deploy clean
 
 # Load nvm and run commands
 NVM_EXEC = source ~/.nvm/nvm.sh 2>/dev/null || true; nvm use >/dev/null 2>&1 || true
@@ -28,7 +28,7 @@ preview:
 cf-dev:
 	@$(NVM_EXEC) && npm run cf:dev
 
-cf-deploy:
+deploy: fetch-blog build
 	@$(NVM_EXEC) && npm run cf:deploy
 
 clean:

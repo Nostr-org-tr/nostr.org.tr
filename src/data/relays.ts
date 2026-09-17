@@ -3,12 +3,14 @@ export interface RelayInfo {
   name: string;
   description: string;
   readPolicy: 'open' | 'restricted' | 'paid';
-  writePolicy: 'open' | 'whitelist' | 'paid';
+  writePolicy: 'open' | 'whitelist' | 'paid' | 'readonly';
   nips: number[];
   location: string;
   software: string;
   isOfficialCommunityRelay: boolean;
   openingSoon?: boolean;
+  isCacheRelay?: boolean;
+  upstreamExample?: string;
 }
 
 export const communityRelay: RelayInfo = {
@@ -21,6 +23,20 @@ export const communityRelay: RelayInfo = {
   location: 'Türkiye / Frankfurt (Düşük Gecikme)',
   software: 'Khatru / Nostr-RS-Relay',
   isOfficialCommunityRelay: true,
+};
+
+export const cacheRelay: RelayInfo = {
+  url: 'wss://cache.nostr.org.tr',
+  name: 'Nostr Türkiye Pull-Through Cache Rölesi',
+  description: 'Nostr Türkiye resmi salt-okunur (read-only) pull-through önbellek rölesi. İstenen upstream rölelerden (?relays=...) gelen sorguları dinamik olarak çeker ve edge üzerinde önbelleğe alarak ultra hızlı veri aktarımı sağlar.',
+  readPolicy: 'open',
+  writePolicy: 'readonly',
+  nips: [1, 11],
+  location: 'Türkiye / Global Edge Caching',
+  software: 'Pull-Through Cache Relay',
+  isOfficialCommunityRelay: true,
+  isCacheRelay: true,
+  upstreamExample: 'nak req -k 1 -l 10 "wss://cache.nostr.org.tr?relays=wss://relay.damus.io,wss://nos.lol"',
 };
 
 export const recommendedRelays: RelayInfo[] = [
