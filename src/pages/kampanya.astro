@@ -1,0 +1,439 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CopyButton from '../components/CopyButton.astro';
+import ArticleSchema from '../components/seo/ArticleSchema.astro';
+import BreadcrumbSchema from '../components/seo/BreadcrumbSchema.astro';
+import { 
+  HeartHandshake, 
+  Sparkles, 
+  ShieldCheck, 
+  Zap, 
+  Server, 
+  GraduationCap, 
+  Code2, 
+  Radio, 
+  Languages, 
+  CheckCircle2, 
+  ArrowRight, 
+  Coins,
+  Globe2,
+  Users
+} from 'lucide-astro';
+
+const breadcrumbs = [
+  { name: 'Ana Sayfa', path: '/' },
+  { name: 'Fon Kampanyası', path: '/kampanya' },
+];
+
+const milestones = [
+  {
+    step: 'Aşama 1',
+    title: 'Dayanıklı Çekirdek Altyapı',
+    target: '$5.000 / ~6.5M Sats',
+    desc: '12 aylık yüksek performanslı relay.nostr.org.tr dedicated NVMe sunucu masrafları, nostr.org.tr alan adı güvenliği, ilk 3 büyük mobil istemcinin (Amethyst, Primal, Coracle) %100 Türkçe yerelleştirilmesi.',
+  },
+  {
+    step: 'Aşama 2',
+    title: 'Eğitim & Topluluk Büyümesi',
+    target: '$10.000 / ~13M Sats',
+    desc: '10 bölümlük profesyonel Türkçe Nostr & Lightning video eğitim serisi, interaktif kullanıcı onboarding portalı, İstanbul ve Ankara’da 3 üniversite atölyesi.',
+  },
+  {
+    step: 'Aşama 3',
+    title: 'Geliştirici Hibeleri & Hackathon',
+    target: '$25.000 / ~33M Sats',
+    desc: 'Türkiye merkezli 5 açık kaynak Nostr geliştirici mikro hibesi, çok düğümlü coğrafi yedekli röle kümesi, Türkiye Nostr Geliştirici Hackathon’u.',
+  }
+];
+
+const budgetCategories = [
+  {
+    percent: '%40',
+    title: 'Sunucu ve Yüksek Erişilebilirlikli Röle Altyapısı',
+    color: 'bg-nostr-500 text-white',
+    border: 'border-nostr-200 dark:border-nostr-800',
+    icon: Server,
+    items: [
+      'Çok bölgeli NVMe dedicated röle sunucuları (relay.nostr.org.tr)',
+      'Yüksek bant genişlikli WebSocket kümeleri ve Cloudflare edge altyapısı',
+      'DDoS koruması, otomatik veritabanı yedekleme ve felaket kurtarma sistemleri'
+    ]
+  },
+  {
+    percent: '%25',
+    title: 'Eğitim İçerikleri, Yayınlar ve Yerel Buluşmalar',
+    color: 'bg-emerald-500 text-white',
+    border: 'border-emerald-200 dark:border-emerald-800',
+    icon: GraduationCap,
+    items: [
+      'Türkçe video eğitim serisi, animasyonlu anlatımlar ve interaktif başlangıç rehberleri',
+      'Yeni başlayanlar için basılı & dijital güvenlik kitleri, üniversite atölyeleri',
+      'Bilgilendirici grafikler ve açık eğitim kaynakları (OER)'
+    ]
+  },
+  {
+    percent: '%25',
+    title: 'Açık Kaynak Geliştirici Fonu ve Görev Ödülleri',
+    color: 'bg-amber-500 text-white',
+    border: 'border-amber-200 dark:border-amber-800',
+    icon: Code2,
+    items: [
+      'Yerel NIP geliştirmeleri, açık kaynak bot ve araçlar için geliştirici mikro hibeleri',
+      'Popüler Nostr istemcilerinin Türkçe yerelleştirme ödülleri (bounties)',
+      'nostr.org.tr web araç setinin bakımı ve yeni tanı araçlarının geliştirilmesi'
+    ]
+  },
+  {
+    percent: '%10',
+    title: 'Alan Adı, Güvenlik Denetimleri ve Acil Durum Rezervi',
+    color: 'bg-purple-500 text-white',
+    border: 'border-purple-200 dark:border-purple-800',
+    icon: ShieldCheck,
+    items: [
+      'Çok yıllık nostr.org.tr alan adı tescil ve koruma güvencesi',
+      'Web araçları ve kriptografik kütüphanelerin bağımsız güvenlik testleri',
+      'Beklenmedik trafik artışları ve altyapı kesintileri için operasyonel acil rezerv'
+    ]
+  }
+];
+---
+
+<Layout 
+  title="Nostr Türkiye Fon Toplama Kampanyası - Özgür İletişim Altyapısını Birlikte Büyütelim"
+  description="Türkiye'de sansüre dirençli, açık ve bağımsız iletişim altyapısını güçlendirmek için Nostr Türkiye Topluluğu fon toplama kampanyasına Bitcoin, Lightning veya Agora üzerinden destek olun."
+  ogType="article"
+>
+  <Fragment slot="head">
+    <BreadcrumbSchema items={breadcrumbs} />
+    <ArticleSchema
+      title="Nostr Türkiye Fon Toplama Kampanyası"
+      description="Türkiye'de sansüre dirençli, açık ve bağımsız iletişim altyapısını güçlendirmek için Nostr Türkiye Topluluğu fon toplama kampanyası."
+      path="/kampanya"
+      inLanguage="tr-TR"
+      datePublished="2025-01-01"
+      dateModified="2026-09-23"
+    />
+  </Fragment>
+
+  <!-- Hero Header -->
+  <section class="py-12 sm:py-16 border-b border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-b from-white via-slate-50 to-slate-100/60 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Bilingual Notice & Badge -->
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-800 shadow-sm">
+          <HeartHandshake class="w-4 h-4 text-rose-500" />
+          <span>Resmi Topluluk Fon Kampanyası</span>
+          <span class="text-rose-300 dark:text-rose-700">•</span>
+          <span>Agora & Lightning Destekli</span>
+        </div>
+
+        <a 
+          href="/en/campaign" 
+          class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-nostr-600 dark:hover:text-nostr-400 bg-white dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm transition-all"
+        >
+          <Languages class="w-3.5 h-3.5 text-nostr-500" />
+          <span>Read in English (Campaign Page)</span>
+          <ArrowRight class="w-3 h-3" />
+        </a>
+      </div>
+
+      <div class="max-w-3xl">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+          Sansürsüz, Özgür İletişim Altyapısı ve Topluluk Merkezi İnşa Ediyoruz
+        </h1>
+        <p class="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+          85 milyondan fazla Türkçe konuşan bireyi açık protokoller, yerel yüksek hızlı röleler (<code class="text-xs px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-nostr-600 dark:text-nostr-400 font-mono">relay.nostr.org.tr</code>), geliştirici araçları ve dijital egemenlikle güçlendiriyoruz.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Main Content & Sticky Campaign Widget Grid -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+      
+      <!-- Left Column: Rich Campaign Details (7 cols on lg) -->
+      <div class="lg:col-span-7 space-y-12">
+        
+        <!-- Section 1: Background Story -->
+        <section class="space-y-6">
+          <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+            <div class="p-2 rounded-xl bg-nostr-50 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400 border border-nostr-100 dark:border-nostr-900">
+              <Sparkles class="w-5 h-5" />
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+                1. Arka Plan Hikayesi: Neden Nostr Türkiye?
+              </h2>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Merkeziyetçilik, sansür ve bağımsız kamu yararı altyapısı</p>
+            </div>
+          </div>
+
+          <div class="prose prose-slate dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 space-y-4 text-sm sm:text-base leading-relaxed">
+            <p>
+              Türkiye’de ve bölgemizde dijital iletişim, birkaç küresel teknoloji tekelinin insafına terk edilmiş durumdadır. İnternet kullanıcıları ve içerik üreticileri düzenli olarak <strong>keyfi bant daraltma (throttling)</strong>, ani erişim engelleri, kapalı algoritmik manipülasyonlar ve tek taraflı hesap kapatma (de-platforming) tehditleriyle karşı karşıyadır.
+            </p>
+            <p>
+              <strong>Nostr (Notes and Other Stuff Transmitted by Relays)</strong>, iletişimi şirketlerin sunucularından kurtararak doğrudan bireylerin kriptografik mülkiyetine (<code class="text-xs font-mono bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">public key</code>) ve bağımsız röleler ağına devreder. Hiçbir şirket hesabınızı donduramaz veya sesinizi kısamaz.
+            </p>
+
+            <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 space-y-3">
+              <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <CheckCircle2 class="w-4 h-4 text-emerald-500" />
+                <span>Bugüne Kadar Sıfır Bütçeyle Neler İnşa Ettik?</span>
+              </h3>
+              <ul class="space-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+                <li class="flex items-start gap-2">
+                  <span class="font-bold text-nostr-600 dark:text-nostr-400">•</span>
+                  <span><strong>nostr.org.tr Portalı:</strong> Astro 5, Tailwind CSS ve Cloudflare Workers üzerinde çalışan modern ve hızlı topluluk merkezi.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="font-bold text-nostr-600 dark:text-nostr-400">•</span>
+                  <span><strong>Yerel Röle (<code class="text-xs font-mono">relay.nostr.org.tr</code>):</strong> Düşük gecikmeli, kesintisiz bölgesel röle altyapısı.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="font-bold text-nostr-600 dark:text-nostr-400">•</span>
+                  <span><strong>Ücretsiz NIP-05 Kimlik Servisi:</strong> Tüm Türkçe konuşan kullanıcılar için anında <code class="text-xs font-mono">adiniz@nostr.org.tr</code> doğrulanmış kimlik desteği.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="font-bold text-nostr-600 dark:text-nostr-400">•</span>
+                  <span><strong>7+ Web Tanı Aracı:</strong> Anahtar Üreticisi, NIP-19 Dönüştürücü, NIP-05 Üreticisi, NIP-07 Test Aracı, Canlı Röle Ping Testi, Zap Denetleyicisi ve Event Doğrulayıcı.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="font-bold text-nostr-600 dark:text-nostr-400">•</span>
+                  <span><strong>Kapsamlı Rehber & DevFest Konuşması:</strong> Türkçe başlangıç belgeleri ve DevFest Istanbul sahnesinde protokol anlatımı.</span>
+                </li>
+              </ul>
+            </div>
+
+            <p>
+              Bugüne kadar tüm sunucu, alan adı ve geliştirme masraflarını gönüllü maintainer'lar kendi ceplerinden karşıladı. Şimdi ise bu yapıyı kişilere bağımlı olmaktan çıkarıp, <strong>kalıcı ve yüksek erişilebilirlikli bir kamu yararı altyapısına</strong> dönüştürmek için desteğinize ihtiyacımız var.
+            </p>
+          </div>
+        </section>
+
+        <!-- Section 2: Concrete Benefits -->
+        <section class="space-y-6">
+          <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+            <div class="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900">
+              <ShieldCheck class="w-5 h-5" />
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+                2. Türkçe Konuşan Toplum ve Ekosistem İçin Somut Faydalar
+              </h2>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Katkılarınız doğrudan neye dönüşecek?</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+              <div class="flex items-center gap-2 text-nostr-600 dark:text-nostr-400 font-bold text-sm">
+                <Radio class="w-4 h-4" />
+                <span>1. Kesintisiz & Sansürsüz İletişim</span>
+              </div>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Gazeteciler, öğrenciler, yazılımcılar ve yurttaşlar için merkezi engellere takılmayan, şeffaf ve güvenli bir dijital meydan.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+              <div class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm">
+                <Zap class="w-4 h-4" />
+                <span>2. Düşük Gecikme (20-40ms)</span>
+              </div>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Türkiye ve Avrupa veri merkezlerindeki optimize rölelerle yurt dışı gecikmeleri en aza inerek ultra hızlı deneyim sağlanır.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+              <div class="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold text-sm">
+                <GraduationCap class="w-4 h-4" />
+                <span>3. Ana Dilde Kapsamlı Eğitim</span>
+              </div>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Adım adım Türkçe video serileri, güvenlik rehberleri ve yerel atölyelerle teknik bilgisi olmayan kullanıcılar da hızla sisteme dahil edilir.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+              <div class="flex items-center gap-2 text-purple-600 dark:text-purple-400 font-bold text-sm">
+                <Code2 class="w-4 h-4" />
+                <span>4. Yerel Geliştirici Fonu & Hibeler</span>
+              </div>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Türk yazılımcıların Nostr istemcileri, NIP eklentileri ve yerel araçlar geliştirmesi için doğrudan mikro geliştirici hibeleri dağıtılır.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 3: Transparent Budget Allocation -->
+        <section class="space-y-6">
+          <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+            <div class="p-2 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-900">
+              <Coins class="w-5 h-5" />
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+                3. Fonların Kullanım Planı ve Bütçe Dağılımı
+              </h2>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Şeffaf, denetlenebilir ve hesap verebilir kaynak kullanımı</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {budgetCategories.map((cat) => {
+              const Icon = cat.icon;
+              return (
+                <div class={`p-5 rounded-2xl bg-white dark:bg-slate-900 border ${cat.border} shadow-sm space-y-3`}>
+                  <div class="flex items-center justify-between">
+                    <span class={`px-2.5 py-0.5 text-xs font-extrabold rounded-lg ${cat.color}`}>
+                      {cat.percent}
+                    </span>
+                    <Icon class="w-5 h-5 text-slate-400 opacity-80" />
+                  </div>
+                  <h3 class="font-bold text-sm text-slate-900 dark:text-white leading-tight">
+                    {cat.title}
+                  </h3>
+                  <ul class="space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
+                    {cat.items.map((item) => (
+                      <li class="flex items-start gap-1.5">
+                        <span class="text-slate-400">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <!-- Section 4: Milestones -->
+        <section class="space-y-6">
+          <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+            <div class="p-2 rounded-xl bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 border border-purple-100 dark:border-purple-900">
+              <Users class="w-5 h-5" />
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+                4. Fon Hedefleri ve Aşamalar (Milestones)
+              </h2>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Toplanan fonlara göre teslim edilecek taahhütler</p>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            {milestones.map((m) => (
+              <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2.5">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                      {m.step}
+                    </span>
+                    <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">
+                      {m.title}
+                    </h3>
+                  </div>
+                  <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                    <Zap class="w-3 h-3 fill-current" />
+                    <span>{m.target}</span>
+                  </div>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                  {m.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <!-- Section 5: Transparency & Open Source -->
+        <section class="p-6 rounded-2xl bg-gradient-to-br from-nostr-50 to-purple-50 dark:from-nostr-950/40 dark:to-slate-900 border border-nostr-200 dark:border-nostr-800 space-y-3">
+          <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <Globe2 class="w-5 h-5 text-nostr-600 dark:text-nostr-400" />
+            <span>Şeffaflık, Yönetişim ve Açık Kaynak Güvencesi</span>
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            Topluluğumuz <strong>%100 açık kaynak</strong> prensipleriyle yönetilmektedir. Tüm kodlarımız GitHub üzerinde yer alır; fon kullanım raporları ve sunucu faturaları düzenli olarak Nostr uzun formatlı yazılarıyla (NIP-23) ve web portalımızda şeffaf biçimde yayımlanır. Katkı sağlayan herkes topluluğun doğal karar vericisidir.
+          </p>
+        </section>
+
+      </div>
+
+      <!-- Right Column: Sticky Campaign Card (5 cols on lg) -->
+      <div class="lg:col-span-5 space-y-6 lg:sticky lg:top-20">
+        
+        <!-- Agora Embed Container -->
+        <div class="rounded-3xl bg-white dark:bg-slate-900 p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+          <div class="flex items-center justify-between px-1">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span class="text-xs font-bold tracking-wider uppercase text-slate-700 dark:text-slate-300">
+                Canlı Bağış Kartı
+              </span>
+            </div>
+            <span class="text-[11px] font-mono text-slate-500 dark:text-slate-400">Agora Embed</span>
+          </div>
+
+          <!-- The User Provided Iframe -->
+          <div class="flex justify-center w-full overflow-hidden rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-1">
+            <iframe 
+              src="https://agora.spot/embed/campaign/naddr1qvzqqqyygupzq3hnc7an8npsryzfkaku38dmjm35cfrmmkngk6kcvvngy7fllzs6qqvxummnw3ez6mmjvukhgu3dve6kuerjv95hx6twvudlm2e2?variant=donate&amp;theme=light"
+              width="380" 
+              height="660"
+              style="border:0;width:100%;max-width:380px;"
+              loading="lazy" 
+              allow="clipboard-write"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Agora fundraiser campaign"
+            ></iframe>
+          </div>
+        </div>
+
+        <!-- Direct Lightning Alternative Support -->
+        <div class="rounded-2xl bg-white dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <Zap class="w-4 h-4 text-amber-500 fill-amber-500" />
+            <span>Doğrudan Lightning ile Destek Olun</span>
+          </h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            Iframe dışında doğrudan mobil cüzdanınızdan veya Nostr istemcinizden Zap göndermek isterseniz:
+          </p>
+
+          <div class="space-y-2 text-xs">
+            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2">
+              <div class="truncate">
+                <span class="text-slate-500 block text-[10px]">Altyapı Fonu Lightning Adresi:</span>
+                <span class="font-mono font-bold text-slate-800 dark:text-slate-200 truncate">nostrorgtr@cake.cash</span>
+              </div>
+              <CopyButton text="nostrorgtr@cake.cash" label="Kopyala" />
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2">
+              <div class="truncate">
+                <span class="text-slate-500 block text-[10px]">Kurucu Maintainer Adresi:</span>
+                <span class="font-mono font-bold text-slate-800 dark:text-slate-200 truncate">delirehberi@emre.xyz</span>
+              </div>
+              <CopyButton text="delirehberi@emre.xyz" label="Kopyala" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Community Links Card -->
+        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 space-y-2">
+          <div class="font-semibold text-slate-900 dark:text-slate-200">Sorularınız veya Kurumsal Destek İçin:</div>
+          <p>
+            Büyük hibe, donanım veya sunucu desteği sağlamak isterseniz <a href="mailto:ekip@nostr.org.tr" class="text-nostr-600 dark:text-nostr-400 font-semibold hover:underline">ekip@nostr.org.tr</a> üzerinden bize ulaşabilirsiniz.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+</Layout>

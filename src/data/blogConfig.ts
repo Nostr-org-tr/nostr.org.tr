@@ -61,11 +61,6 @@ export const BLOG_COMMENT_RELAYS = [
 // External web clients to view / interact with NIP-23 articles
 export const NOSTR_CLIENT_BRIDGES = [
   {
-    name: 'Habla',
-    urlTemplate: (naddr: string) => `https://habla.news/a/${naddr}`,
-    description: 'Nostr odaklı uzun form okuma ve yazma istemcisi',
-  },
-  {
     name: 'Yakihonne',
     urlTemplate: (naddr: string) => `https://yakihonne.com/article/${naddr}`,
     description: 'Nostr medya ve makale yayınlama platformu',

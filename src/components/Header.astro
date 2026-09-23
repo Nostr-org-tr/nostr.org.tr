@@ -17,7 +17,8 @@ import {
   Library,
   Languages,
   Feather,
-  Wrench
+  Wrench,
+  HeartHandshake
 } from 'lucide-astro';
 import ThemeToggle from './ThemeToggle.astro';
 
@@ -30,9 +31,10 @@ const { currentPath = '/', isEn = false } = Astro.props;
 
 // Grouped navigation structure
 const singleNavs = [
-  { href: '/manifesto', label: 'Manifesto', icon: ScrollText },
-  { href: '/topluluk', label: 'Topluluk', icon: Users },
+  { href: isEn ? '/en/manifesto' : '/manifesto', label: 'Manifesto', icon: ScrollText },
+  { href: '/topluluk', label: isEn ? 'Community' : 'Topluluk', icon: Users },
   { href: '/blog', label: 'Blog', icon: Feather },
+  { href: isEn ? '/en/campaign' : '/kampanya', label: isEn ? 'Campaign' : 'Kampanya', icon: HeartHandshake },
 ];
 
 const discoverItems = [
@@ -198,7 +200,7 @@ const isResourceActive = resourceItems.some(i => currentPath === i.href || (i.hr
       <!-- Language Switcher -->
       {isEn ? (
         <a
-          href="/manifesto"
+          href={currentPath.includes('campaign') ? "/kampanya" : "/manifesto"}
           title="Türkçe Versiyon"
           class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700"
         >
@@ -207,8 +209,8 @@ const isResourceActive = resourceItems.some(i => currentPath === i.href || (i.hr
         </a>
       ) : (
         <a
-          href="/en/manifesto"
-          title="English Manifesto"
+          href={currentPath.includes('kampanya') ? "/en/campaign" : "/en/manifesto"}
+          title="English Version"
           class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700"
         >
           <Languages class="w-3.5 h-3.5 text-nostr-500" />

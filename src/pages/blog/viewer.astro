@@ -826,7 +826,6 @@ import {
         const primaryRef = canonicalNaddr || canonicalNevent || event.id;
         const bridges = [
           ...(canonicalNaddr ? [
-            { name: 'Habla', url: `https://habla.news/a/${canonicalNaddr}` },
             { name: 'Yakihonne', url: `https://yakihonne.com/article/${canonicalNaddr}` },
           ] : []),
           { name: 'Primal', url: `https://primal.net/e/${canonicalNevent || primaryRef}` },
