@@ -12,6 +12,7 @@ const breadcrumbs = [
 ];
 ---
 
+<!-- Hallmark · genre: editorial · macrostructure: Tabular Index · design-system: design.md · designed-as-app -->
 <Layout 
   title="Küratörlü Takip Listeleri - Nostr Türkiye"
   description="Akademisyenler, influencerlar, çekirdek geliştiriciler ve topluluk liderleri için küratörlü Nostr takip listeleri. Tek tıkla toplu takip ve hesap tavsiye formu."
@@ -19,17 +20,19 @@ const breadcrumbs = [
   <BreadcrumbSchema slot="head" items={breadcrumbs} />
   
   <!-- Header Banner -->
-  <section class="py-14 sm:py-20 border-b border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-b from-white via-slate-50 to-slate-100/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+  <section class="py-16 sm:py-22 border-b border-slate-200/90 dark:border-slate-800/90 bg-[#faf9f5] dark:bg-[#0b0f19]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         
         <div class="space-y-2 max-w-2xl">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-nostr-100 dark:bg-nostr-950 text-nostr-700 dark:text-nostr-300 border border-nostr-200 dark:border-nostr-800 shadow-sm">
-            <ListChecks class="w-3.5 h-3.5 text-nostr-500" />
-            <span>Küratörlü Ağ Rehberi</span>
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-900 dark:bg-purple-950/80 dark:text-purple-200 border border-purple-200 dark:border-purple-800 shadow-2xs">
+            <ListChecks class="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+            <span class="font-mono uppercase tracking-wider">Ağ Keşfi</span>
+            <span class="text-slate-300 dark:text-slate-700">•</span>
+            <span>Küratörlü Listeler</span>
           </div>
 
-          <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.2]">
+          <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
             Takip Listeleri
           </h1>
           <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -47,12 +50,12 @@ const breadcrumbs = [
   </section>
 
   <!-- Follow Groups Stream -->
-  <section class="py-16 bg-white dark:bg-slate-950">
+  <section class="py-16 sm:py-20 bg-white dark:bg-[#0e1322]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
       
       <!-- Extension Quick Help Note -->
-      <div class="p-4 sm:p-5 rounded-2xl bg-nostr-50/60 dark:bg-nostr-950/40 border border-nostr-200/60 dark:border-nostr-800/60 flex items-start gap-3.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
-        <Sparkles class="w-5 h-5 text-nostr-500 flex-shrink-0 mt-0.5" />
+      <div class="p-5 rounded-2xl bg-purple-50/70 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800/80 flex items-start gap-3.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300 shadow-2xs">
+        <Sparkles class="w-5 h-5 text-purple-600 dark:text-purple-400 flex-shrink-0 mt-0.5" />
         <p class="leading-relaxed">
           <strong class="font-bold text-slate-900 dark:text-white">İpucu:</strong> Tarayıcınızda <strong>Alby</strong> veya <strong>nos2x</strong> gibi NIP-07 Nostr eklentisi kuruluysa, kategorilerin yanındaki <strong>"Tümünü Takip Et"</strong> butonuna basarak ilgili tüm hesapları tek tıkla takip listenize ekleyebilirsiniz.
         </p>

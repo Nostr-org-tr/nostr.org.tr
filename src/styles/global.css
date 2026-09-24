@@ -2,32 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Hallmark · genre: editorial · macrostructure: app-family · design-system: design.md · designed-as-app */
+
 @layer base {
   :root {
-    --bg-page: #f8fafc;
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --border-color: #e2e8f0;
+    --color-paper: #faf9f5;
+    --color-paper-2: #f3f1ea;
+    --color-paper-card: #ffffff;
+    --color-paper-hover: #eeece4;
+    --color-ink: #18181b;
+    --color-ink-2: #52525b;
+    --color-ink-muted: #71717a;
+    --color-rule: #e4e2d9;
+    --color-rule-strong: #d1cfc7;
+    --color-accent: #7c3aed;
+    --color-accent-hover: #6d28d9;
+    --color-accent-subtle: #f5f3ff;
+    --color-accent-ink: #ffffff;
+    --color-accent-tr: #e11d48;
+    --color-lightning: #f59e0b;
+    --color-success: #16a34a;
+    --color-focus: #7c3aed;
   }
 
   .dark {
-    --bg-page: #090d16;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --border-color: #1e293b;
+    --color-paper: #0b0f19;
+    --color-paper-2: #111827;
+    --color-paper-card: #0f1624;
+    --color-paper-hover: #172033;
+    --color-ink: #f8fafc;
+    --color-ink-2: #cbd5e1;
+    --color-ink-muted: #64748b;
+    --color-rule: #1e293b;
+    --color-rule-strong: #334155;
+    --color-accent: #a78bfa;
+    --color-accent-hover: #c084fc;
+    --color-accent-subtle: #2e1065;
+    --color-accent-ink: #0b0f19;
+    --color-accent-tr: #f43f5e;
+    --color-lightning: #fbbf24;
+    --color-success: #22c55e;
+    --color-focus: #a78bfa;
   }
 
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
   body {
-    background-color: var(--bg-page);
-    color: var(--text-primary);
+    background-color: var(--color-paper);
+    color: var(--color-ink);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow-x: clip;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -37,30 +67,47 @@
     background-color: #8b5cf6;
     color: #ffffff;
   }
+
+  /* Focus ring discipline */
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  /* Anti-slop: Headings are strictly roman (no italic headers) */
+  h1, h2, h3, h4, h5, h6 {
+    font-style: normal;
+    letter-spacing: -0.025em;
+    overflow-wrap: anywhere;
+  }
 }
 
 @layer utilities {
   .glass-header {
-    background-color: rgba(248, 250, 252, 0.85);
+    background-color: rgba(250, 249, 245, 0.88);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
 
   .dark .glass-header {
-    background-color: rgba(9, 13, 22, 0.85);
+    background-color: rgba(11, 15, 25, 0.88);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
 
   .nostr-gradient-text {
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #e11d48 100%);
+    background: linear-gradient(135deg, #7c3aed 0%, #9333ea 50%, #e11d48 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .dark .nostr-gradient-text {
-    background: linear-gradient(135deg, #a78bfa 0%, #c084fc 50%, #fb7185 100%);
+    background: linear-gradient(135deg, #c084fc 0%, #a855f7 50%, #fb7185 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  .prose-nostr {
+    max-width: 65ch;
   }
 }

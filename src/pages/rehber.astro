@@ -43,6 +43,7 @@ const breadcrumbs = [
 ];
 ---
 
+<!-- Hallmark · genre: editorial · macrostructure: Long Document · design-system: design.md · designed-as-app -->
 <GuideLayout 
   title="Nostr Başlangıç ve İleri Düzey Dokümantasyon Rehberi"
   description="Nostr protokolünün temelleri, anahtar güvenliği, istemciler, NIP-05, Zaps ve göç araçları hakkında kapsamlı Türkçe kılavuz."
@@ -59,11 +60,11 @@ const breadcrumbs = [
     />
   </Fragment>
 
-  <!-- Featured Spotlights: Specialized Industry Guides -->
+  <!-- Specialized Industry Guides Bento -->
   <div class="space-y-4">
     <div class="flex items-center gap-2 px-1">
-      <Sparkles class="w-4 h-4 text-nostr-500" />
-      <h2 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+      <Sparkles class="w-4 h-4 text-purple-600 dark:text-purple-400" />
+      <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono">
         Özel Sektörel Kılavuzlar
       </h2>
     </div>
@@ -73,20 +74,20 @@ const breadcrumbs = [
       <!-- Card 1: Gazeteciler -->
       <a 
         href="/gazeteciler-icin-nostr"
-        class="group p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-nostr-400 dark:hover:border-nostr-600 transition-all shadow-sm flex flex-col justify-between"
+        class="group p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900/60 border border-slate-200/90 dark:border-slate-800 hover:border-purple-400 transition-all shadow-2xs flex flex-col justify-between"
       >
         <div class="space-y-2.5">
-          <div class="w-10 h-10 rounded-2xl bg-nostr-100 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400 flex items-center justify-center">
+          <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 flex items-center justify-center">
             <Newspaper class="w-5 h-5" />
           </div>
-          <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-nostr-600 dark:group-hover:text-nostr-400 transition-colors">
+          <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
             Gazeteciler İçin
           </h3>
           <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
             Haber arşivini koruma, kaynak gizliliği ve sansürsüz kamuoyu bilgilendirmesi.
           </p>
         </div>
-        <div class="mt-4 flex items-center gap-1 text-xs font-semibold text-nostr-600 dark:text-nostr-400">
+        <div class="mt-4 flex items-center gap-1 text-xs font-semibold text-purple-700 dark:text-purple-300">
           <span>Kılavuzu Oku</span>
           <ArrowRight class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
         </div>
@@ -95,20 +96,20 @@ const breadcrumbs = [
       <!-- Card 2: Sanatçılar -->
       <a 
         href="/sanatcilar-icin-nostr"
-        class="group p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-pink-400 dark:hover:border-pink-600 transition-all shadow-sm flex flex-col justify-between"
+        class="group p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900/60 border border-slate-200/90 dark:border-slate-800 hover:border-purple-400 transition-all shadow-2xs flex flex-col justify-between"
       >
         <div class="space-y-2.5">
-          <div class="w-10 h-10 rounded-2xl bg-pink-100 dark:bg-pink-950 text-pink-600 dark:text-pink-400 flex items-center justify-center">
+          <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 flex items-center justify-center">
             <Palette class="w-5 h-5" />
           </div>
-          <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors">
+          <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
             Sanatçılar İçin
           </h3>
           <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
             Streaming komisyonsuz mikro telifler, Wavlake müzik yayını ve eser sahipliği.
           </p>
         </div>
-        <div class="mt-4 flex items-center gap-1 text-xs font-semibold text-pink-600 dark:text-pink-400">
+        <div class="mt-4 flex items-center gap-1 text-xs font-semibold text-purple-700 dark:text-purple-300">
           <span>Kılavuzu Oku</span>
           <ArrowRight class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
         </div>
@@ -117,20 +118,20 @@ const breadcrumbs = [
       <!-- Card 3: Siyasetçiler -->
       <a 
         href="/siyasetciler-icin-nostr"
-        class="group p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-600 transition-all shadow-sm flex flex-col justify-between"
+        class="group p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900/60 border border-slate-200/90 dark:border-slate-800 hover:border-purple-400 transition-all shadow-2xs flex flex-col justify-between"
       >
         <div class="space-y-2.5">
-          <div class="w-10 h-10 rounded-2xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+          <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 flex items-center justify-center">
             <Vote class="w-5 h-5" />
           </div>
-          <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+          <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
             Siyasetçiler İçin
           </h3>
           <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
             Seçmenle kapatılamaz iletişim, resmi NIP-05 mührü ve bot koruması.
           </p>
         </div>
-        <div class="mt-4 flex items-center gap-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+        <div class="mt-4 flex items-center gap-1 text-xs font-semibold text-purple-700 dark:text-purple-300">
           <span>Kılavuzu Oku</span>
           <ArrowRight class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
         </div>
@@ -144,15 +145,15 @@ const breadcrumbs = [
     return (
       <article 
         id={guide.id} 
-        class="scroll-mt-28 p-6 sm:p-10 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6"
+        class="scroll-mt-28 p-7 sm:p-10 rounded-3xl bg-[#faf9f5] dark:bg-slate-900/60 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-6"
       >
         <!-- Chapter Header -->
-        <div class="flex items-start gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
-          <div class="w-12 h-12 rounded-2xl bg-nostr-100 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400 flex items-center justify-center flex-shrink-0">
+        <div class="flex items-start gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
+          <div class="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 flex items-center justify-center flex-shrink-0 border border-purple-200 dark:border-purple-800/80 shadow-2xs">
             <Icon class="w-6 h-6" />
           </div>
           <div>
-            <span class="text-xs font-mono font-bold text-nostr-600 dark:text-nostr-400 uppercase tracking-wider">
+            <span class="text-xs font-mono font-bold text-purple-700 dark:text-purple-400 uppercase tracking-wider">
               {guide.readTime} Okuma Süresi
             </span>
             <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">
@@ -169,7 +170,7 @@ const breadcrumbs = [
           {guide.content.map((sec) => (
             <div class="space-y-3">
               <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-nostr-500"></span>
+                <span class="w-2 h-2 rounded-full bg-purple-600 dark:bg-purple-400"></span>
                 <span>{sec.heading}</span>
               </h3>
               
@@ -182,20 +183,20 @@ const breadcrumbs = [
                 <div class="ml-4 rounded-2xl bg-slate-900 text-slate-100 border border-slate-800 overflow-hidden shadow-sm">
                   <div class="flex items-center justify-between px-4 py-2.5 bg-slate-950/80 border-b border-slate-800 text-xs font-mono text-slate-400">
                     <span class="flex items-center gap-1.5 text-slate-300 font-semibold">
-                      <Code2 class="w-3.5 h-3.5 text-nostr-400" />
+                      <Code2 class="w-3.5 h-3.5 text-purple-400" />
                       <span>{sec.codeTitle || '.well-known/nostr.json'}</span>
                     </span>
                     <CopyButton text={sec.code} label="JSON Kopyala" className="bg-slate-800 text-slate-200 border-slate-700 hover:bg-slate-700 hover:text-white" />
                   </div>
-                  <pre class="p-4 overflow-x-auto text-xs sm:text-sm font-mono leading-relaxed text-slate-200 selection:bg-nostr-600 selection:text-white"><code>{sec.code}</code></pre>
+                  <pre class="p-4 overflow-x-auto text-xs sm:text-sm font-mono leading-relaxed text-slate-200 selection:bg-purple-600 selection:text-white"><code>{sec.code}</code></pre>
                 </div>
               )}
 
               <!-- Tips / Alerts -->
               {sec.tips && (
-                <div class="ml-4 p-4 rounded-2xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/50 space-y-2">
-                  <span class="text-xs font-bold text-amber-800 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-                    <ShieldAlert class="w-3.5 h-3.5" />
+                <div class="ml-4 p-4 rounded-2xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/50 space-y-2">
+                  <span class="text-xs font-bold text-amber-800 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5 font-mono">
+                    <ShieldAlert class="w-3.5 h-3.5 text-amber-600" />
                     <span>Önemli Güvenlik İpuçları</span>
                   </span>
                   <ul class="space-y-1 text-xs sm:text-sm text-amber-900 dark:text-amber-200">
@@ -217,9 +218,9 @@ const breadcrumbs = [
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-nostr-50 hover:text-nostr-600 dark:hover:bg-nostr-950 dark:hover:text-nostr-300 border border-slate-200 dark:border-slate-700 transition-colors"
+                      class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-purple-50 hover:text-purple-700 dark:hover:bg-purple-950 dark:hover:text-purple-300 border border-slate-300 dark:border-slate-700 transition-colors shadow-2xs"
                     >
-                      <CheckCircle2 class="w-3.5 h-3.5 text-nostr-500" />
+                      <CheckCircle2 class="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                       <span>{link.label}</span>
                       <ExternalLink class="w-3 h-3 opacity-60" />
                     </a>
@@ -231,13 +232,13 @@ const breadcrumbs = [
         </div>
 
         {guide.id === 'nip-05' && (
-          <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+          <div class="pt-4 border-t border-slate-200 dark:border-slate-800">
             <Nip05KeyConverter />
           </div>
         )}
 
         {guide.id === 'blossom-medya-sunuculari' && (
-          <div class="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-4">
+          <div class="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-4">
             <div class="flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-purple-500"></span>
               <h4 class="text-sm font-bold text-slate-900 dark:text-white">Canlı Resmi Medya Sunucusu Durumu & Testi</h4>
@@ -251,7 +252,7 @@ const breadcrumbs = [
   })}
 
   <!-- Next Step CTA -->
-  <div class="p-8 sm:p-10 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6">
+  <div class="p-8 sm:p-10 rounded-3xl bg-[#faf9f5] dark:bg-slate-900/60 border border-slate-200/90 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xs">
     <div class="space-y-1 text-center sm:text-left">
       <h3 class="text-lg font-bold text-slate-900 dark:text-white">
         Öğrendiklerinizi pratiğe dökün
@@ -264,14 +265,14 @@ const breadcrumbs = [
     <div class="flex items-center gap-3">
       <a
         href="/takip-listeleri"
-        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-nostr-600 hover:bg-nostr-700 transition-all shadow-sm"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-purple-700 hover:bg-purple-800 transition-all shadow-xs active:scale-[0.98]"
       >
         <span>Takip Listelerine Git</span>
         <ArrowRight class="w-3.5 h-3.5" />
       </a>
       <a
         href="/roleler"
-        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-all"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 transition-all active:scale-[0.98]"
       >
         <span>Röleleri Gör</span>
       </a>

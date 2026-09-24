@@ -11,6 +11,7 @@ const breadcrumbs = [
 ];
 ---
 
+<!-- Hallmark · genre: editorial · macrostructure: Tabular Index · design-system: design.md · designed-as-app -->
 <Layout 
   title="Açık Kaynak Projeler & Araçlar - Nostr Türkiye"
   description="Türkiye Nostr topluluğu tarafından geliştirilen ve desteklenen açık kaynak projeler: x2nostr göç aracı, bridge.workouse.com otomasyonu ve ekosistem araçları."
@@ -18,24 +19,26 @@ const breadcrumbs = [
   <BreadcrumbSchema slot="head" items={breadcrumbs} />
   
   <!-- Header Banner -->
-  <section class="py-14 sm:py-20 border-b border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-b from-white via-slate-50 to-slate-100/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+  <section class="py-16 sm:py-22 border-b border-slate-200/90 dark:border-slate-800/90 bg-[#faf9f5] dark:bg-[#0b0f19]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-nostr-100 dark:bg-nostr-950 text-nostr-700 dark:text-nostr-300 border border-nostr-200 dark:border-nostr-800 mb-6 shadow-sm">
-        <FolderGit2 class="w-3.5 h-3.5 text-nostr-500" />
-        <span>Açık Kaynak Ekosistem</span>
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-900 dark:bg-purple-950/80 dark:text-purple-200 border border-purple-200 dark:border-purple-800 mb-6 shadow-2xs">
+        <FolderGit2 class="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+        <span class="font-mono uppercase tracking-wider">Açık Kaynak</span>
+        <span class="text-slate-300 dark:text-slate-700">•</span>
+        <span>Topluluk Projeleri & Botlar</span>
       </div>
 
-      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.2]">
+      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
         Projeler & Araçlar
       </h1>
       <p class="mt-4 text-base sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-        Nostr ekosistemini büyüten, diğer platformlardan geçişi kolaylaştıran ve otomasyon sağlayan topluluk projeleri.
+        Nostr ekosistemini büyüten, diğer platformlardan geçişi kolaylaştıran ve otomasyon sağlayan yerel açık kaynak projeler.
       </p>
     </div>
   </section>
 
   <!-- Projects Grid -->
-  <section class="py-16 bg-white dark:bg-slate-950">
+  <section class="py-16 sm:py-20 bg-white dark:bg-[#0e1322]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
       
       <!-- Featured & Community Projects -->
@@ -46,10 +49,10 @@ const breadcrumbs = [
       </div>
 
       <!-- Add Your Project CTA -->
-      <div class="p-8 sm:p-10 rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div class="p-8 sm:p-10 rounded-3xl bg-[#faf9f5] dark:bg-slate-900/60 border border-slate-200/90 dark:border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xs">
         <div class="space-y-2 max-w-2xl">
           <h3 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <PlusCircle class="w-5 h-5 text-nostr-500" />
+            <PlusCircle class="w-5 h-5 text-purple-600 dark:text-purple-400" />
             <span>Nostr Projenizi Ekleyin</span>
           </h3>
           <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -59,7 +62,7 @@ const breadcrumbs = [
 
         <a
           href="mailto:ekip@nostr.org.tr?subject=Nostr%20Proje%20Tan%C4%B1t%C4%B1m%20%C3%96nerisi"
-          class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs text-white bg-nostr-600 hover:bg-nostr-700 shadow-md shadow-nostr-500/10 transition-all active:scale-95 flex-shrink-0"
+          class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold text-xs text-white bg-purple-700 hover:bg-purple-800 shadow-sm transition-all active:scale-[0.98] flex-shrink-0"
         >
           <Mail class="w-4 h-4" />
           <span>Proje Gönder</span>

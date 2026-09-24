@@ -25,6 +25,7 @@ const breadcrumbs = [
 ];
 ---
 
+<!-- Hallmark · genre: editorial · macrostructure: Long Document · design-system: design.md · designed-as-app -->
 <Layout 
   title="Nostr Türkiye Topluluk Manifestosu - Özgür, Açık ve Sorumlu İletişim"
   description="Nostr Türkiye topluluğunun temel ilkeleri, doakrasi yönetim modeli, hukuki çerçevesi ve değer transferi vizyonunu içeren resmi topluluk manifestosu."
@@ -43,33 +44,33 @@ const breadcrumbs = [
   </Fragment>
   
   <!-- Hero Header -->
-  <section class="py-16 sm:py-20 border-b border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-b from-white via-slate-50 to-slate-100/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+  <section class="py-16 sm:py-24 border-b border-slate-200/90 dark:border-slate-800/90 bg-[#faf9f5] dark:bg-[#0b0f19]">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       
       <!-- Bilingual Switch Notice -->
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-nostr-50 text-nostr-700 dark:bg-nostr-950 dark:text-nostr-300 border border-nostr-200 dark:border-nostr-800 mb-6 shadow-sm">
-        <ScrollText class="w-3.5 h-3.5 text-nostr-500" />
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-900 dark:bg-purple-950/80 dark:text-purple-200 border border-purple-200 dark:border-purple-800 mb-8 shadow-xs">
+        <ScrollText class="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
         <span>Resmi Topluluk Belgesi</span>
         <span class="text-slate-300 dark:text-slate-700">•</span>
         <a 
           href="/en/manifesto" 
-          class="inline-flex items-center gap-1 text-nostr-600 dark:text-nostr-400 hover:underline font-bold"
+          class="inline-flex items-center gap-1 text-purple-700 dark:text-purple-300 hover:underline font-bold"
         >
           <Languages class="w-3 h-3" />
           <span>Read in English</span>
         </a>
       </div>
 
-      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.2]">
+      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
         Nostr Türkiye Topluluk Manifestosu
       </h1>
-      <p class="mt-4 text-base sm:text-xl font-medium text-nostr-600 dark:text-nostr-400">
+      <p class="mt-4 text-base sm:text-xl font-medium text-purple-700 dark:text-purple-300">
         Özgür, Açık ve Sorumlu İletişimin Geleceği
       </p>
 
-      <!-- Manifesto Lead Statement -->
-      <div class="mt-8 p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-left relative">
-        <Quote class="w-10 h-10 text-nostr-200 dark:text-nostr-900/60 absolute top-4 right-4 pointer-events-none" />
+      <!-- Manifesto Lead Statement: Typographic Card -->
+      <div class="mt-10 p-7 sm:p-9 rounded-2xl bg-white dark:bg-[#0e1322] border border-slate-200/90 dark:border-slate-800 shadow-xs text-left relative">
+        <Quote class="w-10 h-10 text-purple-200 dark:text-purple-950/80 absolute top-5 right-5 pointer-events-none" />
         <p class="text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
           {manifestoData.leadTr}
         </p>
@@ -78,8 +79,8 @@ const breadcrumbs = [
     </div>
   </section>
 
-  <!-- 5 Foundational Pillars -->
-  <section class="py-16 sm:py-24 bg-slate-50/50 dark:bg-slate-950">
+  <!-- 5 Foundational Pillars: Long Document -->
+  <section class="py-16 sm:py-24 bg-white dark:bg-[#0e1322]">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
       
       {manifestoData.pillars.map((pillar, idx) => {
@@ -87,15 +88,15 @@ const breadcrumbs = [
         return (
           <article 
             id={`madde-${pillar.number}`} 
-            class="p-6 sm:p-10 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm transition-all hover:border-slate-300 dark:hover:border-slate-700"
+            class="p-7 sm:p-10 rounded-3xl bg-[#faf9f5] dark:bg-slate-900/60 border border-slate-200/90 dark:border-slate-800 transition-all hover:border-slate-300 dark:hover:border-slate-700 shadow-xs"
           >
             <!-- Pillar Header -->
             <div class="flex items-start gap-4 mb-6">
-              <div class="w-12 h-12 rounded-2xl bg-nostr-100 dark:bg-nostr-950 flex items-center justify-center text-nostr-600 dark:text-nostr-400 flex-shrink-0 font-mono font-bold text-lg border border-nostr-200 dark:border-nostr-800/80 shadow-sm">
+              <div class="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-950/80 flex items-center justify-center text-purple-700 dark:text-purple-300 flex-shrink-0 font-mono font-bold text-lg border border-purple-200 dark:border-purple-800/80 shadow-2xs">
                 <Icon class="w-6 h-6" />
               </div>
               <div>
-                <span class="text-xs font-bold uppercase tracking-wider text-nostr-600 dark:text-nostr-400 font-mono">
+                <span class="text-xs font-bold uppercase tracking-wider text-purple-700 dark:text-purple-400 font-mono">
                   Madde {pillar.number}
                 </span>
                 <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-0.5">
@@ -108,14 +109,14 @@ const breadcrumbs = [
             </div>
 
             <!-- Items within Pillar -->
-            <div class="grid grid-cols-1 gap-6 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+            <div class="grid grid-cols-1 gap-6 pt-5 border-t border-slate-200 dark:border-slate-800">
               {pillar.itemsTr.map((item) => (
                 <div class="space-y-1.5">
                   <h3 class="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-nostr-500"></span>
+                    <span class="w-2 h-2 rounded-full bg-purple-600 dark:bg-purple-400"></span>
                     {item.title}
                   </h3>
-                  <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed pl-3.5">
+                  <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed pl-4">
                     {item.body}
                   </p>
                 </div>
@@ -127,36 +128,35 @@ const breadcrumbs = [
       })}
 
       <!-- Final Callout & Conclusion -->
-      <div class="p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-nostr-600 via-nostr-700 to-slate-900 text-white shadow-xl text-center space-y-6">
-        <p class="text-lg sm:text-xl font-medium opacity-90">
+      <div class="p-8 sm:p-12 rounded-3xl bg-slate-950 text-white shadow-xl text-center space-y-6 border border-slate-800">
+        <p class="text-base sm:text-lg font-medium text-slate-300">
           {manifestoData.conclusionTr.lead}
         </p>
-        <blockquote class="text-2xl sm:text-4xl font-extrabold tracking-tight italic">
+        <blockquote class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white font-serif">
           "{manifestoData.conclusionTr.quote}"
         </blockquote>
-        <p class="text-sm sm:text-base opacity-80 max-w-xl mx-auto">
+        <p class="text-sm sm:text-base text-slate-400 max-w-xl mx-auto">
           {manifestoData.conclusionTr.invite}
         </p>
-
-        <div class="pt-4 flex flex-wrap items-center justify-center gap-4">
+        
+        <div class="pt-4 flex flex-wrap items-center justify-center gap-3.5">
           <a
             href="/rehber"
-            class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-nostr-900 bg-white hover:bg-slate-100 shadow-md transition-all active:scale-95"
+            class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm bg-purple-600 hover:bg-purple-700 text-white shadow-sm transition-all active:scale-[0.98]"
           >
-            <span>Nostr Başlangıç Rehberi</span>
+            <span>Başlangıç Rehberini Oku</span>
             <ArrowRight class="w-4 h-4" />
           </a>
           <a
             href="/topluluk"
-            class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all"
+            class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm bg-white/10 hover:bg-white/15 text-white border border-white/20 transition-all active:scale-[0.98]"
           >
-            <Users class="w-4 h-4" />
             <span>Topluluğa Katıl</span>
+            <Users class="w-4 h-4" />
           </a>
         </div>
       </div>
 
     </div>
   </section>
-
 </Layout>

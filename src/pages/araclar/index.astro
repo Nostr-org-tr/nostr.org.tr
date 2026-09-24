@@ -14,8 +14,8 @@ import {
   Plug, 
   Code2, 
   Zap, 
-  ExternalLink,
-  CheckCircle2
+  CheckCircle2,
+  Terminal
 } from 'lucide-astro';
 
 const breadcrumbs = [
@@ -35,6 +35,7 @@ const iconMap: Record<string, any> = {
 };
 ---
 
+<!-- Hallmark · genre: editorial · macrostructure: Workbench · design-system: design.md · designed-as-app -->
 <Layout 
   title="Nostr Araçları & Çözümleyicileri | nostr.org.tr"
   description="Nostr protokolü için NIP-19 format dönüştürücü, NIP-05 doğrulayıcı, NIP-07 eklenti testi, canlı röle ping ve Zap denetleyici gibi %100 yerel ve güvenli web araçları."
@@ -48,25 +49,27 @@ const iconMap: Record<string, any> = {
     />
   </Fragment>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-18 space-y-12">
     
     <!-- Hero Section -->
     <div class="text-center max-w-3xl mx-auto space-y-4">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-nostr-50 dark:bg-nostr-950/80 text-nostr-600 dark:text-nostr-400 border border-nostr-200 dark:border-nostr-800 shadow-sm">
-        <Sparkles class="w-4 h-4" />
-        <span>Açık Kaynak & %100 Yerel İstemci Araçları</span>
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-purple-50 dark:bg-purple-950/80 text-purple-900 dark:text-purple-200 border border-purple-200 dark:border-purple-800 shadow-2xs">
+        <Terminal class="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+        <span class="font-mono uppercase tracking-wider">Workbench</span>
+        <span class="text-slate-300 dark:text-slate-700">•</span>
+        <span>%100 İstemci Taraflı & Güvenli</span>
       </div>
 
-      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
         Nostr Araçlar Portalı
       </h1>
       
-      <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+      <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl mx-auto">
         Nostr ekosisteminde ihtiyaç duyduğunuz anahtar dönüştürücüler, NIP-05 doğrulayıcılar, röle tanı testleri ve eklenti laboratuvarları tek bir güvenli adreste.
       </p>
 
       <!-- Client-side Security Badge -->
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/80 text-emerald-800 dark:text-emerald-300 text-xs font-medium">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/80 text-emerald-800 dark:text-emerald-300 text-xs font-medium shadow-2xs">
         <ShieldCheck class="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
         <span>Tüm araçlar tarayıcınızda yerel çalışır; hiçbir özel anahtar veya veri sunucuya iletilmez.</span>
       </div>
@@ -82,7 +85,7 @@ const iconMap: Record<string, any> = {
           id="tools-search-input"
           type="text"
           placeholder="Araç adı, NIP standardı veya özellik ara... (ör: npub, nip-05, zap, röle)"
-          class="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-nostr-500/50 focus:border-nostr-500 transition-all shadow-sm placeholder:text-slate-400"
+          class="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all shadow-2xs placeholder:text-slate-400"
         />
       </div>
 
@@ -93,12 +96,12 @@ const iconMap: Record<string, any> = {
           return (
             <button
               type="button"
-              class={`cat-filter-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
+              class={`cat-filter-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold font-mono transition-all ${
                 cat.key === 'all'
-                  ? 'bg-nostr-600 text-white shadow-sm'
-                  : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-nostr-400 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-purple-700 text-white shadow-xs'
+                  : 'bg-[#faf9f5] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-purple-400 hover:text-slate-900 dark:hover:text-white'
               }`}
-              data-cat={cat.key}
+              data-cat-key={cat.key}
             >
               <Icon class="w-3.5 h-3.5" />
               <span>{cat.label}</span>
@@ -106,199 +109,161 @@ const iconMap: Record<string, any> = {
           );
         })}
       </div>
-
     </div>
 
-    <!-- Tools Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="tools-grid">
+    <!-- Tools Grid Stream -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="tools-grid-container">
       {nostrTools.map((tool) => {
         const Icon = iconMap[tool.icon] || Sparkles;
         return (
-          <article 
-            class="tool-card group p-6 sm:p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-nostr-400 dark:hover:border-nostr-600 transition-all shadow-sm flex flex-col justify-between space-y-6"
+          <div 
+            class="tool-card group p-6 sm:p-7 rounded-3xl bg-[#faf9f5] dark:bg-slate-900/60 border border-slate-200/90 dark:border-slate-800 hover:border-purple-400 dark:hover:border-purple-600 transition-all flex flex-col justify-between shadow-2xs hover:shadow-xs space-y-5"
+            data-tool-id={tool.id}
             data-category={tool.category}
-            data-keywords={`${tool.title} ${tool.summary} ${tool.nips.join(' ')} ${tool.features.join(' ')}`.toLowerCase()}
+            data-search-corpus={`${tool.title} ${tool.shortTitle} ${tool.summary} ${tool.description} ${tool.nips.join(' ')} ${tool.features.join(' ')}`.toLowerCase()}
           >
-            <!-- Top Metadata -->
             <div class="space-y-4">
-              <div class="flex items-center justify-between">
-                <div class="w-12 h-12 rounded-2xl bg-nostr-50 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400 flex items-center justify-center group-hover:scale-105 transition-transform">
-                  <Icon class="w-6 h-6" />
+              <!-- Top Category & NIP Badges -->
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <span class="px-2.5 py-0.5 rounded-lg text-[11px] font-bold font-mono uppercase tracking-wider bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+                  {tool.categoryLabel}
+                </span>
+
+                <div class="flex items-center gap-1 flex-wrap">
+                  {tool.nips.map((nip) => (
+                    <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200/80 dark:border-slate-700/80">
+                      {nip}
+                    </span>
+                  ))}
                 </div>
-                <div class="flex items-center gap-1.5">
+              </div>
+
+              <!-- Icon & Title -->
+              <div class="flex items-start gap-3.5">
+                <div class="w-11 h-11 rounded-2xl bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform border border-purple-200 dark:border-purple-800/80 shadow-2xs">
+                  <Icon class="w-5 h-5" />
+                </div>
+                <div>
+                  <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-purple-700 dark:group-hover:text-purple-300 transition-colors leading-snug">
+                    <a href={tool.href} class="focus:outline-none">
+                      {tool.title}
+                    </a>
+                  </h2>
                   {tool.badge && (
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
-                      {tool.badge}
+                    <span class="inline-block mt-1 text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 font-mono">
+                      ● {tool.badge}
                     </span>
                   )}
-                  <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
-                    {tool.nips.join(', ')}
-                  </span>
                 </div>
               </div>
 
-              <div class="space-y-1.5">
-                <h2 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-nostr-600 dark:group-hover:text-nostr-400 transition-colors">
-                  {tool.title}
-                </h2>
-                <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-3">
-                  {tool.summary}
-                </p>
-              </div>
+              <!-- Summary -->
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
+                {tool.summary}
+              </p>
 
-              <!-- Key Features Preview -->
-              <div class="space-y-1.5 pt-2">
+              <!-- Feature Highlights List -->
+              <ul class="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-800/80 text-xs text-slate-500 dark:text-slate-400">
                 {tool.features.slice(0, 3).map((feat) => (
-                  <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-                    <CheckCircle2 class="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
-                    <span class="truncate">{feat}</span>
-                  </div>
+                  <li class="flex items-start gap-2">
+                    <CheckCircle2 class="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 flex-shrink-0 mt-0.5" />
+                    <span class="line-clamp-1">{feat}</span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
 
-            <!-- Bottom CTA Button -->
-            <a
-              href={tool.href}
-              class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-2xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-nostr-600 hover:text-white dark:hover:bg-nostr-600 dark:hover:text-white text-slate-800 dark:text-slate-200 transition-all group-hover:bg-nostr-600 group-hover:text-white"
-            >
-              <span>Aracı Kullan</span>
-              <ArrowRight class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </a>
-          </article>
+            <!-- Action Button -->
+            <div class="pt-4 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between">
+              <a
+                href={tool.href}
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-purple-700 dark:text-purple-300 bg-white dark:bg-slate-800 hover:bg-purple-50 dark:hover:bg-purple-950 border border-slate-300 dark:border-slate-700 transition-all group-hover:border-purple-400 shadow-2xs"
+              >
+                <span>Aracı Başlat</span>
+                <ArrowRight class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+              </a>
+
+              <span class="text-[11px] font-mono text-slate-400 dark:text-slate-500">
+                Client-Side
+              </span>
+            </div>
+          </div>
         );
       })}
     </div>
 
-    <!-- No Results State -->
-    <div id="no-results" class="hidden text-center py-16 space-y-3">
-      <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 mx-auto flex items-center justify-center">
+    <!-- Empty State -->
+    <div id="no-tools-found" class="hidden text-center py-16 space-y-3">
+      <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
         <Search class="w-6 h-6" />
       </div>
       <h3 class="text-base font-bold text-slate-900 dark:text-white">Aradığınız kriterlere uygun araç bulunamadı</h3>
-      <p class="text-xs text-slate-500">Lütfen farklı bir anahtar kelime veya kategori seçin.</p>
-    </div>
-
-    <!-- Community Ecosystem Services Callout -->
-    <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-purple-500/10 via-slate-50 to-nostr-500/10 dark:from-purple-950/40 dark:via-slate-900 dark:to-nostr-950/40 border border-purple-200/80 dark:border-purple-800/60 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
-      <div class="space-y-1.5 max-w-2xl">
-        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
-          <Sparkles class="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-          <span>Topluluk Çözümleri & Servisler</span>
-        </div>
-        <h3 class="text-xl font-bold text-slate-900 dark:text-white">
-          rehber.dev ile Ücretsiz NIP-05 & Lightning Adresi Edinin
-        </h3>
-        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-          Kendi alan adınız olmadan <code class="text-purple-700 dark:text-purple-300 font-mono font-semibold">adınız@rehber.dev</code> kimliğini anında alın ve Nostr üzerinden gelen Zap bahşişlerini Alby veya WalletOfSatoshi cüzdanınıza yönlendirin.
-        </p>
-      </div>
-
-      <div class="flex flex-wrap items-center gap-3 flex-shrink-0">
-        <a
-          href="https://rehber.dev"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-bold text-white bg-purple-600 hover:bg-purple-700 shadow-md shadow-purple-500/20 transition-all active:scale-95"
-        >
-          <span>rehber.dev'i Ziyaret Et</span>
-          <ExternalLink class="w-3.5 h-3.5" />
-        </a>
-        <a
-          href="/projeler"
-          class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-all"
-        >
-          <span>Tüm Projeler</span>
-          <ArrowRight class="w-3.5 h-3.5" />
-        </a>
-      </div>
-    </div>
-
-    <!-- Community & Contribution Banner -->
-    <div class="p-8 sm:p-10 rounded-3xl bg-slate-50 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6">
-      <div class="space-y-1 text-center sm:text-left">
-        <h3 class="text-lg font-bold text-slate-900 dark:text-white">
-          Yeni bir Nostr aracı geliştirmek veya önermek ister misiniz?
-        </h3>
-        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-          Nostr Türkiye topluluğu açık kaynak projelerini destekler. GitHub üzerinden katkıda bulunabilirsiniz.
-        </p>
-      </div>
-
-      <div class="flex items-center gap-3 flex-shrink-0">
-        <a
-          href="https://github.com/nostr-org-tr/nostr.org.tr"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition-all"
-        >
-          <span>GitHub'da Katkı Ver</span>
-          <ExternalLink class="w-3.5 h-3.5 opacity-60" />
-        </a>
-      </div>
+      <p class="text-xs text-slate-500 dark:text-slate-400">Farklı anahtar kelimeler veya NIP numarası deneyebilirsiniz.</p>
     </div>
 
   </div>
-</Layout>
 
-<script is:inline>
-  const initToolsFilter = () => {
-    const searchInput = document.getElementById('tools-search-input');
-    const filterBtns = document.querySelectorAll('.cat-filter-btn');
-    const cards = document.querySelectorAll('.tool-card');
-    const noResults = document.getElementById('no-results');
+  <script is:inline>
+    const setupToolsFilter = () => {
+      const searchInput = document.getElementById('tools-search-input');
+      const catButtons = document.querySelectorAll('.cat-filter-btn');
+      const toolCards = document.querySelectorAll('.tool-card');
+      const noResults = document.getElementById('no-tools-found');
+      if (!searchInput || !toolCards.length) return;
 
-    let currentCat = 'all';
-    let currentQuery = '';
+      let currentCat = 'all';
+      let currentQuery = '';
 
-    const filterTools = () => {
-      let visibleCount = 0;
-      const q = currentQuery.toLowerCase().trim();
+      const filterTools = () => {
+        let visibleCount = 0;
 
-      cards.forEach((card) => {
-        const cat = card.getAttribute('data-category');
-        const keywords = card.getAttribute('data-keywords') || '';
+        toolCards.forEach((card) => {
+          const cardCat = card.getAttribute('data-category');
+          const corpus = card.getAttribute('data-search-corpus') || '';
 
-        const matchesCat = currentCat === 'all' || cat === currentCat;
-        const matchesQuery = !q || keywords.includes(q);
+          const matchesCat = currentCat === 'all' || cardCat === currentCat;
+          const matchesQuery = !currentQuery || corpus.includes(currentQuery);
 
-        if (matchesCat && matchesQuery) {
-          card.classList.remove('hidden');
-          visibleCount++;
-        } else {
-          card.classList.add('hidden');
-        }
-      });
-
-      if (noResults) {
-        if (visibleCount === 0) noResults.classList.remove('hidden');
-        else noResults.classList.add('hidden');
-      }
-    };
-
-    searchInput?.addEventListener('input', (e) => {
-      currentQuery = e.target.value;
-      filterTools();
-    });
-
-    filterBtns.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const cat = btn.getAttribute('data-cat') || 'all';
-        currentCat = cat;
-
-        filterBtns.forEach((b) => {
-          if (b === btn) {
-            b.className = 'cat-filter-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all bg-nostr-600 text-white shadow-sm';
+          if (matchesCat && matchesQuery) {
+            card.classList.remove('hidden');
+            visibleCount++;
           } else {
-            b.className = 'cat-filter-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-nostr-400 hover:text-slate-900 dark:hover:text-white';
+            card.classList.add('hidden');
           }
         });
 
+        if (noResults) {
+          if (visibleCount === 0) {
+            noResults.classList.remove('hidden');
+          } else {
+            noResults.classList.add('hidden');
+          }
+        }
+      };
+
+      searchInput.addEventListener('input', (e) => {
+        currentQuery = (e.target.value || '').trim().toLowerCase();
         filterTools();
       });
-    });
-  };
 
-  initToolsFilter();
-  document.addEventListener('astro:after-swap', initToolsFilter);
-</script>
+      catButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          catButtons.forEach((b) => {
+            b.classList.remove('bg-purple-700', 'text-white', 'shadow-xs');
+            b.classList.add('bg-[#faf9f5]', 'dark:bg-slate-900', 'border', 'border-slate-200/90', 'dark:border-slate-800', 'text-slate-600', 'dark:text-slate-300');
+          });
+
+          btn.classList.add('bg-purple-700', 'text-white', 'shadow-xs');
+          btn.classList.remove('bg-[#faf9f5]', 'dark:bg-slate-900', 'text-slate-600', 'dark:text-slate-300');
+
+          currentCat = btn.getAttribute('data-cat-key') || 'all';
+          filterTools();
+        });
+      });
+    };
+
+    setupToolsFilter();
+    document.addEventListener('astro:after-swap', setupToolsFilter);
+  </script>
+
+</Layout>

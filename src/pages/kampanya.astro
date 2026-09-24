@@ -50,8 +50,8 @@ const budgetCategories = [
   {
     percent: '%40',
     title: 'Sunucu ve Yüksek Erişilebilirlikli Röle Altyapısı',
-    color: 'bg-nostr-500 text-white',
-    border: 'border-nostr-200 dark:border-nostr-800',
+    color: 'bg-purple-700 text-white',
+    border: 'border-purple-200 dark:border-purple-800',
     icon: Server,
     items: [
       'Çok bölgeli NVMe dedicated röle sunucuları (relay.nostr.org.tr)',
@@ -62,7 +62,7 @@ const budgetCategories = [
   {
     percent: '%25',
     title: 'Eğitim İçerikleri, Yayınlar ve Yerel Buluşmalar',
-    color: 'bg-emerald-500 text-white',
+    color: 'bg-emerald-600 text-white',
     border: 'border-emerald-200 dark:border-emerald-800',
     icon: GraduationCap,
     items: [
@@ -74,7 +74,7 @@ const budgetCategories = [
   {
     percent: '%25',
     title: 'Açık Kaynak Geliştirici Fonu ve Görev Ödülleri',
-    color: 'bg-amber-500 text-white',
+    color: 'bg-amber-600 text-white',
     border: 'border-amber-200 dark:border-amber-800',
     icon: Code2,
     items: [
@@ -86,8 +86,8 @@ const budgetCategories = [
   {
     percent: '%10',
     title: 'Alan Adı, Güvenlik Denetimleri ve Acil Durum Rezervi',
-    color: 'bg-purple-500 text-white',
-    border: 'border-purple-200 dark:border-purple-800',
+    color: 'bg-rose-600 text-white',
+    border: 'border-rose-200 dark:border-rose-800',
     icon: ShieldCheck,
     items: [
       'Çok yıllık nostr.org.tr alan adı tescil ve koruma güvencesi',
@@ -98,6 +98,7 @@ const budgetCategories = [
 ];
 ---
 
+<!-- Hallmark · genre: editorial · macrostructure: Feature Column · design-system: design.md · designed-as-app -->
 <Layout 
   title="Nostr Türkiye Fon Toplama Kampanyası - Özgür İletişim Altyapısını Birlikte Büyütelim"
   description="Türkiye'de sansüre dirençli, açık ve bağımsız iletişim altyapısını güçlendirmek için Nostr Türkiye Topluluğu fon toplama kampanyasına Bitcoin, Lightning veya Agora üzerinden destek olun."
@@ -116,13 +117,13 @@ const budgetCategories = [
   </Fragment>
 
   <!-- Hero Header -->
-  <section class="py-12 sm:py-16 border-b border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-b from-white via-slate-50 to-slate-100/60 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+  <section class="py-14 sm:py-18 border-b border-slate-200/90 dark:border-slate-800/90 bg-[#faf9f5] dark:bg-[#0b0f19]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Bilingual Notice & Badge -->
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-800 shadow-sm">
-          <HeartHandshake class="w-4 h-4 text-rose-500" />
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-800 dark:bg-rose-950/70 dark:text-rose-200 border border-rose-200 dark:border-rose-800/80 shadow-xs">
+          <HeartHandshake class="w-4 h-4 text-rose-600 dark:text-rose-400" />
           <span>Resmi Topluluk Fon Kampanyası</span>
           <span class="text-rose-300 dark:text-rose-700">•</span>
           <span>Agora & Lightning Destekli</span>
@@ -130,20 +131,20 @@ const budgetCategories = [
 
         <a 
           href="/en/campaign" 
-          class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-nostr-600 dark:hover:text-nostr-400 bg-white dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm transition-all"
+          class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-purple-700 dark:hover:text-purple-300 bg-white dark:bg-slate-800 px-3.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-xs transition-all active:scale-[0.98]"
         >
-          <Languages class="w-3.5 h-3.5 text-nostr-500" />
+          <Languages class="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
           <span>Read in English (Campaign Page)</span>
           <ArrowRight class="w-3 h-3" />
         </a>
       </div>
 
       <div class="max-w-3xl">
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.15]">
           Sansürsüz, Özgür İletişim Altyapısı ve Topluluk Merkezi İnşa Ediyoruz
         </h1>
         <p class="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-          85 milyondan fazla Türkçe konuşan bireyi açık protokoller, yerel yüksek hızlı röleler (<code class="text-xs px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-nostr-600 dark:text-nostr-400 font-mono">relay.nostr.org.tr</code>), geliştirici araçları ve dijital egemenlikle güçlendiriyoruz.
+          85 milyondan fazla Türkçe konuşan bireyi açık protokoller, yerel yüksek hızlı röleler (<code class="text-xs px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-purple-700 dark:text-purple-300 font-mono">relay.nostr.org.tr</code>), geliştirici araçları ve dijital egemenlikle güçlendiriyoruz.
         </p>
       </div>
 
@@ -151,7 +152,7 @@ const budgetCategories = [
   </section>
 
   <!-- Main Content & Sticky Campaign Widget Grid -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
       
       <!-- Left Column: Rich Campaign Details (7 cols on lg) -->
@@ -160,7 +161,7 @@ const budgetCategories = [
         <!-- Section 1: Background Story -->
         <section class="space-y-6">
           <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
-            <div class="p-2 rounded-xl bg-nostr-50 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400 border border-nostr-100 dark:border-nostr-900">
+            <div class="p-2 rounded-xl bg-purple-50 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-100 dark:border-purple-900">
               <Sparkles class="w-5 h-5" />
             </div>
             <div>
@@ -173,36 +174,36 @@ const budgetCategories = [
 
           <div class="prose prose-slate dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 space-y-4 text-sm sm:text-base leading-relaxed">
             <p>
-              Türkiye’de ve bölgemizde dijital iletişim, birkaç küresel teknoloji tekelinin insafına terk edilmiş durumdadır. İnternet kullanıcıları ve içerik üreticileri düzenli olarak <strong>keyfi bant daraltma (throttling)</strong>, ani erişim engelleri, kapalı algoritmik manipülasyonlar ve tek taraflı hesap kapatma (de-platforming) tehditleriyle karşı karşıyadır.
+              Türkiye’de ve bölgemizde dijital iletişim, birkaç küresel teknoloji tekelinin insafına terk edilmiş durumdadır. İnternet kullanıcıları ve içerik üreticileri düzenli olarak <strong>keyfi bant daraltma (throttling)</strong>, ani erişim engelleri, kapalı algoritmik manipülasyonlar ve tek taraflı hesap kapatma tehditleriyle karşı karşıyadır.
             </p>
             <p>
               <strong>Nostr (Notes and Other Stuff Transmitted by Relays)</strong>, iletişimi şirketlerin sunucularından kurtararak doğrudan bireylerin kriptografik mülkiyetine (<code class="text-xs font-mono bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">public key</code>) ve bağımsız röleler ağına devreder. Hiçbir şirket hesabınızı donduramaz veya sesinizi kısamaz.
             </p>
 
-            <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 space-y-3">
+            <div class="p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 space-y-3">
               <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <CheckCircle2 class="w-4 h-4 text-emerald-500" />
+                <CheckCircle2 class="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 <span>Bugüne Kadar Sıfır Bütçeyle Neler İnşa Ettik?</span>
               </h3>
               <ul class="space-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
                 <li class="flex items-start gap-2">
-                  <span class="font-bold text-nostr-600 dark:text-nostr-400">•</span>
+                  <span class="font-bold text-purple-600 dark:text-purple-400">•</span>
                   <span><strong>nostr.org.tr Portalı:</strong> Astro 5, Tailwind CSS ve Cloudflare Workers üzerinde çalışan modern ve hızlı topluluk merkezi.</span>
                 </li>
                 <li class="flex items-start gap-2">
-                  <span class="font-bold text-nostr-600 dark:text-nostr-400">•</span>
+                  <span class="font-bold text-purple-600 dark:text-purple-400">•</span>
                   <span><strong>Yerel Röle (<code class="text-xs font-mono">relay.nostr.org.tr</code>):</strong> Düşük gecikmeli, kesintisiz bölgesel röle altyapısı.</span>
                 </li>
                 <li class="flex items-start gap-2">
-                  <span class="font-bold text-nostr-600 dark:text-nostr-400">•</span>
+                  <span class="font-bold text-purple-600 dark:text-purple-400">•</span>
                   <span><strong>Ücretsiz NIP-05 Kimlik Servisi:</strong> Tüm Türkçe konuşan kullanıcılar için anında <code class="text-xs font-mono">adiniz@nostr.org.tr</code> doğrulanmış kimlik desteği.</span>
                 </li>
                 <li class="flex items-start gap-2">
-                  <span class="font-bold text-nostr-600 dark:text-nostr-400">•</span>
+                  <span class="font-bold text-purple-600 dark:text-purple-400">•</span>
                   <span><strong>7+ Web Tanı Aracı:</strong> Anahtar Üreticisi, NIP-19 Dönüştürücü, NIP-05 Üreticisi, NIP-07 Test Aracı, Canlı Röle Ping Testi, Zap Denetleyicisi ve Event Doğrulayıcı.</span>
                 </li>
                 <li class="flex items-start gap-2">
-                  <span class="font-bold text-nostr-600 dark:text-nostr-400">•</span>
+                  <span class="font-bold text-purple-600 dark:text-purple-400">•</span>
                   <span><strong>Kapsamlı Rehber & DevFest Konuşması:</strong> Türkçe başlangıç belgeleri ve DevFest Istanbul sahnesinde protokol anlatımı.</span>
                 </li>
               </ul>
@@ -217,7 +218,7 @@ const budgetCategories = [
         <!-- Section 2: Concrete Benefits -->
         <section class="space-y-6">
           <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
-            <div class="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900">
+            <div class="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-100 dark:border-emerald-900">
               <ShieldCheck class="w-5 h-5" />
             </div>
             <div>
@@ -229,8 +230,8 @@ const budgetCategories = [
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
-              <div class="flex items-center gap-2 text-nostr-600 dark:text-nostr-400 font-bold text-sm">
+            <div class="p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 space-y-2">
+              <div class="flex items-center gap-2 text-purple-700 dark:text-purple-300 font-bold text-sm">
                 <Radio class="w-4 h-4" />
                 <span>1. Kesintisiz & Sansürsüz İletişim</span>
               </div>
@@ -239,8 +240,8 @@ const budgetCategories = [
               </p>
             </div>
 
-            <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
-              <div class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm">
+            <div class="p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 space-y-2">
+              <div class="flex items-center gap-2 text-emerald-700 dark:text-emerald-300 font-bold text-sm">
                 <Zap class="w-4 h-4" />
                 <span>2. Düşük Gecikme (20-40ms)</span>
               </div>
@@ -249,8 +250,8 @@ const budgetCategories = [
               </p>
             </div>
 
-            <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
-              <div class="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold text-sm">
+            <div class="p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 space-y-2">
+              <div class="flex items-center gap-2 text-amber-700 dark:text-amber-300 font-bold text-sm">
                 <GraduationCap class="w-4 h-4" />
                 <span>3. Ana Dilde Kapsamlı Eğitim</span>
               </div>
@@ -259,8 +260,8 @@ const budgetCategories = [
               </p>
             </div>
 
-            <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
-              <div class="flex items-center gap-2 text-purple-600 dark:text-purple-400 font-bold text-sm">
+            <div class="p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 space-y-2">
+              <div class="flex items-center gap-2 text-rose-700 dark:text-rose-300 font-bold text-sm">
                 <Code2 class="w-4 h-4" />
                 <span>4. Yerel Geliştirici Fonu & Hibeler</span>
               </div>
@@ -274,7 +275,7 @@ const budgetCategories = [
         <!-- Section 3: Transparent Budget Allocation -->
         <section class="space-y-6">
           <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
-            <div class="p-2 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-900">
+            <div class="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-100 dark:border-amber-900">
               <Coins class="w-5 h-5" />
             </div>
             <div>
@@ -289,7 +290,7 @@ const budgetCategories = [
             {budgetCategories.map((cat) => {
               const Icon = cat.icon;
               return (
-                <div class={`p-5 rounded-2xl bg-white dark:bg-slate-900 border ${cat.border} shadow-sm space-y-3`}>
+                <div class={`p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900 border ${cat.border} shadow-xs space-y-3`}>
                   <div class="flex items-center justify-between">
                     <span class={`px-2.5 py-0.5 text-xs font-extrabold rounded-lg ${cat.color}`}>
                       {cat.percent}
@@ -316,7 +317,7 @@ const budgetCategories = [
         <!-- Section 4: Milestones -->
         <section class="space-y-6">
           <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
-            <div class="p-2 rounded-xl bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 border border-purple-100 dark:border-purple-900">
+            <div class="p-2 rounded-xl bg-purple-50 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-100 dark:border-purple-900">
               <Users class="w-5 h-5" />
             </div>
             <div>
@@ -329,10 +330,10 @@ const budgetCategories = [
 
           <div class="space-y-4">
             {milestones.map((m) => (
-              <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2.5">
+              <div class="p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-2.5">
                 <div class="flex flex-wrap items-center justify-between gap-2">
                   <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                    <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
                       {m.step}
                     </span>
                     <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">
@@ -353,9 +354,9 @@ const budgetCategories = [
         </section>
 
         <!-- Section 5: Transparency & Open Source -->
-        <section class="p-6 rounded-2xl bg-gradient-to-br from-nostr-50 to-purple-50 dark:from-nostr-950/40 dark:to-slate-900 border border-nostr-200 dark:border-nostr-800 space-y-3">
+        <section class="p-6 rounded-2xl bg-purple-50/70 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800/80 space-y-3">
           <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <Globe2 class="w-5 h-5 text-nostr-600 dark:text-nostr-400" />
+            <Globe2 class="w-5 h-5 text-purple-700 dark:text-purple-300" />
             <span>Şeffaflık, Yönetişim ve Açık Kaynak Güvencesi</span>
           </h3>
           <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -369,15 +370,15 @@ const budgetCategories = [
       <div class="lg:col-span-5 space-y-6 lg:sticky lg:top-20">
         
         <!-- Agora Embed Container -->
-        <div class="rounded-3xl bg-white dark:bg-slate-900 p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+        <div class="rounded-3xl bg-white dark:bg-[#0e1322] p-5 border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-4">
           <div class="flex items-center justify-between px-1">
             <div class="flex items-center gap-2">
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span class="text-xs font-bold tracking-wider uppercase text-slate-700 dark:text-slate-300">
+              <span class="text-xs font-bold tracking-wider uppercase text-slate-700 dark:text-slate-300 font-mono">
                 Canlı Bağış Kartı
               </span>
             </div>
-            <span class="text-[11px] font-mono text-slate-500 dark:text-slate-400">Agora Embed</span>
+            <span class="text-[11px] font-mono text-slate-500 dark:text-slate-400">Agora Protocol</span>
           </div>
 
           <!-- The User Provided Iframe -->
@@ -396,7 +397,7 @@ const budgetCategories = [
         </div>
 
         <!-- Direct Lightning Alternative Support -->
-        <div class="rounded-2xl bg-white dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+        <div class="rounded-2xl bg-white dark:bg-[#0e1322] p-5 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-4">
           <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
             <Zap class="w-4 h-4 text-amber-500 fill-amber-500" />
             <span>Doğrudan Lightning ile Destek Olun</span>
@@ -405,19 +406,19 @@ const budgetCategories = [
             Iframe dışında doğrudan mobil cüzdanınızdan veya Nostr istemcinizden Zap göndermek isterseniz:
           </p>
 
-          <div class="space-y-2 text-xs">
-            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2">
+          <div class="space-y-2.5 text-xs">
+            <div class="p-3 rounded-xl bg-[#faf9f5] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 flex items-center justify-between gap-2">
               <div class="truncate">
-                <span class="text-slate-500 block text-[10px]">Altyapı Fonu Lightning Adresi:</span>
-                <span class="font-mono font-bold text-slate-800 dark:text-slate-200 truncate">nostrorgtr@cake.cash</span>
+                <span class="text-slate-500 dark:text-slate-400 block text-[10px] uppercase font-mono tracking-wider">Altyapı Fonu Lightning Adresi</span>
+                <span class="font-mono font-bold text-slate-900 dark:text-slate-100 truncate text-xs">nostrorgtr@cake.cash</span>
               </div>
               <CopyButton text="nostrorgtr@cake.cash" label="Kopyala" />
             </div>
 
-            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2">
+            <div class="p-3 rounded-xl bg-[#faf9f5] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 flex items-center justify-between gap-2">
               <div class="truncate">
-                <span class="text-slate-500 block text-[10px]">Kurucu Maintainer Adresi:</span>
-                <span class="font-mono font-bold text-slate-800 dark:text-slate-200 truncate">delirehberi@emre.xyz</span>
+                <span class="text-slate-500 dark:text-slate-400 block text-[10px] uppercase font-mono tracking-wider">Kurucu Maintainer Adresi</span>
+                <span class="font-mono font-bold text-slate-900 dark:text-slate-100 truncate text-xs">delirehberi@emre.xyz</span>
               </div>
               <CopyButton text="delirehberi@emre.xyz" label="Kopyala" />
             </div>
@@ -425,10 +426,10 @@ const budgetCategories = [
         </div>
 
         <!-- Community Links Card -->
-        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 space-y-2">
+        <div class="p-4 rounded-2xl bg-[#faf9f5] dark:bg-slate-900/60 border border-slate-200/90 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 space-y-2">
           <div class="font-semibold text-slate-900 dark:text-slate-200">Sorularınız veya Kurumsal Destek İçin:</div>
           <p>
-            Büyük hibe, donanım veya sunucu desteği sağlamak isterseniz <a href="mailto:ekip@nostr.org.tr" class="text-nostr-600 dark:text-nostr-400 font-semibold hover:underline">ekip@nostr.org.tr</a> üzerinden bize ulaşabilirsiniz.
+            Büyük hibe, donanım veya sunucu desteği sağlamak isterseniz <a href="mailto:ekip@nostr.org.tr" class="text-purple-700 dark:text-purple-300 font-semibold hover:underline">ekip@nostr.org.tr</a> üzerinden bize ulaşabilirsiniz.
           </p>
         </div>
 

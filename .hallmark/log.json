@@ -1,0 +1,11 @@
+[
+  {
+    "date": "2026-09-24",
+    "scope": "app",
+    "genre": "editorial",
+    "design_system": "design.md",
+    "macrostructures": ["Marquee Hero", "Long Document", "Tabular Index", "Workbench"],
+    "theme": "Editorial Nostr (Warm Parchment + Nostr Purple + TR Crimson)",
+    "brief": "nostr.org.tr full site redesign with Hallmark design discipline"
+  }
+]

@@ -50,8 +50,8 @@ const budgetCategories = [
   {
     percent: '40%',
     title: 'Server & High-Availability Relay Infrastructure',
-    color: 'bg-nostr-500 text-white',
-    border: 'border-nostr-200 dark:border-nostr-800',
+    color: 'bg-purple-700 text-white',
+    border: 'border-purple-200 dark:border-purple-800',
     icon: Server,
     items: [
       'Multi-region NVMe dedicated relay nodes (relay.nostr.org.tr)',
@@ -62,7 +62,7 @@ const budgetCategories = [
   {
     percent: '25%',
     title: 'Education, Content Production & Local Outreach',
-    color: 'bg-emerald-500 text-white',
+    color: 'bg-emerald-600 text-white',
     border: 'border-emerald-200 dark:border-emerald-800',
     icon: GraduationCap,
     items: [
@@ -74,7 +74,7 @@ const budgetCategories = [
   {
     percent: '25%',
     title: 'Open Source Dev Bounties & Tool Maintenance',
-    color: 'bg-amber-500 text-white',
+    color: 'bg-amber-600 text-white',
     border: 'border-amber-200 dark:border-amber-800',
     icon: Code2,
     items: [
@@ -86,8 +86,8 @@ const budgetCategories = [
   {
     percent: '10%',
     title: 'Domain Protection, Security Audits & Reserves',
-    color: 'bg-purple-500 text-white',
-    border: 'border-purple-200 dark:border-purple-800',
+    color: 'bg-rose-600 text-white',
+    border: 'border-rose-200 dark:border-rose-800',
     icon: ShieldCheck,
     items: [
       'Multi-year domain registration & brand defense (nostr.org.tr)',
@@ -98,6 +98,7 @@ const budgetCategories = [
 ];
 ---
 
+<!-- Hallmark · genre: editorial · macrostructure: Feature Column · design-system: design.md · designed-as-app -->
 <Layout 
   title="Nostr Türkiye Fundraising Campaign - Building Sovereign, Censorship-Resistant Infrastructure"
   description="Support Nostr Türkiye Topluluğu via Bitcoin, Lightning, or Agora to fund high-availability relays, developer grants, and open-source education for 85M+ Turkish speakers."
@@ -117,13 +118,13 @@ const budgetCategories = [
   </Fragment>
 
   <!-- Hero Header -->
-  <section class="py-12 sm:py-16 border-b border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-b from-white via-slate-50 to-slate-100/60 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+  <section class="py-14 sm:py-18 border-b border-slate-200/90 dark:border-slate-800/90 bg-[#faf9f5] dark:bg-[#0b0f19]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Bilingual Notice & Badge -->
       <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-800 shadow-sm">
-          <HeartHandshake class="w-4 h-4 text-rose-500" />
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-800 dark:bg-rose-950/70 dark:text-rose-200 border border-rose-200 dark:border-rose-800/80 shadow-xs">
+          <HeartHandshake class="w-4 h-4 text-rose-600 dark:text-rose-400" />
           <span>Official Community Fundraiser</span>
           <span class="text-rose-300 dark:text-rose-700">•</span>
           <span>Powered by Agora & Lightning</span>
@@ -131,20 +132,20 @@ const budgetCategories = [
 
         <a 
           href="/kampanya" 
-          class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-nostr-600 dark:hover:text-nostr-400 bg-white dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm transition-all"
+          class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-purple-700 dark:hover:text-purple-300 bg-white dark:bg-slate-800 px-3.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-xs transition-all active:scale-[0.98]"
         >
-          <Languages class="w-3.5 h-3.5 text-tr-red" />
+          <Languages class="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
           <span>Türkçe Kampanya Sayfası</span>
           <ArrowRight class="w-3 h-3" />
         </a>
       </div>
 
       <div class="max-w-3xl">
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.15]">
           Building Sovereign, Censorship-Resistant Communication & Community Hub
         </h1>
         <p class="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
-          Empowering 85M+ Turkish speakers with open protocols, local high-speed relays (<code class="text-xs px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-nostr-600 dark:text-nostr-400 font-mono">relay.nostr.org.tr</code>), developer tooling, and decentralized digital sovereignty.
+          Empowering 85M+ Turkish speakers with open protocols, local high-speed relays (<code class="text-xs px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-purple-700 dark:text-purple-300 font-mono">relay.nostr.org.tr</code>), developer tooling, and decentralized digital sovereignty.
         </p>
       </div>
 
@@ -152,7 +153,7 @@ const budgetCategories = [
   </section>
 
   <!-- Main Content & Sticky Campaign Widget Grid -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
       
       <!-- Left Column: Rich Campaign Details (7 cols on lg) -->
@@ -161,56 +162,56 @@ const budgetCategories = [
         <!-- Section 1: Background Story -->
         <section class="space-y-6">
           <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
-            <div class="p-2 rounded-xl bg-nostr-50 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400 border border-nostr-100 dark:border-nostr-900">
+            <div class="p-2 rounded-xl bg-purple-50 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-100 dark:border-purple-900">
               <Sparkles class="w-5 h-5" />
             </div>
             <div>
               <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
-                1. Background Story: Why Nostr Türkiye Matters
+                1. Background Story: Why Nostr Türkiye?
               </h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400">Overcoming central censorship through sovereign public-good infrastructure</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Centralization, censorship, and sovereign digital public infrastructure</p>
             </div>
           </div>
 
           <div class="prose prose-slate dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 space-y-4 text-sm sm:text-base leading-relaxed">
             <p>
-              In Türkiye and surrounding regions, digital communication is heavily constrained by corporate social media silos. Citizens, independent journalists, students, and creators regularly experience <strong>bandwidth throttling (DNS/BGP disruption)</strong>, sudden platform bans, invasive algorithmic manipulation, and arbitrary de-platforming without recourse.
+              In Turkey and across the region, public discourse is increasingly captured by centralized platforms. Citizens, journalists, and independent creators face regular <strong>arbitrary bandwidth throttling</strong>, emergency ISP bans, algorithmic silencing, and unilateral de-platforming.
             </p>
             <p>
-              <strong>Nostr (Notes and Other Stuff Transmitted by Relays)</strong> liberates public communication by replacing corporate database ownership with cryptographic keypairs (<code class="text-xs font-mono bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">public key</code>) and decentralized relays. No corporation can censor your posts or delete your followers.
+              <strong>Nostr (Notes and Other Stuff Transmitted by Relays)</strong> liberates communication by anchoring identity to cryptographic keypairs (<code class="text-xs font-mono bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">public keys</code>) rather than corporate server databases. No central gatekeeper can suspend your account or mute your broadcast.
             </p>
 
-            <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 space-y-3">
+            <div class="p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 space-y-3">
               <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <CheckCircle2 class="w-4 h-4 text-emerald-500" />
-                <span>What We Have Built From Scratch ($0 Outside Budget):</span>
+                <CheckCircle2 class="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                <span>What We Built With Zero External Funding</span>
               </h3>
               <ul class="space-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
                 <li class="flex items-start gap-2">
-                  <span class="font-bold text-nostr-600 dark:text-nostr-400">•</span>
-                  <span><strong>nostr.org.tr Platform:</strong> High-speed bilingual community hub powered by Astro 5, Tailwind, and Cloudflare Workers.</span>
+                  <span class="font-bold text-purple-600 dark:text-purple-400">•</span>
+                  <span><strong>nostr.org.tr Hub:</strong> Production Astro 5 platform hosted on edge infrastructure with zero tracking.</span>
                 </li>
                 <li class="flex items-start gap-2">
-                  <span class="font-bold text-nostr-600 dark:text-nostr-400">•</span>
-                  <span><strong>Regional Relay (<code class="text-xs font-mono">relay.nostr.org.tr</code>):</strong> Low-latency, censorship-resilient relay hosting for regional users.</span>
+                  <span class="font-bold text-purple-600 dark:text-purple-400">•</span>
+                  <span><strong>Local Relay (<code class="text-xs font-mono">relay.nostr.org.tr</code>):</strong> Low-latency high-throughput regional relay for regional nostriches.</span>
                 </li>
                 <li class="flex items-start gap-2">
-                  <span class="font-bold text-nostr-600 dark:text-nostr-400">•</span>
-                  <span><strong>Free NIP-05 Identity Resolution:</strong> Instant sovereign identity provisioning (<code class="text-xs font-mono">name@nostr.org.tr</code>) via edge API at zero cost.</span>
+                  <span class="font-bold text-purple-600 dark:text-purple-400">•</span>
+                  <span><strong>Free NIP-05 Identity Service:</strong> Instant <code class="text-xs font-mono">name@nostr.org.tr</code> verification for the community.</span>
                 </li>
                 <li class="flex items-start gap-2">
-                  <span class="font-bold text-nostr-600 dark:text-nostr-400">•</span>
-                  <span><strong>7+ Diagnostic Web Tools:</strong> Keypair Generator, NIP-19 Converter, NIP-05 Validator, NIP-07 Suite, Live Relay Ping, Zap Checker, and Event Signature Verifier.</span>
+                  <span class="font-bold text-purple-600 dark:text-purple-400">•</span>
+                  <span><strong>7+ Web Diagnostic Tools:</strong> Key Generator, NIP-19 Converter, NIP-05 Generator, NIP-07 Tester, Live Relay Latency Checker, Zap Verifier, and Event Validator.</span>
                 </li>
                 <li class="flex items-start gap-2">
-                  <span class="font-bold text-nostr-600 dark:text-nostr-400">•</span>
-                  <span><strong>Education & DevFest Istanbul Keynote:</strong> Comprehensive Turkish guides and presenting <em>"Nostr: A Protocol for Freedom of Speech"</em> to tech audiences.</span>
+                  <span class="font-bold text-purple-600 dark:text-purple-400">•</span>
+                  <span><strong>Comprehensive Guides & DevFest Keynote:</strong> Turkish documentation and public conference presentations.</span>
                 </li>
               </ul>
             </div>
 
             <p>
-              To date, all hosting, domain registration, maintenance, and development hours have been funded out of pocket by volunteer maintainers. To ensure this infrastructure remains <strong>unbreakable, fast, and permanent</strong>, we invite the global Nostr & Bitcoin community to support our mission.
+              Until now, all server hosting, domain fees, and engineering labor have been self-funded by volunteer maintainers. We are now raising funds to transform this into a <strong>sustainable, high-availability public good</strong> for millions of Turkish speakers.
             </p>
           </div>
         </section>
@@ -218,71 +219,71 @@ const budgetCategories = [
         <!-- Section 2: Concrete Benefits -->
         <section class="space-y-6">
           <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
-            <div class="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900">
+            <div class="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-100 dark:border-emerald-900">
               <ShieldCheck class="w-5 h-5" />
             </div>
             <div>
               <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
-                2. Tangible Benefits for Turkish Speakers & the Protocol
+                2. Tangible Impact for the Turkish Ecosystem
               </h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400">Direct impact of your contribution</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Where will your contribution make an impact?</p>
             </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
-              <div class="flex items-center gap-2 text-nostr-600 dark:text-nostr-400 font-bold text-sm">
+            <div class="p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 space-y-2">
+              <div class="flex items-center gap-2 text-purple-700 dark:text-purple-300 font-bold text-sm">
                 <Radio class="w-4 h-4" />
-                <span>1. Uncensorable Town Square</span>
+                <span>1. Uninterrupted Censorship Resistance</span>
               </div>
               <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Provides a decentralized communications lifeline for journalists, students, and citizens immune to local platform blocking.
+                A neutral digital public square immune to state bans and corporate de-platforming for citizens and journalists.
               </p>
             </div>
 
-            <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
-              <div class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm">
+            <div class="p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 space-y-2">
+              <div class="flex items-center gap-2 text-emerald-700 dark:text-emerald-300 font-bold text-sm">
                 <Zap class="w-4 h-4" />
-                <span>2. Low Latency (20-40ms)</span>
+                <span>2. Ultra-Low Latency (20-40ms)</span>
               </div>
               <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Regionally hosted nodes in Istanbul and Europe reduce latency from 200ms+ down to sub-40ms for lightning-fast mobile feeds.
+                Optimized relay clusters located near Turkish IXPs, eliminating high overseas round-trip latencies.
               </p>
             </div>
 
-            <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
-              <div class="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold text-sm">
+            <div class="p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 space-y-2">
+              <div class="flex items-center gap-2 text-amber-700 dark:text-amber-300 font-bold text-sm">
                 <GraduationCap class="w-4 h-4" />
-                <span>3. Native Turkish Education</span>
+                <span>3. Native Turkish Educational Hub</span>
               </div>
               <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Removing language barriers through video masterclasses, client setup tutorials, and cryptographic security kits.
+                Step-by-step masterclasses, security guides, and university workshops for non-technical users.
               </p>
             </div>
 
-            <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
-              <div class="flex items-center gap-2 text-purple-600 dark:text-purple-400 font-bold text-sm">
+            <div class="p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 space-y-2">
+              <div class="flex items-center gap-2 text-rose-700 dark:text-rose-300 font-bold text-sm">
                 <Code2 class="w-4 h-4" />
-                <span>4. Developer Grants & Bounties</span>
+                <span>4. Developer Grants & Hackathons</span>
               </div>
               <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Micro-grants for Turkish engineers building Nostr apps, bots, NIP standards, and Lightning payment integrations.
+                Direct micro-grants for Turkish open-source developers building Nostr clients, bots, and protocol tools.
               </p>
             </div>
           </div>
         </section>
 
-        <!-- Section 3: Transparent Budget Allocation -->
+        <!-- Section 3: Budget Allocation -->
         <section class="space-y-6">
           <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
-            <div class="p-2 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-900">
+            <div class="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-100 dark:border-amber-900">
               <Coins class="w-5 h-5" />
             </div>
             <div>
               <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
-                3. Transparent Budget Allocation Matrix
+                3. Transparent Budget Allocation
               </h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400">Every satoshi accounted for and publicly auditable</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Verifiable, auditable, and open fund distribution</p>
             </div>
           </div>
 
@@ -290,7 +291,7 @@ const budgetCategories = [
             {budgetCategories.map((cat) => {
               const Icon = cat.icon;
               return (
-                <div class={`p-5 rounded-2xl bg-white dark:bg-slate-900 border ${cat.border} shadow-sm space-y-3`}>
+                <div class={`p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900 border ${cat.border} shadow-xs space-y-3`}>
                   <div class="flex items-center justify-between">
                     <span class={`px-2.5 py-0.5 text-xs font-extrabold rounded-lg ${cat.color}`}>
                       {cat.percent}
@@ -317,23 +318,23 @@ const budgetCategories = [
         <!-- Section 4: Milestones -->
         <section class="space-y-6">
           <div class="flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
-            <div class="p-2 rounded-xl bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 border border-purple-100 dark:border-purple-900">
+            <div class="p-2 rounded-xl bg-purple-50 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-100 dark:border-purple-900">
               <Users class="w-5 h-5" />
             </div>
             <div>
               <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
-                4. Funding Milestones & Deliverables
+                4. Funding Milestones
               </h2>
-              <p class="text-xs text-slate-500 dark:text-slate-400">Concrete commitments unlocked at each target</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Key deliverables tied to funding thresholds</p>
             </div>
           </div>
 
           <div class="space-y-4">
             {milestones.map((m) => (
-              <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2.5">
+              <div class="p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-2.5">
                 <div class="flex flex-wrap items-center justify-between gap-2">
                   <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                    <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
                       {m.step}
                     </span>
                     <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">
@@ -354,13 +355,13 @@ const budgetCategories = [
         </section>
 
         <!-- Section 5: Transparency & Open Source -->
-        <section class="p-6 rounded-2xl bg-gradient-to-br from-nostr-50 to-purple-50 dark:from-nostr-950/40 dark:to-slate-900 border border-nostr-200 dark:border-nostr-800 space-y-3">
+        <section class="p-6 rounded-2xl bg-purple-50/70 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800/80 space-y-3">
           <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <Globe2 class="w-5 h-5 text-nostr-600 dark:text-nostr-400" />
-            <span>Radical Transparency & Open Source Governance</span>
+            <Globe2 class="w-5 h-5 text-purple-700 dark:text-purple-300" />
+            <span>Open Source & Transparent Governance</span>
           </h3>
           <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-            Our project is operated under <strong>100% open-source</strong> principles. All codebase, documentation, and tools reside publicly on GitHub. Infrastructure invoices and grant disbursements are published regularly via Nostr long-form articles (NIP-23). Any builder contributing value is welcomed as an organic decision-maker.
+            The Nostr Türkiye initiative operates with <strong>100% open source</strong> governance. Code repositories, server hosting receipts, and grant disbursements are published openly on GitHub and via NIP-23 long-form notes.
           </p>
         </section>
 
@@ -370,15 +371,15 @@ const budgetCategories = [
       <div class="lg:col-span-5 space-y-6 lg:sticky lg:top-20">
         
         <!-- Agora Embed Container -->
-        <div class="rounded-3xl bg-white dark:bg-slate-900 p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+        <div class="rounded-3xl bg-white dark:bg-[#0e1322] p-5 border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-4">
           <div class="flex items-center justify-between px-1">
             <div class="flex items-center gap-2">
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span class="text-xs font-bold tracking-wider uppercase text-slate-700 dark:text-slate-300">
+              <span class="text-xs font-bold tracking-wider uppercase text-slate-700 dark:text-slate-300 font-mono">
                 Live Donation Widget
               </span>
             </div>
-            <span class="text-[11px] font-mono text-slate-500 dark:text-slate-400">Agora Embed</span>
+            <span class="text-[11px] font-mono text-slate-500 dark:text-slate-400">Agora Protocol</span>
           </div>
 
           <!-- The User Provided Iframe -->
@@ -397,39 +398,39 @@ const budgetCategories = [
         </div>
 
         <!-- Direct Lightning Alternative Support -->
-        <div class="rounded-2xl bg-white dark:bg-slate-900 p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+        <div class="rounded-2xl bg-white dark:bg-[#0e1322] p-5 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-4">
           <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
             <Zap class="w-4 h-4 text-amber-500 fill-amber-500" />
-            <span>Direct Lightning Zap Support</span>
+            <span>Direct Lightning Support</span>
           </h3>
           <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            If you prefer to zap directly from your favorite mobile Lightning wallet or native Nostr client:
+            If you prefer sending Zaps directly from your native Lightning or Nostr wallet:
           </p>
 
-          <div class="space-y-2 text-xs">
-            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2">
+          <div class="space-y-2.5 text-xs">
+            <div class="p-3 rounded-xl bg-[#faf9f5] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 flex items-center justify-between gap-2">
               <div class="truncate">
-                <span class="text-slate-500 block text-[10px]">Infrastructure Fund Lightning Address:</span>
-                <span class="font-mono font-bold text-slate-800 dark:text-slate-200 truncate">nostrorgtr@cake.cash</span>
+                <span class="text-slate-500 dark:text-slate-400 block text-[10px] uppercase font-mono tracking-wider">Infrastructure Fund Address</span>
+                <span class="font-mono font-bold text-slate-900 dark:text-slate-100 truncate text-xs">nostrorgtr@cake.cash</span>
               </div>
               <CopyButton text="nostrorgtr@cake.cash" label="Copy" />
             </div>
 
-            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2">
+            <div class="p-3 rounded-xl bg-[#faf9f5] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 flex items-center justify-between gap-2">
               <div class="truncate">
-                <span class="text-slate-500 block text-[10px]">Founder Maintainer Address:</span>
-                <span class="font-mono font-bold text-slate-800 dark:text-slate-200 truncate">delirehberi@emre.xyz</span>
+                <span class="text-slate-500 dark:text-slate-400 block text-[10px] uppercase font-mono tracking-wider">Maintainer Direct Address</span>
+                <span class="font-mono font-bold text-slate-900 dark:text-slate-100 truncate text-xs">delirehberi@emre.xyz</span>
               </div>
               <CopyButton text="delirehberi@emre.xyz" label="Copy" />
             </div>
           </div>
         </div>
 
-        <!-- Community Links Card -->
-        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 space-y-2">
-          <div class="font-semibold text-slate-900 dark:text-slate-200">Institutional or Grant Inquiries:</div>
+        <!-- Community Inquiries Card -->
+        <div class="p-4 rounded-2xl bg-[#faf9f5] dark:bg-slate-900/60 border border-slate-200/90 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 space-y-2">
+          <div class="font-semibold text-slate-900 dark:text-slate-200">Institutional & Hardware Grants:</div>
           <p>
-            If you represent a foundation or sponsor wishing to provide dedicated hardware, high-bandwidth relay nodes, or grant matching, please contact us at <a href="mailto:ekip@nostr.org.tr" class="text-nostr-600 dark:text-nostr-400 font-semibold hover:underline">ekip@nostr.org.tr</a>.
+            For corporate sponsorships, server hardware, or dedicated relay hosting, reach out directly at <a href="mailto:ekip@nostr.org.tr" class="text-purple-700 dark:text-purple-300 font-semibold hover:underline">ekip@nostr.org.tr</a>.
           </p>
         </div>
 

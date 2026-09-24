@@ -30,6 +30,7 @@ const breadcrumbs = [
 const relatedTools = nostrTools.filter((t) => t.id !== tool.id).slice(0, 3);
 ---
 
+<!-- Hallmark · genre: editorial · macrostructure: Workbench · design-system: design.md · designed-as-app -->
 <Layout 
   title={`${tool.title} | Nostr Türkiye Araçları`}
   description={tool.summary}
@@ -44,13 +45,13 @@ const relatedTools = nostrTools.filter((t) => t.id !== tool.id).slice(0, 3);
     <FaqSchema faqs={tool.faqs} />
   </Fragment>
 
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-10">
     
     <!-- Breadcrumb Nav -->
-    <nav class="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 overflow-x-auto py-1" aria-label="Gezinme Yolu">
-      <a href="/" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors flex-shrink-0">Ana Sayfa</a>
+    <nav class="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 overflow-x-auto py-1 font-mono" aria-label="Gezinme Yolu">
+      <a href="/" class="hover:text-purple-700 dark:hover:text-purple-300 transition-colors flex-shrink-0">Ana Sayfa</a>
       <ChevronRight class="w-3.5 h-3.5 opacity-60 flex-shrink-0" />
-      <a href="/araclar" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors flex-shrink-0">Araçlar</a>
+      <a href="/araclar" class="hover:text-purple-700 dark:hover:text-purple-300 transition-colors flex-shrink-0">Araçlar</a>
       <ChevronRight class="w-3.5 h-3.5 opacity-60 flex-shrink-0" />
       <span class="text-slate-900 dark:text-slate-200 font-semibold truncate">{tool.shortTitle}</span>
     </nav>
@@ -58,23 +59,23 @@ const relatedTools = nostrTools.filter((t) => t.id !== tool.id).slice(0, 3);
     <!-- Hero Header -->
     <header class="space-y-4">
       <div class="flex flex-wrap items-center gap-2">
-        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-nostr-50 dark:bg-nostr-950/80 text-nostr-600 dark:text-nostr-400 border border-nostr-200 dark:border-nostr-800">
+        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-purple-50 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 font-mono">
           {tool.categoryLabel}
         </span>
         {tool.nips.map((nip) => (
-          <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-medium bg-[#faf9f5] dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
             {nip}
           </span>
         ))}
         {tool.badge && (
-          <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 font-mono">
             {tool.badge}
           </span>
         )}
       </div>
 
       <div class="space-y-2">
-        <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+        <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.2]">
           {tool.title}
         </h1>
         <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-4xl leading-relaxed">
@@ -83,9 +84,9 @@ const relatedTools = nostrTools.filter((t) => t.id !== tool.id).slice(0, 3);
       </div>
 
       <!-- Zero-Leak Client-Side Security Assurance Badge -->
-      <div class="p-3.5 sm:p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 text-xs">
+      <div class="p-4 rounded-2xl bg-[#faf9f5] dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 flex items-center justify-between gap-3 text-xs shadow-2xs">
         <div class="flex items-center gap-2.5 text-slate-700 dark:text-slate-300">
-          <div class="p-1 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400">
+          <div class="p-1 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400">
             <ShieldCheck class="w-4 h-4" />
           </div>
           <span>
@@ -105,9 +106,9 @@ const relatedTools = nostrTools.filter((t) => t.id !== tool.id).slice(0, 3);
     </main>
 
     <!-- Features & Technical Breakdown -->
-    <section class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+    <section class="p-6 sm:p-8 rounded-3xl bg-[#faf9f5] dark:bg-slate-900/60 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-6">
       <div class="flex items-center gap-2.5">
-        <div class="p-2 rounded-xl bg-nostr-100 dark:bg-nostr-950 text-nostr-600 dark:text-nostr-400">
+        <div class="p-2 rounded-xl bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300">
           <Sparkles class="w-5 h-5" />
         </div>
         <h2 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
@@ -117,8 +118,8 @@ const relatedTools = nostrTools.filter((t) => t.id !== tool.id).slice(0, 3);
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
         {tool.features.map((feat) => (
-          <div class="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-100 dark:border-slate-800/80">
-            <CheckCircle2 class="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+          <div class="flex items-start gap-2.5 p-3.5 rounded-xl bg-white dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800/80 shadow-2xs">
+            <CheckCircle2 class="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
             <span class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
               {feat}
             </span>
@@ -131,9 +132,9 @@ const relatedTools = nostrTools.filter((t) => t.id !== tool.id).slice(0, 3);
 
     <!-- FAQ Section -->
     {tool.faqs.length > 0 && (
-      <section class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+      <section class="p-6 sm:p-8 rounded-3xl bg-[#faf9f5] dark:bg-slate-900/60 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-6">
         <div class="flex items-center gap-2.5">
-          <div class="p-2 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400">
+          <div class="p-2 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300">
             <HelpCircle class="w-5 h-5" />
           </div>
           <h2 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
@@ -143,9 +144,9 @@ const relatedTools = nostrTools.filter((t) => t.id !== tool.id).slice(0, 3);
 
         <div class="space-y-4">
           {tool.faqs.map((faq) => (
-            <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-100 dark:border-slate-800/80 space-y-2">
+            <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 space-y-2 shadow-2xs">
               <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <span class="w-1.5 h-1.5 rounded-full bg-nostr-500"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-purple-600 dark:bg-purple-400"></span>
                 <span>{faq.question}</span>
               </h3>
               <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed pl-3.5">
@@ -161,14 +162,14 @@ const relatedTools = nostrTools.filter((t) => t.id !== tool.id).slice(0, 3);
     <section class="space-y-4 pt-4">
       <div class="flex items-center justify-between px-1">
         <div class="flex items-center gap-2">
-          <BookOpen class="w-4 h-4 text-nostr-500" />
-          <h2 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+          <BookOpen class="w-4 h-4 text-purple-600 dark:text-purple-400" />
+          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono">
             Diğer Nostr Araçları
           </h2>
         </div>
         <a 
           href="/araclar" 
-          class="text-xs font-semibold text-nostr-600 dark:text-nostr-400 hover:underline flex items-center gap-1"
+          class="text-xs font-semibold text-purple-700 dark:text-purple-300 hover:underline flex items-center gap-1"
         >
           <span>Tüm Araçları Gör</span>
           <ArrowRight class="w-3.5 h-3.5" />
@@ -179,25 +180,25 @@ const relatedTools = nostrTools.filter((t) => t.id !== tool.id).slice(0, 3);
         {relatedTools.map((relTool) => (
           <a
             href={relTool.href}
-            class="group p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-nostr-400 dark:hover:border-nostr-600 transition-all shadow-sm flex flex-col justify-between space-y-3"
+            class="group p-5 rounded-2xl bg-[#faf9f5] dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-purple-400 dark:hover:border-purple-600 transition-all shadow-2xs flex flex-col justify-between space-y-3"
           >
             <div class="space-y-2">
               <div class="flex items-center justify-between">
-                <span class="text-[11px] font-bold font-mono text-nostr-600 dark:text-nostr-400 uppercase tracking-wider">
+                <span class="text-[11px] font-bold font-mono text-purple-700 dark:text-purple-300 uppercase tracking-wider">
                   {relTool.categoryLabel}
                 </span>
-                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200/80 dark:border-slate-700/80">
                   {relTool.nips.join(', ')}
                 </span>
               </div>
-              <h3 class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-nostr-600 dark:group-hover:text-nostr-400 transition-colors">
+              <h3 class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-purple-700 dark:group-hover:text-purple-300 transition-colors">
                 {relTool.shortTitle}
               </h3>
               <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
                 {relTool.summary}
               </p>
             </div>
-            <div class="flex items-center gap-1 text-xs font-semibold text-nostr-600 dark:text-nostr-400">
+            <div class="flex items-center gap-1 text-xs font-semibold text-purple-700 dark:text-purple-300">
               <span>Aracı Aç</span>
               <ArrowRight class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>

@@ -1,109 +1,155 @@
 ---
-import { Github, Mail, Zap } from 'lucide-astro';
+import { Github, Mail, Zap, Radio, Database, ShieldCheck, Heart } from 'lucide-astro';
 
+interface Props {
+  isEn?: boolean;
+}
+
+const { isEn = false } = Astro.props;
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 py-12 transition-colors">
+<!-- Hallmark · footer: Ft5 Statement colophon · genre: editorial -->
+<footer class="mt-auto border-t border-slate-200/90 dark:border-slate-800/90 bg-[#f7f5ed] dark:bg-[#0d121f] text-slate-700 dark:text-slate-300 py-12 transition-colors">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 pb-10 border-b border-slate-200 dark:border-slate-800">
       
-      <!-- Brand & Mission Statement -->
-      <div class="md:col-span-2 space-y-3">
-        <div class="flex items-center gap-2">
-          <img src="/images/nostr-org-logo.jpeg" alt="Nostr Türkiye" class="w-7 h-7 rounded-lg object-cover" width="28" height="28" />
-          <span class="font-bold text-slate-900 dark:text-white">Nostr Türkiye Topluluğu</span>
+      <!-- Brand & Manifesto Colophon -->
+      <div class="md:col-span-5 space-y-4">
+        <div class="flex items-center gap-2.5">
+          <img 
+            src="/images/nostr-org-logo.jpeg" 
+            alt="Nostr Türkiye" 
+            class="w-8 h-8 rounded-xl object-cover shadow-sm ring-1 ring-slate-900/5 dark:ring-white/10" 
+            width="32" 
+            height="32" 
+          />
+          <div class="flex items-center gap-1.5 font-bold tracking-tight text-slate-900 dark:text-white text-base">
+            <span>nostr</span>
+            <span class="px-1.5 py-0.5 text-xs font-mono font-semibold rounded bg-tr-red/10 text-tr-red dark:bg-tr-red/20 dark:text-rose-400 border border-tr-red/20">
+              .org.tr
+            </span>
+          </div>
         </div>
-        <p class="text-sm text-slate-600 dark:text-slate-400 max-w-md leading-relaxed">
-          Platformların ve algoritmaların değil; bireylerin özgür iradesinin ve açık protokollerin hakim olduğu bir internet için bağımsız, doakratik topluluk.
+
+        <p class="text-sm text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed">
+          {isEn
+            ? "An independent, non-profit community initiative dedicated to free, decentralized, and cryptographic communication in Turkey."
+            : "Şirketlerin ve kapalı algoritmaların değil; bireylerin kendi açık anahtarlarıyla özgürce iletişim kurduğu sansürsüz protokolün Türkiye platformu."}
         </p>
-        <div class="flex flex-wrap items-center gap-3 pt-1 text-xs text-slate-500 dark:text-slate-400">
-          <span class="inline-flex items-center gap-1">
-            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-            Açık Kaynak & Bağımsız
-          </span>
-          <span>•</span>
-          <a 
-            href="lightning:nostrorgtr@cake.cash" 
-            class="inline-flex items-center gap-1 text-amber-600 dark:text-amber-400 hover:underline font-medium"
-            title="Lightning ile sunucu masraflarına destek olun"
+
+        <!-- Live Infrastructure Meta Badges -->
+        <div class="flex flex-wrap items-center gap-2 pt-1 text-xs">
+          <a
+            href="/roleler"
+            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 text-slate-700 dark:text-slate-300 hover:border-nostr-400 dark:hover:border-nostr-500 transition-colors font-mono"
           >
-            <Zap class="w-3.5 h-3.5 fill-current" />
-            <span>Altyapı Desteği: nostrorgtr@cake.cash</span>
+            <Radio class="w-3.5 h-3.5 text-emerald-500 animate-pulse" />
+            <span>relay.nostr.org.tr</span>
+          </a>
+          <a
+            href="/roleler#blossom"
+            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 text-slate-700 dark:text-slate-300 hover:border-nostr-400 dark:hover:border-nostr-500 transition-colors font-mono"
+          >
+            <Database class="w-3.5 h-3.5 text-nostr-500" />
+            <span>blossom.nostr.org.tr</span>
           </a>
         </div>
       </div>
 
-      <!-- Quick Nav Links -->
-      <div class="space-y-3">
-        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-900 dark:text-slate-200">
-          Topluluk & Ekosistem
+      <!-- Navigation Column 1: Ecosystem -->
+      <div class="md:col-span-2 space-y-3">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono">
+          {isEn ? "Ecosystem" : "Ekosistem"}
         </h3>
         <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
           <li>
-            <a href="/manifesto" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
+            <a href={isEn ? "/en/manifesto" : "/manifesto"} class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
               Manifesto
             </a>
           </li>
           <li>
             <a href="/topluluk" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
-              Topluluk & Ekip
+              {isEn ? "Community" : "Topluluk"}
             </a>
           </li>
           <li>
             <a href="/roleler" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
-              Röleler (relay.nostr.org.tr)
+              {isEn ? "Relays & Blossom" : "Röleler & Blossom"}
             </a>
           </li>
           <li>
             <a href="/projeler" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
-              Projeler & Araçlar
-            </a>
-          </li>
-          <li>
-            <a href="/kampanya" class="text-rose-600 dark:text-rose-400 font-semibold hover:underline transition-colors flex items-center gap-1">
-              <span>💖 Destek Kampanyası</span>
+              {isEn ? "Open Source Projects" : "Açık Kaynak Projeler"}
             </a>
           </li>
           <li>
             <a href="/takip-listeleri" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
-              Takip Listeleri
+              {isEn ? "Follow Lists" : "Takip Listeleri"}
             </a>
           </li>
           <li>
-            <a href="/rehber" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
-              Başlangıç Rehberi
-            </a>
-          </li>
-          <li>
-            <a href="/gazeteciler-icin-nostr" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
-              Gazeteciler İçin Kılavuz
-            </a>
-          </li>
-          <li>
-            <a href="/sanatcilar-icin-nostr" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
-              Sanatçılar İçin Kılavuz
-            </a>
-          </li>
-          <li>
-            <a href="/siyasetciler-icin-nostr" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
-              Siyasetçiler İçin Kılavuz
-            </a>
-          </li>
-          <li>
-            <a href="/konusmalar" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
-              Konuşmalar & Sunumlar
+            <a href="/araclar" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
+              {isEn ? "Nostr Tools" : "Protokol Araçları"}
             </a>
           </li>
         </ul>
       </div>
 
-      <!-- Protocol & Contact -->
-      <div class="space-y-3">
-        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-900 dark:text-slate-200">
-          İletişim & Katkı
+      <!-- Navigation Column 2: Guides & Education -->
+      <div class="md:col-span-3 space-y-3">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono">
+          {isEn ? "Guides & Docs" : "Rehber & Dokümanlar"}
         </h3>
         <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+          <li>
+            <a href="/rehber" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
+              {isEn ? "Beginner's Guide" : "Başlangıç Rehberi"}
+            </a>
+          </li>
+          <li>
+            <a href="/gazeteciler-icin-nostr" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
+              {isEn ? "For Journalists" : "Gazeteciler İçin Nostr"}
+            </a>
+          </li>
+          <li>
+            <a href="/sanatcilar-icin-nostr" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
+              {isEn ? "For Artists & Creators" : "Sanatçılar İçin Nostr"}
+            </a>
+          </li>
+          <li>
+            <a href="/siyasetciler-icin-nostr" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
+              {isEn ? "For Public Figures" : "Siyasetçiler İçin Nostr"}
+            </a>
+          </li>
+          <li>
+            <a href="/konusmalar" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
+              {isEn ? "Talks & Meetups" : "Konuşmalar & Sunumlar"}
+            </a>
+          </li>
+          <li>
+            <a href="/blog" class="hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors">
+              Blog & Notlar
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Support & Contribution Column -->
+      <div class="md:col-span-2 space-y-3">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white font-mono">
+          {isEn ? "Support & Contact" : "Destek & İletişim"}
+        </h3>
+        <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+          <li>
+            <a 
+              href={isEn ? "/en/campaign" : "/kampanya"} 
+              class="inline-flex items-center gap-1.5 text-tr-red dark:text-rose-400 font-semibold hover:underline"
+            >
+              <Heart class="w-3.5 h-3.5 fill-current" />
+              <span>{isEn ? "Server Campaign" : "Sunucu Kampanyası"}</span>
+            </a>
+          </li>
           <li>
             <a 
               href="mailto:ekip@nostr.org.tr" 
@@ -121,15 +167,17 @@ const currentYear = new Date().getFullYear();
               class="inline-flex items-center gap-1.5 hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors"
             >
               <Github class="w-3.5 h-3.5" />
-              <span>GitHub Deposu</span>
+              <span>GitHub</span>
             </a>
           </li>
           <li>
             <a 
-              href="/en/manifesto" 
-              class="inline-flex items-center gap-1.5 hover:text-nostr-600 dark:hover:text-nostr-400 transition-colors"
+              href="lightning:nostrorgtr@cake.cash" 
+              class="inline-flex items-center gap-1.5 text-amber-600 dark:text-amber-400 hover:underline font-mono text-xs"
+              title="Lightning donation"
             >
-              <span>English Manifesto</span>
+              <Zap class="w-3.5 h-3.5 fill-current" />
+              <span>nostrorgtr@cake.cash</span>
             </a>
           </li>
         </ul>
@@ -137,11 +185,14 @@ const currentYear = new Date().getFullYear();
 
     </div>
 
-    <!-- Bottom Bar -->
-    <div class="pt-6 mt-6 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
-      <p>© {currentYear} Nostr Türkiye Topluluğu. Açık protokollere adanmıştır.</p>
-      <p class="inline-flex items-center gap-1">
-        <span>İletişim senin, kimlik senin, ağ senin.</span>
+    <!-- Colophon Bottom Statement -->
+    <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400 font-mono">
+      <div class="flex items-center gap-2">
+        <ShieldCheck class="w-4 h-4 text-slate-400" />
+        <span>© {currentYear} Nostr Türkiye Topluluğu. MIT License.</span>
+      </div>
+      <p class="text-slate-600 dark:text-slate-400">
+        İletişim senin, kimlik senin, ağ senin.
       </p>
     </div>
   </div>

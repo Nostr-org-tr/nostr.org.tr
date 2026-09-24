@@ -9,31 +9,32 @@ interface Props {
 const { project } = Astro.props;
 
 const categoryColors: Record<string, string> = {
-  Migration: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
-  Automation: 'bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border-amber-200 dark:border-amber-800',
-  Client: 'bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border-blue-200 dark:border-blue-800',
-  Protocol: 'bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 border-purple-200 dark:border-purple-800',
-  Tool: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border-slate-200 dark:border-slate-700',
-  Bot: 'bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border-rose-200 dark:border-rose-800',
+  Migration: 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+  Automation: 'bg-amber-50 text-amber-800 dark:bg-amber-950/70 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+  Client: 'bg-blue-50 text-blue-800 dark:bg-blue-950/70 dark:text-blue-300 border-blue-200 dark:border-blue-800',
+  Protocol: 'bg-purple-50 text-purple-800 dark:bg-purple-950/70 dark:text-purple-300 border-purple-200 dark:border-purple-800',
+  Tool: 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700',
+  Bot: 'bg-rose-50 text-rose-800 dark:bg-rose-950/70 dark:text-rose-300 border-rose-200 dark:border-rose-800',
 };
 
 const badgeStyle = categoryColors[project.category] || categoryColors.Tool;
 ---
 
-<div class={`p-6 sm:p-7 rounded-2xl bg-white dark:bg-slate-900 border transition-all duration-200 flex flex-col justify-between ${
+<!-- Hallmark · component: project-card · genre: editorial -->
+<div class={`p-6 sm:p-7 rounded-2xl bg-[#faf9f5] dark:bg-slate-900/60 border transition-all duration-200 flex flex-col justify-between shadow-2xs hover:shadow-xs ${
   project.isFeatured 
-    ? 'border-nostr-300 dark:border-nostr-700 shadow-md shadow-nostr-500/5 hover:border-nostr-500' 
-    : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-sm'
+    ? 'border-purple-300 dark:border-purple-800/80 ring-1 ring-purple-400/20' 
+    : 'border-slate-200/90 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
 }`}>
   
   <div>
     <!-- Top Meta -->
     <div class="flex items-center justify-between gap-2 mb-3">
-      <span class={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-semibold border ${badgeStyle}`}>
+      <span class={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-semibold font-mono border ${badgeStyle}`}>
         {project.category}
       </span>
       {project.isFeatured && (
-        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-800">
+        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-900 dark:bg-amber-950/80 dark:text-amber-200 border border-amber-200 dark:border-amber-800">
           <Sparkles class="w-3 h-3 text-amber-500" />
           <span>Öne Çıkan</span>
         </span>
@@ -42,11 +43,11 @@ const badgeStyle = categoryColors[project.category] || categoryColors.Tool;
 
     <!-- Title & Author -->
     <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-      <FolderGit2 class="w-5 h-5 text-nostr-500 flex-shrink-0" />
+      <FolderGit2 class="w-5 h-5 text-purple-600 dark:text-purple-400 flex-shrink-0" />
       <span>{project.name}</span>
     </h3>
     <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
-      Geliştirici: <span class="text-slate-700 dark:text-slate-200">{project.author}</span>
+      Geliştirici: <span class="text-slate-800 dark:text-slate-200 font-semibold">{project.author}</span>
     </p>
 
     <!-- Description -->
@@ -57,7 +58,7 @@ const badgeStyle = categoryColors[project.category] || categoryColors.Tool;
     <!-- Tags -->
     <div class="mt-4 flex flex-wrap gap-1.5">
       {project.tags.map((tag) => (
-        <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-700/60">
+        <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200/80 dark:border-slate-700/80">
           #{tag}
         </span>
       ))}
@@ -65,13 +66,13 @@ const badgeStyle = categoryColors[project.category] || categoryColors.Tool;
   </div>
 
   <!-- Action Links -->
-  <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
+  <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
     <div class="flex items-center gap-3">
       <a
         href={project.url}
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center gap-1.5 text-xs font-semibold text-nostr-600 dark:text-nostr-400 hover:text-nostr-700 dark:hover:text-nostr-300 transition-colors"
+        class="inline-flex items-center gap-1.5 text-xs font-semibold text-purple-700 dark:text-purple-300 hover:text-purple-800 dark:hover:text-purple-200 transition-colors"
       >
         <span>{project.gitworkshop ? 'GitWorkshop Deposu' : 'Projeyi Ziyaret Et'}</span>
         <ExternalLink class="w-3.5 h-3.5" />
@@ -82,7 +83,7 @@ const badgeStyle = categoryColors[project.category] || categoryColors.Tool;
           href={project.previewUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:underline"
+          class="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 dark:text-emerald-300 hover:underline"
         >
           <Eye class="w-3.5 h-3.5" />
           <span>Canlı Önizleme</span>
@@ -98,9 +99,9 @@ const badgeStyle = categoryColors[project.category] || categoryColors.Tool;
           rel="noopener noreferrer"
           aria-label={`${project.name} GitWorkshop Deposu`}
           title="GitWorkshop Nostr Git Deposu"
-          class="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-1 text-xs"
+          class="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors flex items-center gap-1 text-xs"
         >
-          <GitBranch class="w-4 h-4 text-nostr-500" />
+          <GitBranch class="w-4 h-4 text-purple-600 dark:text-purple-400" />
         </a>
       )}
 
@@ -111,7 +112,7 @@ const badgeStyle = categoryColors[project.category] || categoryColors.Tool;
           rel="noopener noreferrer"
           aria-label={`${project.name} GitHub Deposu`}
           title="GitHub Deposu"
-          class="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          class="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors"
         >
           <Github class="w-4 h-4" />
         </a>
