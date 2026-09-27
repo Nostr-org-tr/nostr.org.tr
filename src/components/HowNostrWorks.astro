@@ -1,0 +1,231 @@
+---
+import { 
+  Key, 
+  Radio, 
+  Cpu, 
+  ArrowRight, 
+  ExternalLink,
+  Layers,
+  Sparkles,
+  RefreshCw,
+  Server,
+  Check
+} from 'lucide-astro';
+---
+
+<section class="py-20 sm:py-28 bg-[#faf9f5] dark:bg-[#0b0f19] border-b border-slate-200/80 dark:border-slate-800/80 relative overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Section Header -->
+    <div class="max-w-3xl mb-16">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 dark:bg-purple-950/80 text-purple-800 dark:text-purple-300 border border-purple-200/80 dark:border-purple-800/80 mb-3">
+        <Layers class="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+        <span class="font-mono uppercase tracking-wider">Protokol Mimarisi</span>
+      </div>
+      <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
+        Nostr Nasıl Çalışır?
+      </h2>
+      <p class="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+        Geleneksel sosyal ağlar tek bir şirketin sunucusuna bağlıdır. Nostr ise <span class="font-semibold text-purple-700 dark:text-purple-300">"Çoklu İstemci, Çoklu Röle" (Multi-Master)</span> mimarisi ve <span class="font-semibold text-purple-700 dark:text-purple-300">Outbox (Gossip) Modeli</span> ile çalışır.
+      </p>
+    </div>
+
+    <!-- Stepped Outbox Architecture Flow -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+      
+      <!-- Step 1 -->
+      <div class="group p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 hover:border-purple-400 dark:hover:border-purple-600 transition-all shadow-xs relative flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-md bg-purple-50 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/60">
+              ADIM 01
+            </span>
+            <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-950/80 flex items-center justify-center text-purple-700 dark:text-purple-300">
+              <Key class="w-4 h-4" />
+            </div>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white mb-2">
+            Outbox Röleleri Belirlenir
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            Kullanıcı (NIP-65 ile) içeriklerini hangi rölelere (örneğin <code>relay.nostr.org.tr</code>) yazacağını ağa anons eder.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 text-[11px] font-mono text-purple-700 dark:text-purple-400">
+          NIP-65 Relay List Metadata
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="group p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 hover:border-purple-400 dark:hover:border-purple-600 transition-all shadow-xs relative flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-md bg-purple-50 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/60">
+              ADIM 02
+            </span>
+            <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-950/80 flex items-center justify-center text-purple-700 dark:text-purple-300">
+              <Radio class="w-4 h-4" />
+            </div>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white mb-2">
+            Hedefli İstemci Bağlantısı
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            Sizi takip edenlerin istemcileri, anons ettiğiniz röleleri bulur ve sadece o rölelerden verilerinizi çeker.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 text-[11px] font-mono text-purple-700 dark:text-purple-400">
+          Direct Query Routing
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="group p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 hover:border-purple-400 dark:hover:border-purple-600 transition-all shadow-xs relative flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-md bg-purple-50 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/60">
+              ADIM 03
+            </span>
+            <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-950/80 flex items-center justify-center text-purple-700 dark:text-purple-300">
+              <RefreshCw class="w-4 h-4" />
+            </div>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white mb-2">
+            Röle Değişimi & Sıfır Kayıp
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            Kullandığınız bir röle kapansa veya sizi engellese bile yeni bir röle seçersiniz; takipçileriniz otomatik olarak yeni röleye yönelir.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 text-[11px] font-mono text-purple-700 dark:text-purple-400">
+          Censorship Resilient Flow
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="group p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 hover:border-purple-400 dark:hover:border-purple-600 transition-all shadow-xs relative flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-md bg-purple-50 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/60">
+              ADIM 04
+            </span>
+            <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-950/80 flex items-center justify-center text-purple-700 dark:text-purple-300">
+              <Cpu class="w-4 h-4" />
+            </div>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white mb-2">
+            Kullanıcı Temsilcisi İstemciler
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            İstemciler sadece "görüntüleyici" değil, kullanıcının adına çalışan akıllı temsilcilerdir. Veriyi doğrular ve yerel olarak işler.
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 text-[11px] font-mono text-purple-700 dark:text-purple-400">
+          Client-Side Verification
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Deep Dive Architecture Bento: Protocol vs Relays -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+      
+      <!-- Box 1: Ownerless Protocol vs Owned Relays -->
+      <div class="lg:col-span-7 p-7 sm:p-8 rounded-3xl bg-white dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+        <div>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 dark:bg-amber-950/80 text-amber-900 dark:text-amber-200 border border-amber-200/80 dark:border-amber-800/80 mb-4">
+            <Sparkles class="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+            <span>Ağ Felsefesi</span>
+          </div>
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-3">
+            Protokol Sahipsizdir, Röleler Değildir
+          </h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+            Nostr soyut bir ifade özgürlüğü vaadiyle değil, <strong>birlikte olma ve ayrılma özgürlüğü (freedom of association)</strong> temeliyle çalışır. Her sunucu özel mülkiyettir ve kendi topluluk kurallarını belirler.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
+            <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/80">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-1">
+                Merkezi Ağlar
+              </h4>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Şirket hesabınızı sildiğinde takipçilerinizi, verinizi ve dijital varlığınızı tamamen kaybedersiniz.
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-purple-50/70 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-800/80">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-purple-900 dark:text-purple-300 mb-1">
+                Nostr Modeli
+              </h4>
+              <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                Bir röle sizi kabul etmezse, diğer onlarca röleye yayın yapar veya dakikalar içinde kendi rölenizi açarsınız.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between flex-wrap gap-3">
+          <span class="text-xs text-slate-500 dark:text-slate-400">
+            Kendi rölenizi kurmak ister misiniz?
+          </span>
+          <a 
+            href="https://github.com/hoytech/strfry" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 text-xs font-semibold text-purple-700 dark:text-purple-300 hover:text-purple-900 dark:hover:text-purple-100"
+          >
+            <span>strfry & Khatru rölelerini inceleyin</span>
+            <ExternalLink class="w-3.5 h-3.5" />
+          </a>
+        </div>
+      </div>
+
+      <!-- Box 2: Smart Clients & Dumb Relays -->
+      <div class="lg:col-span-5 p-7 sm:p-8 rounded-3xl bg-slate-900 dark:bg-slate-900/95 text-white border border-slate-800 shadow-sm flex flex-col justify-between">
+        <div>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-purple-200 border border-white/20 mb-4">
+            <Server class="w-3.5 h-3.5 text-purple-300" />
+            <span>Mühendislik İlkesi</span>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-3">
+            Akıllı İstemciler, Hafif Röleler
+          </h3>
+          <p class="text-sm text-slate-300 leading-relaxed mb-5">
+            Geleneksel web2'de sunucu tüm mantığı yöneten devasa bir tekeldir. Nostr'da ise röleler yalnızca iletileri saklayan basit borulardır; içeriklerin geçerliliğini ve kimlik doğrulamalarını sizin cihazınızdaki açık kaynak istemci yapar.
+          </p>
+          <ul class="space-y-3 text-xs text-slate-300 mb-6">
+            <li class="flex items-start gap-2.5">
+              <span class="p-0.5 rounded bg-purple-500/20 text-purple-300 mt-0.5">
+                <Check class="w-3.5 h-3.5 text-purple-300" />
+              </span>
+              <span>İmzalanmış iletiler sunucu tarafından değiştirilemez (imza bozulur).</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="p-0.5 rounded bg-purple-500/20 text-purple-300 mt-0.5">
+                <Check class="w-3.5 h-3.5 text-purple-300" />
+              </span>
+              <span>Kullanıcı istediği istemciyi (Damus, Amethyst, Coracle vb.) özgürce seçer.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="p-0.5 rounded bg-purple-500/20 text-purple-300 mt-0.5">
+                <Check class="w-3.5 h-3.5 text-purple-300" />
+              </span>
+              <span>İstemci birden fazla röleyle paralel konuşarak sansürü imkansız kılar.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="pt-5 border-t border-slate-800">
+          <a 
+            href="/rehber" 
+            class="inline-flex items-center gap-2 text-xs font-semibold text-purple-300 hover:text-white transition-colors"
+          >
+            <span>İstemci Seçim Kılavuzunu Oku</span>
+            <ArrowRight class="w-3.5 h-3.5" />
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
